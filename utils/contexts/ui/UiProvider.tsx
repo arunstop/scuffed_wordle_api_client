@@ -1,3 +1,4 @@
+import { useTheme } from "next-themes";
 import { useReducer } from "react";
 import { GeneralContextChildren as ContextChildren } from "../../models/GeneralModel";
 import {
@@ -14,19 +15,25 @@ const INITIAL_STATE: UiState = {
 
 const reducer = (state: UiState, action: UiActionTypes) => {
   const { darkTheme } = state;
-  const { type } = action;
+  const { type, payload } = action;
   switch (type) {
     case "TOGGLE_DARK_THEME":
-      return { ...state, darkTheme: !darkTheme };
+      return { ...state, darkTheme: payload };
     default:
       return state;
   }
 };
 
 export const UiProvider = ({ children }: ContextChildren) => {
-  const [uiState, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const { theme, setTheme } = useTheme();
+
+  const [uiState, dispatch] = useReducer(reducer, {
+    ...INITIAL_STATE,
+    darkTheme: theme === "business",
+  });
   const uiAction: UiAction = {
     toggleDarkTheme: (darkTheme: boolean) => {
+      setTheme(darkTheme ? "business" : "corporate");
       dispatch({
         type: "TOGGLE_DARK_THEME",
         payload: darkTheme,
@@ -37,7 +44,6 @@ export const UiProvider = ({ children }: ContextChildren) => {
     state: uiState,
     action: uiAction,
   };
-
   return (
     <UiContext.Provider value={value}>
       <>{children}</>
