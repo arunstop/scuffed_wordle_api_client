@@ -1,7 +1,16 @@
 // State
 export interface UiState {
     darkTheme: boolean;
+    menuList: UiMenu[];
 }
+
+export interface UiMenu {
+    id: string;
+    title: string;
+    type: UiMenuTypes;
+}
+
+export type UiMenuTypes = | 'MODAL' | 'PAGE';
 
 // Action
 export interface UiAction {

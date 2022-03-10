@@ -10,7 +10,7 @@ const Home: NextPage = () => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <main className="my">
-      <div className="card w-96 h-auto bg-base-100 shadow-xl border border-primary">
+      <div className="card min-w-fit h-auto bg-base-100 shadow-xl border border-primary m-2">
         <figure className="px-10 pt-10">
           <img src="/vercel.svg" alt="icon" />
         </figure>
