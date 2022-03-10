@@ -1,35 +1,64 @@
 import { useTheme } from "next-themes";
 import { useReducer } from "react";
 import { GeneralContextChildren as ContextChildren } from "../../models/GeneralModel";
+import { slugify } from "../../models/GlobalModel";
 import {
   UiAction,
   UiActionTypes,
   UiContextProps,
+  UiMenu,
   UiState,
 } from "../../models/UiModel";
 import { UiContext } from "./UiContext";
 
+const getInitialMenuList = (): UiMenu[] => {
+  const menuList = [
+    { title: "Dashboard", type: "PAGE" },
+    { title: "Dictionary", type: "PAGE" },
+    { title: "Logout", type: "MODAL" },
+  ];
+
+  // Giving each child on the menuList an id
+  const menuWithIdList = (): UiMenu[] => {
+    return menuList.map(
+      (menu) =>
+        ({
+          id: slugify(menu.title),
+          title: menu.title,
+          type: menu.type,
+        } as UiMenu), // Cast the anonymous object into UiMenu
+    );
+  };
+
+  return menuWithIdList();
+};
+
 const INITIAL_STATE: UiState = {
   darkTheme: false,
+  menuList: getInitialMenuList(),
+  menuOn: getInitialMenuList()[0].id,
 };
 
 const reducer = (state: UiState, action: UiActionTypes) => {
-  const { darkTheme } = state;
+  // const { darkTheme } = state;
   const { type, payload } = action;
   switch (type) {
     case "TOGGLE_DARK_THEME":
       return { ...state, darkTheme: payload };
+    case "SELECT_MENU":
+      return { ...state, menuOn: payload };
     default:
       return state;
   }
 };
 
 export const UiProvider = ({ children }: ContextChildren) => {
-  const { theme, setTheme } = useTheme();
+  // HYDRATION ERROR
+  const { theme, setTheme } = useTheme(); 
 
   const [uiState, dispatch] = useReducer(reducer, {
     ...INITIAL_STATE,
-    darkTheme: theme === "business",
+    // darkTheme: theme === "business",
   });
   const uiAction: UiAction = {
     toggleDarkTheme: (darkTheme: boolean) => {
@@ -37,6 +66,13 @@ export const UiProvider = ({ children }: ContextChildren) => {
       dispatch({
         type: "TOGGLE_DARK_THEME",
         payload: darkTheme,
+      });
+    },
+    selectMenu: (menuId: string) => {
+      // alert(menuId);
+      dispatch({
+        type: "SELECT_MENU",
+        payload: menuId,
       });
     },
   };

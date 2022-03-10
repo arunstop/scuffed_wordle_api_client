@@ -10,9 +10,9 @@
       {
         "arrays": "always-multiline",
         "objects": "always-multiline",
-        "imports": "always-multiline",
-        "exports": "always-multiline",
-        "functions": "never"
+        "imports": "only-multiline",
+        "exports": "only-multiline",
+        "functions": "only-multiline"
       }
     ]
   },

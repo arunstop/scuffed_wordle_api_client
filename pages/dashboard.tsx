@@ -1,7 +1,8 @@
 import Head from "next/head";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
+import MenuItem from "../components/Menu/MenuItem";
 import { useCountContext } from "../utils/contexts/counter/CounterHooks";
 import { useUiContext } from "../utils/contexts/ui/UiHooks";
 // import { useTheme } from "next-themes";
@@ -13,9 +14,16 @@ export default function Dashboard() {
   // giving alias with colon (:)
   const { state: countState, action: countAction } = useCountContext();
   const { state: uiState, action: uiAction } = useUiContext();
+  type ModalValue = boolean;
+
+  const [modalLogout, setModalLogout] = useState<ModalValue>(false);
 
   // const xd: boolean = false;
   // const {theme, setTheme} = useTheme();
+
+  function toggleModalLogout(value: boolean) {
+    setModalLogout(value);
+  }
 
   return (
     // <CounterProvider>
@@ -121,7 +129,6 @@ export default function Dashboard() {
             <label htmlFor="my-modal" className="btn modal-button">
               Modal
             </label>
-            
 
             <ul className="steps my-4 w-full">
               <li className="step step-primary">Register</li>
@@ -144,32 +151,54 @@ export default function Dashboard() {
         </div>
         <div className="drawer-side">
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-          <ul className="menu p-4 overflow-y-auto w-80 bg-base-200 text-base-content">
+          {/* {uiState.menuOn} */}
+          <ul className="menu p-4 overflow-y-auto w-80 bg-base-300 text-base-content">
             {/* <!-- Sidebar content here --> */}
-            <li>
-              <a className="bg-primary-focus">Sidebar Item 1</a>
-            </li>
-            <li>
-              <a>Sidebar Item 2</a>
-            </li>
+            {uiState.menuList.map((menu, index) => (
+              <MenuItem
+                key={menu.id}
+                title={menu.title}
+                isActive={menu.id === uiState.menuOn}
+                action={() =>
+                  menu.type == "PAGE"
+                    ? uiAction.selectMenu(menu.id)
+                    : toggleModalLogout(true)
+                }
+              />
+            ))}
           </ul>
         </div>
       </main>
-      <input type="checkbox" id="my-modal" className="modal-toggle" />
-            <div className="modal">
-              <div className="modal-box">
-                <p>
-                  Enim dolorem dolorum omnis atque necessitatibus. Consequatur
-                  aut adipisci qui iusto illo eaque. Consequatur repudiandae et.
-                  Nulla ea quasi eligendi. Saepe velit autem minima.
-                </p>
-                <div className="modal-action">
-                  <label htmlFor="my-modal" className="btn">
-                    Close
-                  </label>
-                </div>
-              </div>
+      <>
+        <input
+          id="my-modal"
+          type="checkbox"
+          // checked={modalLogout}
+          defaultChecked={modalLogout}
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+            toggleModalLogout(event.target.checked)
+          }
+          className="modal-toggle"
+        />
+        <div className="modal">
+          <div className="modal-box">
+            <p>
+              Enim dolorem dolorum omnis atque necessitatibus. Consequatur aut
+              adipisci qui iusto illo eaque. Consequatur repudiandae et. Nulla
+              ea quasi eligendi. Saepe velit autem minima.
+            </p>
+            <div className="modal-action">
+              <label
+                htmlFor="my-modal"
+                className="btn"
+                // onClick={() => toggleModalLogout(false)}
+              >
+                Close
+              </label>
             </div>
+          </div>
+        </div>
+      </>
     </>
   );
 }
