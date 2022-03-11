@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { FaRegArrowAltCircleRight } from "react-icons/fa";
 
 const Home: NextPage = () => (
   <div className="flex justify-center items-center min-h-screen flex-col">
@@ -27,7 +28,10 @@ const Home: NextPage = () => (
             className="input input-bordered w-full max-w-xs"
           />
           <Link href="/dashboard" passHref>
-            <button className="btn btn-primary w-full">Login</button>
+            <button className="btn btn-primary w-full">
+              Login
+              <FaRegArrowAltCircleRight size={24} className="ml-2"/>
+            </button>
           </Link>
 
           {/* <div className="card-actions">

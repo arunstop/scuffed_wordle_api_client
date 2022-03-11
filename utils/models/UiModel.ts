@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 // State
 export interface UiState {
     darkTheme: boolean;
@@ -9,6 +10,7 @@ export interface UiMenu {
     id: string;
     title: string;
     type: UiMenuTypes;
+    icon: ReactNode;
 }
 
 export type UiMenuTypes = | 'MODAL' | 'PAGE';

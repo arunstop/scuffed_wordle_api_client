@@ -1,8 +1,12 @@
 import Head from "next/head";
-import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import React, { ChangeEvent, useState } from "react";
+import { MdOutlineDarkMode,MdMenu } from "react-icons/md";
+import { FiSun } from "react-icons/fi";
+import {RiAppsFill} from "react-icons/ri";
+// import { TiThMenu } from "react-icons/ti";
 import MenuItem from "../components/Menu/MenuItem";
+import { APP_NAME, LOGOUT_MODAL_DESC, LOGOUT_MODAL_TITLE } from "../utils/constants";
 import { useCountContext } from "../utils/contexts/counter/CounterHooks";
 import { useUiContext } from "../utils/contexts/ui/UiHooks";
 // import { useTheme } from "next-themes";
@@ -23,6 +27,7 @@ export default function Dashboard() {
 
   function toggleModalLogout(value: boolean) {
     setModalLogout(value);
+    // console.log(modalLogout);
   }
 
   return (
@@ -37,18 +42,50 @@ export default function Dashboard() {
       <main className="drawer drawer-mobile w-full">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle btn" />
         <div className="drawer-content ">
-          <div className="flex flex-col items-center justify-center">
+          {/* <!-- Navbar --> */}
+          <div className="w-full navbar bg-base-300 sticky">
+            {/* toggle menu button */}
+            <label
+              className="mr-2 btn btn-circle lg:hidden btn-ghost"
+              htmlFor="my-drawer-2"
+            >
+              <MdMenu size={30} className="text-base-content" />
+            </label>
+            {/* app name */}
+            <RiAppsFill size={30} className="text-primary"/>
+            <div className="flex-1 mx-2 text-lg font-bold text-primary">{APP_NAME}</div>
+            {/* toggle darktheme */}
+            <div className="flex items-center">
+              <label className="btn btn-circle swap swap-rotate btn-ghost">
+                <input
+                  type="checkbox"
+                  checked={uiState.darkTheme}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    uiAction.toggleDarkTheme(event.target.checked)
+                  }
+                />
+                {/* if darktheme on show the light theme icon */}
+                <MdOutlineDarkMode
+                  size={30}
+                  className="swap-off text-base-content"
+                />
+                <FiSun size={30} className="swap-on text-base-content" />
+              </label>
+            </div>
+          </div>
+          {/* CONTENT */}
+          <div className="flex flex-col items-center justify-center p-2 lg:p-4">
             <label
               htmlFor="my-drawer-2"
               className="btn btn-primary drawer-button lg:hidden"
             >
               Open drawer
             </label>
-            <Link href={"/"} passHref>
-              <button className="btn btn-primary" onClick={() => router.back()}>
-                Back
-              </button>
-            </Link>
+            {/* <Link href={"/"} passHref> */}
+            <button className="btn btn-primary" onClick={() => router.back()}>
+              Back
+            </button>
+            {/* </Link> */}
             <h2>Counter</h2>
             <p>Count : {countState.count}</p>
             <button
@@ -150,15 +187,17 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="drawer-side">
-          <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
+          <label htmlFor="my-drawer-2" className="drawer-overlay backdrop-blur-sm"></label>
           {/* {uiState.menuOn} */}
-          <ul className="menu p-4 overflow-y-auto w-80 bg-base-300 text-base-content">
+
+          <ul className="menu p-4 overflow-y-auto w-60 bg-base-300 text-base-content">
             {/* <!-- Sidebar content here --> */}
             {uiState.menuList.map((menu, index) => (
               <MenuItem
                 key={menu.id}
                 title={menu.title}
                 isActive={menu.id === uiState.menuOn}
+                icon={menu.icon}
                 action={() =>
                   menu.type == "PAGE"
                     ? uiAction.selectMenu(menu.id)
@@ -169,31 +208,41 @@ export default function Dashboard() {
           </ul>
         </div>
       </main>
+      {/* Logout modal */}
       <>
         <input
           id="my-modal"
           type="checkbox"
-          // checked={modalLogout}
-          defaultChecked={modalLogout}
+          checked={modalLogout}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             toggleModalLogout(event.target.checked)
           }
           className="modal-toggle"
         />
-        <div className="modal">
-          <div className="modal-box">
-            <p>
-              Enim dolorem dolorum omnis atque necessitatibus. Consequatur aut
-              adipisci qui iusto illo eaque. Consequatur repudiandae et. Nulla
-              ea quasi eligendi. Saepe velit autem minima.
-            </p>
+        <div className="modal backdrop-blur-sm">
+          <div className="modal-box border-2 border-primary sm:border-transparent">
+            <p className="text-2xl mb-6">{LOGOUT_MODAL_TITLE}</p>
+            <p>{LOGOUT_MODAL_DESC}</p>
             <div className="modal-action">
               <label
                 htmlFor="my-modal"
-                className="btn"
-                // onClick={() => toggleModalLogout(false)}
+                className="btn w-24 btn-outline"
+                onClick={() => {
+                  // toggleModalLogout(false);
+                  // router.back();
+                }}
               >
-                Close
+                Cancel
+              </label>
+              <label
+                htmlFor="my-modal"
+                className="btn w-24 btn-primary"
+                onClick={() => {
+                  // toggleModalLogout(false);
+                  router.back();
+                }}
+              >
+                OK
               </label>
             </div>
           </div>

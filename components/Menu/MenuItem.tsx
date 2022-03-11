@@ -1,8 +1,9 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 type MenuItemProps = {
 //   key: string;
   title: string;
+  icon: ReactNode;
   isActive: boolean;
   action: () => void;
 };
@@ -10,6 +11,7 @@ type MenuItemProps = {
 export default function MenuItem({
 //   key,
   title,
+  icon,
   isActive,
   action,
 }: MenuItemProps) {
@@ -21,9 +23,10 @@ export default function MenuItem({
   return (
     <li>
       <a
-        className={`btn justify-start normal-case text-base h-auto border-transparent ${activeClass}`}
+        className={`btn justify-start text-sm normal-case text-base h-auto border-transparent ${activeClass}`}
         onClick={action}
       >
+        {icon}
         {title}
       </a>
     </li>
