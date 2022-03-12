@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
-import React, { useState } from "react";
+import React from "react";
 import Drawer from "../components/Drawer/Drawer";
-import { ID_MAIN_DRAWER, ID_MODAL_LOGOUT } from "../utils/constants/ConstantIds";
+import { ID_MAIN_DRAWER } from "../utils/constants/ConstantIds";
 import { APP_NAME } from "../utils/constants/ConstantText";
 import { useCountContext } from "../utils/contexts/counter/CounterHooks";
 import { useUiContext } from "../utils/contexts/ui/UiHooks";
@@ -12,17 +12,6 @@ export default function Dashboard() {
   // giving alias with colon (:)
   const { state: countState, action: countAction } = useCountContext();
   const { state: uiState, action: uiAction } = useUiContext();
-  type ModalValue = boolean;
-
-  const [modalLogout, setModalLogout] = useState<ModalValue>(false);
-
-  // const xd: boolean = false;
-  // const {theme, setTheme} = useTheme();
-
-  function toggleModalLogout(value: boolean) {
-    setModalLogout(value);
-    // console.log(modalLogout);
-  }
 
   return (
     // <CounterProvider>
@@ -42,109 +31,6 @@ export default function Dashboard() {
           >
             Open drawer
           </label>
-          {/* <Link href={"/"} passHref> */}
-          <button className="btn btn-primary" onClick={() => router.back()}>
-            Back
-          </button>
-          {/* </Link> */}
-          <h2>Counter</h2>
-          <p>Count : {countState.count}</p>
-          <button
-            className="btn btn-primary"
-            onClick={() => countAction.increase(1)}
-          >
-            Increase
-          </button>
-          <button
-            className="btn btn-secondary"
-            onClick={() => countAction.decrease(1)}
-          >
-            Decrease
-          </button>
-
-          <h2 className="mt-6">Dark theme : {uiState.darkTheme + ""}</h2>
-          <input
-            type="checkbox"
-            className="toggle toggle-primary"
-            checked={uiState.darkTheme}
-            onChange={() => uiAction.toggleDarkTheme(!uiState.darkTheme)}
-          />
-
-          <div className="m-4">
-            <button className="btn btn-primary">primary</button>
-            <button className="btn btn-secondary">secondary</button>
-            <button className="btn btn-accent">accent</button>
-          </div>
-
-          <div className="m-4" data-theme="valentine">
-            <button className="btn btn-primary">primary</button>
-            <button className="btn btn-secondary">secondary</button>
-            <button className="btn btn-accent">accent</button>
-          </div>
-
-          <div className="m-4 tabs">
-            <button className="tab tab-lifted">Tab 1</button>
-            <button className="tab tab-lifted tab-active">Tab 2</button>
-            <button className="tab tab-lifted">Tab 3</button>
-          </div>
-
-          <div className="m-4">
-            <input type="checkbox" className="toggle toggle-primary" />
-            <input type="checkbox" className="toggle toggle-secondary" />
-            <input type="checkbox" className="toggle toggle-accent" />
-          </div>
-
-          <div className="card shadow-2xl w-80 m-4">
-            <figure>
-              <img src="https://picsum.photos/id/1005/500/250" />
-            </figure>
-            <div className="card-body">
-              <h2 className="card-title">DaisyUi Card</h2>
-              <p>
-                Rerum reiciendis beatae tenetur excepturi aut pariatur est eos.
-                Sit sit necessitatibus.
-              </p>
-            </div>
-          </div>
-
-          <div className="dropdown m-4">
-            <div tabIndex={0} className="m-1 btn">
-              Dropdown
-            </div>
-            <ul
-              tabIndex={0}
-              className="p-2 menu dropdown-content bg-neutral text-neutral-content rounded-box w-52"
-            >
-              <li>
-                <a>Item 1</a>
-              </li>
-              <li>
-                <a>Item 2</a>
-              </li>
-            </ul>
-          </div>
-
-          <label htmlFor={ID_MODAL_LOGOUT} className="btn modal-button">
-            Modal
-          </label>
-
-          <ul className="steps my-4 w-full">
-            <li className="step step-primary">Register</li>
-            <li className="step step-primary">Choose plan</li>
-            <li className="step">Purchase</li>
-            <li className="step">Receive Product</li>
-          </ul>
-
-          <div className="avatar online m-10">
-            <div className="rounded-full w-24 h-24">
-              <img src="https://i.pravatar.cc/150?img=3" />
-            </div>
-          </div>
-          <div className="avatar offline m-10">
-            <div className="rounded-full w-24 h-24">
-              <img src="https://i.pravatar.cc/150?img=3" />
-            </div>
-          </div>
         </div>
       </Drawer>
     </>

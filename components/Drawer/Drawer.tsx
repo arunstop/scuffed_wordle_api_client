@@ -33,7 +33,7 @@ export default function Drawer({ children }: Children) {
     // console.log(modalLogout);
   }
   return (
-    <main className="drawer drawer-mobile w-full">
+    <main className="drawer drawer-mobile w-full min-h-screen">
       <input
         id={ID_MAIN_DRAWER}
         type="checkbox"
@@ -85,10 +85,9 @@ export default function Drawer({ children }: Children) {
         <ul className="menu p-4 overflow-y-auto w-60 bg-base-300 text-base-content">
           {uiState.menuList.map((menu, index) => (
             <MenuItem
-              key={menu.id}
-              title={menu.title}
+              key={index}
+              menu={menu}
               isActive={menu.id === uiState.menuOn}
-              icon={menu.icon}
               action={() =>
                 menu.type == "PAGE"
                   ? uiAction.selectMenu(menu.id)

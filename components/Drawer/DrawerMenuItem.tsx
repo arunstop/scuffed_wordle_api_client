@@ -1,17 +1,15 @@
-import React, { ReactNode } from "react";
+import Link from "next/link";
+import React from "react";
+import { UiMenu } from "../../utils/models/UiModel";
 
 type MenuItemProps = {
-//   key: string;
-  title: string;
-  icon: ReactNode;
+  menu: UiMenu;
   isActive: boolean;
   action: () => void;
 };
 
 export default function MenuItem({
-//   key,
-  title,
-  icon,
+  menu: { id, icon, title, type },
   isActive,
   action,
 }: MenuItemProps) {
@@ -22,13 +20,15 @@ export default function MenuItem({
       "bg-base-300 hover:bg-transparent hover:border-current";
   return (
     <li>
-      <a
-        className={`btn justify-start text-sm normal-case text-base h-auto border-transparent ${activeClass}`}
-        onClick={action}
-      >
-        {icon}
-        {title}
-      </a>
+      <Link href={type === "MODAL" ? "" : `/${id}`} replace>
+        <a
+          className={`btn justify-start text-sm normal-case h-auto border-transparent ${activeClass}`}
+          onClick={action}
+        >
+          {icon}
+          {title}
+        </a>
+      </Link>
     </li>
   );
 }

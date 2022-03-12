@@ -10,7 +10,7 @@ import {
   UiState,
 } from "../../models/UiModel";
 import { UiContext } from "./UiContext";
-import {MdSpaceDashboard,MdOutlineErrorOutline} from "react-icons/md";
+import {MdOutlineSpaceDashboard,MdOutlineErrorOutline} from "react-icons/md";
 import {GoBook} from "react-icons/go";
 import {HiOutlineLogout} from "react-icons/hi";
 import {RiApps2Line} from "react-icons/ri";
@@ -18,7 +18,7 @@ import {RiApps2Line} from "react-icons/ri";
 
 const getInitialMenuList = (): UiMenu[] => {
   const menuList = [
-    { title: "Dashboard", type: "PAGE",icon:<MdSpaceDashboard size={24} /> },
+    { title: "Dashboard", type: "PAGE",icon:<MdOutlineSpaceDashboard size={24} /> },
     { title: "Dictionary", type: "PAGE",icon:<GoBook size={24}/> },
     { title: "Games", type: "PAGE",icon:<RiApps2Line size={24} /> },
     { title: "Issue Reports", type: "PAGE",icon:<MdOutlineErrorOutline size={24} /> },
