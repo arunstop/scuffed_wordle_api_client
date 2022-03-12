@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export interface Children {
+export interface MainChildren {
     children: ReactNode;
     // children: JSX.Element | JSX.Element[]
 }

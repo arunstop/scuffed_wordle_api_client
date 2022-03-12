@@ -5,7 +5,7 @@ import {
   CounterContextProps,
   CounterState,
 } from "../../models/CounterModel";
-import { Children } from "../../models/GeneralModel";
+import { MainChildren } from "../../models/GeneralModel";
 import { CounterContext } from "./CounterContext";
 
 const INITIAL_STATE: CounterState = {
@@ -31,7 +31,7 @@ const reducer = (state: CounterState, action: CounterActionTypes) => {
   }
 };
 
-export const CounterProvider = ({ children }: Children) => {
+export const CounterProvider = ({ children }: MainChildren) => {
   const [counterState, dispatch] = useReducer(reducer, INITIAL_STATE);
   // set initial value
   const counterAction: CounterAction = {

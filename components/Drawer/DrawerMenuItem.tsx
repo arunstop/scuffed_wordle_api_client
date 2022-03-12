@@ -18,17 +18,24 @@ export default function MenuItem({
       "btn-primary text-white font-semibold"
     : // not active
       "bg-base-300 hover:bg-transparent hover:border-current";
+  const item = (
+    <a
+      className={`btn justify-start text-sm normal-case h-auto border-transparent ${activeClass}`}
+      onClick={action}
+    >
+      {icon}
+      {title}
+    </a>
+  );
   return (
     <li>
-      <Link href={type === "MODAL" ? "" : `/${id}`} replace>
-        <a
-          className={`btn justify-start text-sm normal-case h-auto border-transparent ${activeClass}`}
-          onClick={action}
-        >
-          {icon}
-          {title}
-        </a>
-      </Link>
+      {type !== "PAGE" ? (
+        item
+      ) : (
+        <Link href={`/${id}`} replace>
+          {item}
+        </Link>
+      )}
     </li>
   );
 }

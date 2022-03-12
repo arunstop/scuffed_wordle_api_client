@@ -1,6 +1,6 @@
 import { useTheme } from "next-themes";
 import { useReducer } from "react";
-import { Children as ContextChildren } from "../../models/GeneralModel";
+import { MainChildren as ContextChildren } from "../../models/GeneralModel";
 import { slugify } from "../../models/GlobalModel";
 import {
   UiAction,

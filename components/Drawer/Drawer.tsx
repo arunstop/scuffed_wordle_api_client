@@ -10,7 +10,7 @@ import {
   LOGOUT_MODAL_TITLE,
 } from "../../utils/constants/ConstantText";
 import MenuItem from "./DrawerMenuItem";
-import { Children } from "../../utils/models/GeneralModel";
+import { MainChildren } from "../../utils/models/GeneralModel";
 import { NextRouter, useRouter } from "next/router";
 import {
   ID_MAIN_DRAWER,
@@ -18,7 +18,7 @@ import {
 } from "../../utils/constants/ConstantIds";
 type ModalValue = boolean;
 
-export default function Drawer({ children }: Children) {
+export default function Drawer({ children }: MainChildren) {
   //   const { state: countState, action: countAction } = useCountContext();
   const { state: uiState, action: uiAction } = useUiContext();
   const router: NextRouter = useRouter();
@@ -110,7 +110,7 @@ export default function Drawer({ children }: Children) {
         />
         <div className="modal backdrop-blur-sm">
           <div className="modal-box border-2 border-primary sm:border-transparent">
-            <p className="text-2xl mb-6">{LOGOUT_MODAL_TITLE}</p>
+            <p className="text-2xl mb-6 font-bold text-primary">{LOGOUT_MODAL_TITLE}</p>
             <p>{LOGOUT_MODAL_DESC}</p>
             <div className="modal-action">
               <label

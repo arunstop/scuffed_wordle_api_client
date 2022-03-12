@@ -1,17 +1,18 @@
 import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
 import React from "react";
+import { IoMdAddCircleOutline } from "react-icons/io";
 import Drawer from "../components/Drawer/Drawer";
-import { ID_MAIN_DRAWER } from "../utils/constants/ConstantIds";
+// import { ID_MAIN_DRAWER } from "../utils/constants/ConstantIds";
 import { APP_NAME } from "../utils/constants/ConstantText";
-import { useCountContext } from "../utils/contexts/counter/CounterHooks";
-import { useUiContext } from "../utils/contexts/ui/UiHooks";
+// import { useCountContext } from "../utils/contexts/counter/CounterHooks";
+// import { useUiContext } from "../utils/contexts/ui/UiHooks";
 
 export default function Dashboard() {
   const router: NextRouter = useRouter();
   // giving alias with colon (:)
-  const { state: countState, action: countAction } = useCountContext();
-  const { state: uiState, action: uiAction } = useUiContext();
+  // const { state: countState, action: countAction } = useCountContext();
+  // const { state: uiState, action: uiAction } = useUiContext();
 
   return (
     // <CounterProvider>
@@ -24,13 +25,16 @@ export default function Dashboard() {
 
       <Drawer>
         {/* CONTENT */}
-        <div className="flex flex-col items-center justify-center p-2 lg:p-4">
-          <label
-            htmlFor={ID_MAIN_DRAWER}
-            className="btn btn-primary drawer-button lg:hidden"
+        <div className="flex flex-col p-2 lg:p-4">
+          <div className="flex flex-wrap items-center">
+          <button
+            // htmlFor={ID_MAIN_DRAWER}
+            className="btn btn-primary gap-2 lg:btn-lg btn-md"
           >
-            Open drawer
-          </label>
+            ADD GAMES
+            <IoMdAddCircleOutline size={30}/>
+          </button>
+          </div>
         </div>
       </Drawer>
     </>
