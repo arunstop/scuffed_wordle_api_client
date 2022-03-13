@@ -23,15 +23,15 @@ export interface GameState {
 }
 
 // Action Types
-export type GameActionTypes = | { type: 'ADD', payload: Game; }
-    | { type: 'EDIT', payload: Game, }
-    | { type: 'DELETE', payload: string, }
+export type GameActionTypes = | { type: 'ADD', newGame: Game; }
+    | { type: 'EDIT', editedGame: Game, }
+    | { type: 'DELETE', gameId: string, }
     | { type: 'CLEAR', payload: string, };
 
 export interface GameAction {
     add: (game: Game) => void;
     edit: (game: Game) => void;
-    delete: (id: string) => void;
+    delete: (gameId: string) => void;
     clear: (param: string) => void;
 }
 

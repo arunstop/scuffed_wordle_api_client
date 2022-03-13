@@ -4,6 +4,7 @@ import { CounterProvider } from "../utils/contexts/counter/CounterProvider";
 import { UiProvider } from "../utils/contexts/ui/UiProvider";
 // import { useUiContext } from "../utils/contexts/ui/UiHooks";
 import { ThemeProvider } from "next-themes";
+import GameProvider from "../utils/contexts/game/GameProvider";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -11,7 +12,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ThemeProvider>
         <CounterProvider>
           <UiProvider>
+            <GameProvider>
             <Component {...pageProps} />
+            </GameProvider>
           </UiProvider>
         </CounterProvider>
       </ThemeProvider>

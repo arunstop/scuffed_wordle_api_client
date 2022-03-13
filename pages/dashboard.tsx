@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
-import React, { useState } from "react";
+// import React, { useState } from "react";
 // import { FiSun } from "react-icons/fi";
 // import { MdMenu, MdOutlineDarkMode } from "react-icons/md";
 // import { RiAppsFill } from "react-icons/ri";
@@ -26,17 +26,6 @@ export default function Dashboard() {
   // giving alias with colon (:)
   const { state: countState, action: countAction } = useCountContext();
   const { state: uiState, action: uiAction } = useUiContext();
-  type ModalValue = boolean;
-
-  const [modalLogout, setModalLogout] = useState<ModalValue>(false);
-
-  // const xd: boolean = false;
-  // const {theme, setTheme} = useTheme();
-
-  function toggleModalLogout(value: boolean) {
-    setModalLogout(value);
-    // console.log(modalLogout);
-  }
 
   return (
     // <CounterProvider>

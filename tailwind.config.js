@@ -8,6 +8,7 @@ module.exports = {
   },
   plugins: [
     require('daisyui'),
+    require('tailwind-animatecss'),
   ],
   // Daisy UI config theme
   daisyui: {

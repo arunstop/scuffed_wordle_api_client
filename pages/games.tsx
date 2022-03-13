@@ -1,10 +1,15 @@
+import { nanoid } from "nanoid";
 import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { MdDelete, MdEdit } from "react-icons/md";
 import Drawer from "../components/Drawer/Drawer";
 // import { ID_MAIN_DRAWER } from "../utils/constants/ConstantIds";
 import { APP_NAME } from "../utils/constants/ConstantText";
+import { useGameContext } from "../utils/contexts/game/GameHooks";
+import { generateGameData } from "../utils/contexts/game/GameProvider";
+import { useUiContext } from "../utils/contexts/ui/UiHooks";
 // import { useCountContext } from "../utils/contexts/counter/CounterHooks";
 // import { useUiContext } from "../utils/contexts/ui/UiHooks";
 
@@ -12,7 +17,29 @@ export default function Dashboard() {
   const router: NextRouter = useRouter();
   // giving alias with colon (:)
   // const { state: countState, action: countAction } = useCountContext();
-  // const { state: uiState, action: uiAction } = useUiContext();
+  const { state: uiState, action: uiAction } = useUiContext();
+
+  useEffect(() => {
+    if (uiState.menuOn !== "games") {
+      uiAction.selectMenu("games");
+    }
+  });
+
+  const { state: gameState, action: gameAction } = useGameContext();
+  const gameList = gameState.list;
+
+  function getId(): string {
+    const newId = nanoid();
+    if (gameList.map((game) => game.id).includes(newId)) return getId();
+    return newId;
+  }
+
+  function addGame() {
+    gameAction.add(generateGameData(getId()));
+  }
+  function deleteGame(gameId: string) {
+    gameAction.delete(gameId);
+  }
 
   return (
     // <CounterProvider>
@@ -25,15 +52,42 @@ export default function Dashboard() {
 
       <Drawer>
         {/* CONTENT */}
-        <div className="flex flex-col p-2 lg:p-4">
+        <div className="flex flex-col p-2 lg:p-4 gap-y-2">
           <div className="flex flex-wrap items-center">
-          <button
-            // htmlFor={ID_MAIN_DRAWER}
-            className="btn btn-primary gap-2 lg:btn-lg btn-md"
-          >
-            ADD GAMES
-            <IoMdAddCircleOutline size={30}/>
-          </button>
+            <button
+              // htmlFor={ID_MAIN_DRAWER}
+              className="btn btn-primary gap-2 lg:btn-lg btn-md"
+              onClick={() => addGame()}
+            >
+              ADD GAMES ({gameList.length})
+              <IoMdAddCircleOutline size={30} />
+            </button>
+          </div>
+          <div className="flex flex-wrap justify-center gap-4">
+            {gameList.map((game, index) => (
+              <div key={game.id} className="card card-compact shadow-lg outline outline-1 outline-primary">
+                <h2 className="card-title p-4 bg-primary">{game.name}</h2>
+                <div className="card-body">
+                  <p>{game.matrix}</p>
+                  <div className="card-actions justify-end">
+                    <button
+                      key={"btn-game-item-edit-" + index}
+                      className="btn btn-sm btn-circle"
+                      // onClick={() => deleteGame(game.id)}
+                    >
+                      <MdEdit size={18} />
+                    </button>
+                    <button
+                      key={"btn-game-item-delete-" + index}
+                      className="btn btn-sm btn-circle btn-error"
+                      onClick={() => deleteGame(game.id)}
+                    >
+                      <MdDelete size={18} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </Drawer>
