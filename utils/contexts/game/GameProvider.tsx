@@ -57,15 +57,20 @@ const reducer = (state: GameState, action: GameActionTypes): GameState => {
       // then add the editedData
       return {
         ...state,
-        list: [...state.list.filter((game) => game.id !== id), action.editedGame],
+        list: [
+          ...state.list.filter((game) => game.id !== id),
+          action.editedGame,
+        ],
       };
     }
     case "DELETE": {
+      // filter out the data that has id equals with payload
       const id = action.gameId;
       return { ...state, list: state.list.filter((game) => game.id !== id) };
     }
     case "CLEAR":
-      return state;
+      // empty the game list
+      return { ...state, list: [] };
     default:
       return state;
   }

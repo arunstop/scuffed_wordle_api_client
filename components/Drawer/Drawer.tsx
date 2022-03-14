@@ -16,6 +16,7 @@ import {
   ID_MAIN_DRAWER,
   ID_MODAL_LOGOUT,
 } from "../../utils/constants/ConstantIds";
+import Modal from "../Modal";
 type ModalValue = boolean;
 
 export default function Drawer({ children }: MainChildren) {
@@ -108,34 +109,13 @@ export default function Drawer({ children }: MainChildren) {
           }
           className="modal-toggle"
         />
-        <div className="modal backdrop-blur-sm">
-          <div className="modal-box border-2 border-primary sm:border-transparent">
-            <p className="text-2xl mb-6 font-bold text-primary">{LOGOUT_MODAL_TITLE}</p>
-            <p>{LOGOUT_MODAL_DESC}</p>
-            <div className="modal-action">
-              <label
-                htmlFor={ID_MODAL_LOGOUT}
-                className="btn w-24 btn-outline"
-                onClick={() => {
-                  // toggleModalLogout(false);
-                  // router.back();
-                }}
-              >
-                Cancel
-              </label>
-              <label
-                htmlFor={ID_MODAL_LOGOUT}
-                className="btn w-24 btn-primary"
-                onClick={() => {
-                  // toggleModalLogout(false);
-                  router.back();
-                }}
-              >
-                OK
-              </label>
-            </div>
-          </div>
-        </div>
+        <Modal
+          id={ID_MODAL_LOGOUT}
+          title={LOGOUT_MODAL_TITLE}
+          color="primary"
+          desc={LOGOUT_MODAL_DESC}
+          actionY={() => router.back()}
+        />
       </>
     </main>
   );

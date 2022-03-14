@@ -3,8 +3,9 @@ import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdClose, MdDelete, MdEdit } from "react-icons/md";
 import Drawer from "../components/Drawer/Drawer";
+import Modal from "../components/Modal";
 // import { ID_MAIN_DRAWER } from "../utils/constants/ConstantIds";
 import { APP_NAME } from "../utils/constants/ConstantText";
 import { useGameContext } from "../utils/contexts/game/GameHooks";
@@ -52,8 +53,8 @@ export default function Dashboard() {
 
       <Drawer>
         {/* CONTENT */}
-        <div className="flex flex-col p-2 lg:p-4 gap-y-2">
-          <div className="flex flex-wrap items-center">
+        <div className="flex flex-col p-2 lg:p-4 gap-y-4">
+          <div className="flex flex-wrap items-center gap-4">
             <button
               // htmlFor={ID_MAIN_DRAWER}
               className="btn btn-primary gap-2 lg:btn-lg btn-md"
@@ -62,10 +63,33 @@ export default function Dashboard() {
               ADD GAMES ({gameList.length})
               <IoMdAddCircleOutline size={30} />
             </button>
+            <label
+              htmlFor="games-clearall-modal"
+              className="btn btn-error gap-2 lg:btn-lg btn-md"
+            >
+              CLEAR ALL
+              <MdClose size={30} />
+            </label>
+            {/* MODAL */}
+            <input
+              type="checkbox"
+              id="games-clearall-modal"
+              className="modal-toggle"
+            />
+            <Modal
+              id="games-clearall-modal"
+              title="Clear All Game Data"
+              desc="All game data will be wiped out. This action cannot be undone. Use it wisely!"
+              color="error"
+              actionY={() => gameAction.clear("")}
+            />
           </div>
           <div className="flex flex-wrap justify-center gap-4">
             {gameList.map((game, index) => (
-              <div key={game.id} className="card card-compact shadow-lg outline outline-1 outline-primary">
+              <div
+                key={game.id}
+                className="card card-compact shadow-lg outline outline-1 outline-primary animatecss animatecss-flipInY"
+              >
                 <h2 className="card-title p-4 bg-primary">{game.name}</h2>
                 <div className="card-body">
                   <p>{game.matrix}</p>
