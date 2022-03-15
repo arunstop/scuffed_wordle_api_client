@@ -34,12 +34,12 @@ export default function Dashboard() {
     action: gameAction,
     getters: { isSearching, searchedList, isEmpty },
   } = useGameContext();
-  const gameList = searchedList;
+  // const gameList = searchedList;
   // const gameList = gameState.list;
 
   function getId(): string {
     const newId = nanoid();
-    if (gameList.map((game) => game.id).includes(newId)) return getId();
+    if (searchedList.map((game) => game.id).includes(newId)) return getId();
     return newId;
   }
 
@@ -71,16 +71,16 @@ export default function Dashboard() {
               className="btn btn-primary gap-2 lg:btn-lg btn-md"
               onClick={() => addGame()}
             >
-              ADD GAMES ({gameList.length})
+              ADD GAMES ({gameState.list.length})
               <IoMdAddCircleOutline size={30} />
             </button>
             <label
               htmlFor="games-clearall-modal"
               className={`btn gap-2 lg:btn-lg btn-md ${
-                gameList.length !== 0 || !isSearching ? `btn-error` : `btn-disabled`
+                searchedList.length !== 0 || !isSearching ? `btn-error` : `btn-disabled`
               }`}
             >
-              CLEAR ALL
+              CLEAR ALL ({searchedList.length})
               <MdClose size={30} />
             </label>
           </div>
@@ -88,12 +88,12 @@ export default function Dashboard() {
           <input
             type="search"
             placeholder="Search..."
-            className={`input input-bordered input-secondary w-full max-w-xs`}
+            className={`input input-bordered input-secondary w-full max-w-xs lg:input-lg input-md`}
             // value={gameState.search}
             disabled={isEmpty}
             onChange={onSearch}
           />
-          {gameList.length === 0 ? (
+          {searchedList.length === 0 ? (
             <div
               className={`flex flex-col items-center m-auto m gap-4 text-center 
               ${animate("flipInX", "faster")}`}
@@ -103,14 +103,14 @@ export default function Dashboard() {
                 <BsFillEmojiNeutralFill size={120} />
                 __/¯
               </div>
-              <h2 className="text-3xl font-bold">No data found</h2>
+              <h2 className="text-3xl font-bold">No results found</h2>
               <h2 className="text-lg">
                 Try to add new data or change the search keyword.
               </h2>
             </div>
           ) : (
             <div className="flex flex-wrap justify-center gap-4">
-              {gameList.map((game, index) => (
+              {searchedList.map((game, index) => (
                 <div
                   key={game.id}
                   className={`card card-compact shadow-lg outline outline-1 outline-primary ${animate("flipInY")}`}

@@ -71,7 +71,7 @@ const reducer = (state: GameState, action: GameActionTypes): GameState => {
     }
     case "CLEAR":
       // empty the game list
-      return { ...state, list: [] };
+      return { ...state, list: [], search:"" };
     case "SEARCH":
       return { ...state, search: action.keyword };
     default:
