@@ -8,14 +8,14 @@ import {
   APP_NAME,
   LOGOUT_MODAL_DESC,
   LOGOUT_MODAL_TITLE,
-} from "../../utils/constants/ConstantText";
+} from "../../utils/helpers/constants/ConstantText";
 import MenuItem from "./DrawerMenuItem";
 import { MainChildren } from "../../utils/models/GeneralModel";
 import { NextRouter, useRouter } from "next/router";
 import {
   ID_MAIN_DRAWER,
   ID_MODAL_LOGOUT,
-} from "../../utils/constants/ConstantIds";
+} from "../../utils/helpers/constants/ConstantIds";
 import Modal from "../Modal";
 type ModalValue = boolean;
 
@@ -40,7 +40,7 @@ export default function Drawer({ children }: MainChildren) {
         type="checkbox"
         className="drawer-toggle btn"
       />
-      <div className="drawer-content ">
+      <div className="drawer-content flex flex-col">
         {/* <!-- Navbar --> */}
         <div className="w-full navbar bg-base-300 sticky">
           {/* toggle menu button */}
@@ -100,7 +100,7 @@ export default function Drawer({ children }: MainChildren) {
       </div>
       {/* Logout modal */}
       <>
-        <input
+        {/* <input
           id={ID_MODAL_LOGOUT}
           type="checkbox"
           checked={modalLogout}
@@ -108,12 +108,16 @@ export default function Drawer({ children }: MainChildren) {
             toggleModalLogout(event.target.checked)
           }
           className="modal-toggle"
-        />
+        /> */}
         <Modal
           id={ID_MODAL_LOGOUT}
           title={LOGOUT_MODAL_TITLE}
           color="primary"
           desc={LOGOUT_MODAL_DESC}
+          value={modalLogout}
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+            toggleModalLogout(event.target.checked)
+          }
           actionY={() => router.back()}
         />
       </>

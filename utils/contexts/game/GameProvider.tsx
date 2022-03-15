@@ -42,6 +42,7 @@ const getInitialGameList = (): Game[] => {
 
 const INITIAL_STATE: GameState = {
   list: getInitialGameList(),
+  search: "",
 };
 
 const reducer = (state: GameState, action: GameActionTypes): GameState => {
@@ -71,6 +72,8 @@ const reducer = (state: GameState, action: GameActionTypes): GameState => {
     case "CLEAR":
       // empty the game list
       return { ...state, list: [] };
+    case "SEARCH":
+      return { ...state, search: action.keyword };
     default:
       return state;
   }
@@ -86,10 +89,15 @@ export default function GamesProvider({ children }: MainChildren) {
     edit: (game: Game) => dispatch({ type: "EDIT", editedGame: game }),
     delete: (gameId: string) => dispatch({ type: "DELETE", gameId: gameId }),
     clear: (param: string) => dispatch({ type: "CLEAR", payload: param }),
+    search: (keyword: string) => dispatch({ type: "SEARCH", keyword }),
   };
   const value: GameContextProps = {
     state: gameState,
     action: gameAction,
   };
-  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
+  return (
+    <GameContext.Provider value={value}>
+      <>{children}</>
+    </GameContext.Provider>
+  );
 }

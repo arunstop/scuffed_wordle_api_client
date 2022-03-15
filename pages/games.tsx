@@ -1,16 +1,19 @@
 import { nanoid } from "nanoid";
 import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { MdClose, MdDelete, MdEdit } from "react-icons/md";
 import Drawer from "../components/Drawer/Drawer";
 import Modal from "../components/Modal";
+import { BsFillEmojiNeutralFill } from "react-icons/bs";
+// import {GiTumbleweed} from "react-icons/gi";
 // import { ID_MAIN_DRAWER } from "../utils/constants/ConstantIds";
-import { APP_NAME } from "../utils/constants/ConstantText";
+import { APP_NAME } from "../utils/helpers/constants/ConstantText";
 import { useGameContext } from "../utils/contexts/game/GameHooks";
 import { generateGameData } from "../utils/contexts/game/GameProvider";
 import { useUiContext } from "../utils/contexts/ui/UiHooks";
+import { animate } from "../utils/helpers/AnimationHelper";
 // import { useCountContext } from "../utils/contexts/counter/CounterHooks";
 // import { useUiContext } from "../utils/contexts/ui/UiHooks";
 
@@ -26,8 +29,13 @@ export default function Dashboard() {
     }
   });
 
-  const { state: gameState, action: gameAction } = useGameContext();
-  const gameList = gameState.list;
+  const {
+    state: gameState,
+    action: gameAction,
+    getters: { isSearching, searchedList, isEmpty },
+  } = useGameContext();
+  const gameList = searchedList;
+  // const gameList = gameState.list;
 
   function getId(): string {
     const newId = nanoid();
@@ -41,6 +49,9 @@ export default function Dashboard() {
   function deleteGame(gameId: string) {
     gameAction.delete(gameId);
   }
+  function onSearch(event: ChangeEvent<HTMLInputElement>) {
+    gameAction.search(event.target.value);
+  }
 
   return (
     // <CounterProvider>
@@ -53,7 +64,7 @@ export default function Dashboard() {
 
       <Drawer>
         {/* CONTENT */}
-        <div className="flex flex-col p-2 lg:p-4 gap-y-4">
+        <div className="flex flex-col p-2 lg:p-4 gap-y-4 flex-grow">
           <div className="flex flex-wrap items-center gap-4">
             <button
               // htmlFor={ID_MAIN_DRAWER}
@@ -65,56 +76,79 @@ export default function Dashboard() {
             </button>
             <label
               htmlFor="games-clearall-modal"
-              className="btn btn-error gap-2 lg:btn-lg btn-md"
+              className={`btn gap-2 lg:btn-lg btn-md ${
+                gameList.length !== 0 || !isSearching ? `btn-error` : `btn-disabled`
+              }`}
             >
               CLEAR ALL
               <MdClose size={30} />
             </label>
-            {/* MODAL */}
-            <input
-              type="checkbox"
-              id="games-clearall-modal"
-              className="modal-toggle"
-            />
-            <Modal
-              id="games-clearall-modal"
-              title="Clear All Game Data"
-              desc="All game data will be wiped out. This action cannot be undone. Use it wisely!"
-              color="error"
-              actionY={() => gameAction.clear("")}
-            />
           </div>
-          <div className="flex flex-wrap justify-center gap-4">
-            {gameList.map((game, index) => (
-              <div
-                key={game.id}
-                className="card card-compact shadow-lg outline outline-1 outline-primary animatecss animatecss-flipInY"
-              >
-                <h2 className="card-title p-4 bg-primary">{game.name}</h2>
-                <div className="card-body">
-                  <p>{game.matrix}</p>
-                  <div className="card-actions justify-end">
-                    <button
-                      key={"btn-game-item-edit-" + index}
-                      className="btn btn-sm btn-circle"
-                      // onClick={() => deleteGame(game.id)}
-                    >
-                      <MdEdit size={18} />
-                    </button>
-                    <button
-                      key={"btn-game-item-delete-" + index}
-                      className="btn btn-sm btn-circle btn-error"
-                      onClick={() => deleteGame(game.id)}
-                    >
-                      <MdDelete size={18} />
-                    </button>
+          {/* Search bar */}
+          <input
+            type="search"
+            placeholder="Search..."
+            className={`input input-bordered input-secondary w-full max-w-xs`}
+            // value={gameState.search}
+            disabled={isEmpty}
+            onChange={onSearch}
+          />
+          {gameList.length === 0 ? (
+            <div
+              className={`flex flex-col items-center m-auto m gap-4 text-center 
+              ${animate("flipInX", "faster")}`}
+            >
+              <div className="inline-flex items-center text-4xl font-black gap-1 text-warning">
+                ¯\__
+                <BsFillEmojiNeutralFill size={120} />
+                __/¯
+              </div>
+              <h2 className="text-3xl font-bold">No data found</h2>
+              <h2 className="text-lg">
+                Try to add new data or change the search keyword.
+              </h2>
+            </div>
+          ) : (
+            <div className="flex flex-wrap justify-center gap-4">
+              {gameList.map((game, index) => (
+                <div
+                  key={game.id}
+                  className={`card card-compact shadow-lg outline outline-1 outline-primary ${animate("flipInY")}`}
+                >
+                  <h2 className="card-title p-4 bg-primary">{game.name}</h2>
+                  <div className="card-body">
+                    <p>{game.matrix}</p>
+                    <div className="card-actions justify-end">
+                      <button
+                        key={"btn-game-item-edit-" + index}
+                        className="btn btn-sm btn-circle"
+                        // onClick={() => deleteGame(game.id)}
+                      >
+                        <MdEdit size={18} />
+                      </button>
+                      <button
+                        key={"btn-game-item-delete-" + index}
+                        className="btn btn-sm btn-circle btn-error"
+                        onClick={() => deleteGame(game.id)}
+                      >
+                        <MdDelete size={18} />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </Drawer>
+      {/* MODAL */}
+      <Modal
+        id="games-clearall-modal"
+        title="Clear All Game Data"
+        desc="All game data will be wiped out. This action cannot be undone. Use it wisely!"
+        color="error"
+        actionY={() => gameAction.clear("")}
+      />
     </>
   );
 }

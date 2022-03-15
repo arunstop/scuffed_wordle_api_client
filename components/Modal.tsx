@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { MainColorTypes } from "../utils/models/GeneralModel";
 
 type ModalProps = {
@@ -6,6 +6,8 @@ type ModalProps = {
   title: string;
   desc: string;
   color?: MainColorTypes;
+  value?: boolean;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   actionY?: () => void;
   actionN?: () => void;
 };
@@ -13,14 +15,26 @@ export default function Modal({
   id,
   title,
   desc,
-  color="info",
+  color = "info",
+  value,
+  onChange = () => {},
   actionY = () => {},
   actionN = () => {},
 }: ModalProps) {
+  // console.log(value);
   return (
     <>
+      <input
+        id={id}
+        type="checkbox"
+        checked={value}
+        onChange={onChange}
+        className="modal-toggle"
+      />
       <div className="modal backdrop-blur-sm z-20">
-        <div className={`modal-box border-2 border-${color} sm:border-transparent`}>
+        <div
+          className={`modal-box border-2 border-${color} sm:border-transparent`}
+        >
           <p className={`text-2xl mb-6 font-bold text-${color}`}>{title}</p>
           <p>{desc}</p>
           <div className="modal-action">

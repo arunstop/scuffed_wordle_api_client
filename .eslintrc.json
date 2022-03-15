@@ -2,7 +2,9 @@
   "extends": "next/core-web-vitals",
   "plugins": ["unused-imports"],
   "rules": {
+    "no-console": "warn",
     "semi": "error",
+    "no-unused-vars":"warn",
     "max-len": ["error", { "code": 180, "ignoreComments": true }],
     "unused-imports/no-unused-imports": "error",
     "comma-dangle": [

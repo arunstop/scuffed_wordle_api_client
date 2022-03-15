@@ -20,19 +20,22 @@ export interface Game {
 // State
 export interface GameState {
     list: Game[];
+    search: string;
 }
 
 // Action Types
 export type GameActionTypes = | { type: 'ADD', newGame: Game; }
     | { type: 'EDIT', editedGame: Game, }
     | { type: 'DELETE', gameId: string, }
-    | { type: 'CLEAR', payload: string, };
+    | { type: 'CLEAR', payload: string, }
+    | { type: 'SEARCH', keyword: string, };
 
 export interface GameAction {
     add: (game: Game) => void;
     edit: (game: Game) => void;
     delete: (gameId: string) => void;
     clear: (param: string) => void;
+    search: (keyword: string) => void;
 }
 
 

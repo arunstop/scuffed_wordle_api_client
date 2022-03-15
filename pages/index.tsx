@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
-import { APP_NAME } from "../utils/constants/ConstantText";
+import { APP_NAME } from "../utils/helpers/constants/ConstantText";
 
 const Home: NextPage = () => {
   return (

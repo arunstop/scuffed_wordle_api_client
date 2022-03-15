@@ -5,8 +5,8 @@ import { NextRouter, useRouter } from "next/router";
 // import { MdMenu, MdOutlineDarkMode } from "react-icons/md";
 // import { RiAppsFill } from "react-icons/ri";
 import Drawer from "../components/Drawer/Drawer";
-import { ID_MAIN_DRAWER, ID_MODAL_LOGOUT } from "../utils/constants/ConstantIds";
-import { APP_NAME } from "../utils/constants/ConstantText";
+import { ID_MAIN_DRAWER, ID_MODAL_LOGOUT } from "../utils/helpers/constants/ConstantIds";
+import { APP_NAME } from "../utils/helpers/constants/ConstantText";
 
 // import { TiThMenu } from "react-icons/ti";
 // import MenuItem from "../components/Drawer/MenuItem";

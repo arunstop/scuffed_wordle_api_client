@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
-import { APP_NAME } from "../utils/constants/ConstantText";
+import { APP_NAME } from "../utils/helpers/constants/ConstantText";
 import {IoMdArrowRoundBack} from "react-icons/io";
 
 export default function Custom404() {
