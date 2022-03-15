@@ -66,6 +66,7 @@ export default function Dashboard() {
         {/* CONTENT */}
         <div className="flex flex-col p-2 lg:p-4 gap-y-4 flex-grow">
           <div className="flex flex-wrap items-center gap-4">
+            {/* {gameState.search} */}
             <button
               // htmlFor={ID_MAIN_DRAWER}
               className="btn btn-primary gap-2 lg:btn-lg btn-md"
@@ -89,7 +90,7 @@ export default function Dashboard() {
             type="search"
             placeholder="Search..."
             className={`input input-bordered input-secondary w-full max-w-xs lg:input-lg input-md`}
-            // value={gameState.search}
+            value={gameState.search}
             disabled={isEmpty}
             onChange={onSearch}
           />
