@@ -27,14 +27,14 @@ export interface GameState {
 export type GameActionTypes = | { type: 'ADD', newGame: Game; }
     | { type: 'EDIT', editedGame: Game, }
     | { type: 'DELETE', gameId: string, }
-    | { type: 'CLEAR', payload: string, }
+    | { type: 'CLEAR', gameIdList?: string[], }
     | { type: 'SEARCH', keyword: string, };
 
 export interface GameAction {
     add: (game: Game) => void;
     edit: (game: Game) => void;
     delete: (gameId: string) => void;
-    clear: (param: string) => void;
+    clear: (gameIdList?: string[]) => void;
     search: (keyword: string) => void;
 }
 

@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { nanoid } from "nanoid";
 import React, { useReducer } from "react";
 import {
@@ -69,10 +70,24 @@ const reducer = (state: GameState, action: GameActionTypes): GameState => {
       const id = action.gameId;
       return { ...state, list: state.list.filter((game) => game.id !== id) };
     }
-    case "CLEAR":
+    case "CLEAR": {
+      // check if payload contains gameIdList
+      const { gameIdList } = action;
+      if (gameIdList) {
+        // clear selected items from list
+        // by checking if each of the game's id
+        // is NOT included in action.gameIdList
+        const clearedItemList = _.filter(state.list, (game) =>
+          !gameIdList.includes(game.id),
+        );
+        return { ...state, search: "", list: clearedItemList };
+      }
+      // if has no gameIdList
       // empty the game list
-      return { ...state, list:[], search:"" };
+      return { ...state, search: "", list: [] };
+    }
     case "SEARCH":
+      // change search keyword
       return { ...state, search: action.keyword };
     default:
       return state;
@@ -88,7 +103,8 @@ export default function GamesProvider({ children }: MainChildren) {
     },
     edit: (game: Game) => dispatch({ type: "EDIT", editedGame: game }),
     delete: (gameId: string) => dispatch({ type: "DELETE", gameId: gameId }),
-    clear: (param: string) => dispatch({ type: "CLEAR", payload: param }),
+    clear: (gameIdList?: string[]) =>
+      dispatch({ type: "CLEAR", gameIdList: gameIdList }),
     search: (keyword: string) => dispatch({ type: "SEARCH", keyword }),
   };
   const value: GameContextProps = {

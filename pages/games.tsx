@@ -66,7 +66,6 @@ export default function Dashboard() {
         {/* CONTENT */}
         <div className="flex flex-col p-2 lg:p-4 gap-y-4 flex-grow">
           <div className="flex flex-wrap items-center gap-4">
-            {/* {gameState.search} */}
             <button
               // htmlFor={ID_MAIN_DRAWER}
               className="btn btn-primary gap-2 lg:btn-lg btn-md"
@@ -78,7 +77,9 @@ export default function Dashboard() {
             <label
               htmlFor="games-clearall-modal"
               className={`btn gap-2 lg:btn-lg btn-md ${
-                searchedList.length !== 0 || !isSearching ? `btn-error` : `btn-disabled`
+                searchedList.length !== 0 || !isSearching
+                  ? `btn-error`
+                  : `btn-disabled`
               }`}
             >
               CLEAR ALL ({searchedList.length})
@@ -90,7 +91,7 @@ export default function Dashboard() {
             type="search"
             placeholder="Search..."
             className={`input input-bordered input-secondary w-full max-w-xs lg:input-lg input-md`}
-            value={gameState.search}
+            value={gameState.search || ""}
             disabled={isEmpty}
             onChange={onSearch}
           />
@@ -110,11 +111,13 @@ export default function Dashboard() {
               </h2>
             </div>
           ) : (
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-4 transition-transform">
               {searchedList.map((game, index) => (
                 <div
                   key={game.id}
-                  className={`card card-compact shadow-lg outline outline-1 outline-primary ${animate("flipInY")}`}
+                  className={`card card-compact shadow-lg outline outline-1 outline-primary ${animate(
+                    "flipInY",
+                  )}`}
                 >
                   <h2 className="card-title p-4 bg-primary">{game.name}</h2>
                   <div className="card-body">
@@ -148,7 +151,10 @@ export default function Dashboard() {
         title="Clear All Game Data"
         desc="All game data will be wiped out. This action cannot be undone. Use it wisely!"
         color="error"
-        actionY={() => gameAction.clear("")}
+        // clear searched items if exists
+        actionY={() =>
+          gameAction.clear([...searchedList.map((game) => game.id)])
+        }
       />
     </>
   );
