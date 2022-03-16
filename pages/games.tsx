@@ -3,7 +3,7 @@ import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
 import React, { ChangeEvent, useEffect } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { MdClose, MdDelete, MdEdit } from "react-icons/md";
+import { MdClose, MdDelete, MdEdit, MdSearch } from "react-icons/md";
 import Drawer from "../components/Drawer/Drawer";
 import Modal from "../components/Modal";
 import { BsFillEmojiNeutralFill } from "react-icons/bs";
@@ -13,7 +13,6 @@ import { APP_NAME } from "../utils/helpers/constants/ConstantText";
 import { useGameContext } from "../utils/contexts/game/GameHooks";
 import { generateGameData } from "../utils/contexts/game/GameProvider";
 import { useUiContext } from "../utils/contexts/ui/UiHooks";
-import { animate } from "../utils/helpers/AnimationHelper";
 // import { useCountContext } from "../utils/contexts/counter/CounterHooks";
 // import { useUiContext } from "../utils/contexts/ui/UiHooks";
 
@@ -52,6 +51,7 @@ export default function Dashboard() {
   function onSearch(event: ChangeEvent<HTMLInputElement>) {
     gameAction.search(event.target.value);
   }
+  const anim: string = "animatecss animatecss-backInUp animatecss-faster";
 
   return (
     // <CounterProvider>
@@ -68,37 +68,41 @@ export default function Dashboard() {
           <div className="flex flex-wrap items-center gap-4">
             <button
               // htmlFor={ID_MAIN_DRAWER}
-              className="btn btn-primary gap-2 lg:btn-lg btn-md"
+              className="btn btn-primary gap-2 lg:btn-lg lg:text-lg btn-md"
               onClick={() => addGame()}
             >
-              ADD GAMES ({gameState.list.length})
+              Add games ({gameState.list.length})
               <IoMdAddCircleOutline size={30} />
             </button>
             <label
               htmlFor="games-clearall-modal"
-              className={`btn gap-2 lg:btn-lg btn-md ${
+              className={`btn gap-2 lg:btn-lg lg:text-lg btn-md ${
                 searchedList.length !== 0 || !isSearching
                   ? `btn-error`
                   : `btn-disabled`
               }`}
             >
-              CLEAR ALL ({searchedList.length})
+              Clear all ({searchedList.length})
               <MdClose size={30} />
             </label>
+            {/* Search bar */}
+            <div className="form-control">
+              <label className="input-group lg:input-group-lg input-group-md">
+                <span><MdSearch size={30}/></span>
+                <input
+                  type="search"
+                  placeholder="Search..."
+                  className={`input input-bordered input-secondary w-full max-w-xs lg:input-lg input-md`}
+                  value={gameState.search || ""}
+                  disabled={isEmpty}
+                  onChange={onSearch}
+                />
+              </label>
+            </div>
           </div>
-          {/* Search bar */}
-          <input
-            type="search"
-            placeholder="Search..."
-            className={`input input-bordered input-secondary w-full max-w-xs lg:input-lg input-md`}
-            value={gameState.search || ""}
-            disabled={isEmpty}
-            onChange={onSearch}
-          />
           {searchedList.length === 0 ? (
             <div
-              className={`flex flex-col items-center m-auto m gap-4 text-center 
-              ${animate("flipInX", "faster")}`}
+              className={`flex flex-col items-center m-auto m gap-4 text-center animatecss animatecss-jackInTheBox animatecss-faster`}
             >
               <div className="inline-flex items-center text-4xl font-black gap-1 text-warning">
                 ¯\__
@@ -111,13 +115,13 @@ export default function Dashboard() {
               </h2>
             </div>
           ) : (
-            <div className="flex flex-wrap justify-center gap-4 transition-transform">
+            <div className="flex flex-wrap justify-center gap-4 transition">
               {searchedList.map((game, index) => (
                 <div
                   key={game.id}
-                  className={`card card-compact shadow-lg outline outline-1 outline-primary ${animate(
-                    "flipInY",
-                  )}`}
+                  className={
+                    "card card-compact shadow-lg outline outline-1 outline-primary animatecss animatecss-jackInTheBox animatecss-faster"
+                  }
                 >
                   <h2 className="card-title p-4 bg-primary">{game.name}</h2>
                   <div className="card-body">
@@ -151,6 +155,7 @@ export default function Dashboard() {
         title="Clear All Game Data"
         desc="All game data will be wiped out. This action cannot be undone. Use it wisely!"
         color="error"
+        labelY="Clear"
         // clear searched items if exists
         actionY={() =>
           gameAction.clear([...searchedList.map((game) => game.id)])

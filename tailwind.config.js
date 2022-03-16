@@ -22,7 +22,7 @@ module.exports = {
         "--animation-btn": "0.3s", // duration of animation when you click on button
         "--animation-input": "0.3s", // duration of animation for inputs like checkbox, toggle, radio, etc
         "--btn-focus-scale": "0.9", // scale transform of button when you focus on it
-        "--btn-text-case": "uppercase", // set default text transform for buttons
+        "--btn-text-case": "none", // set default text transform for buttons
         "--border-btn": "1px", // border width of buttons
         "--tab-border": "1px", // border width of tabs
         "--tab-radius": "0.5rem", // border radius of tabs
@@ -35,7 +35,7 @@ module.exports = {
         "--animation-btn": "0.3s", // duration of animation when you click on button
         "--animation-input": "0.3s", // duration of animation for inputs like checkbox, toggle, radio, etc
         "--btn-focus-scale": "0.9", // scale transform of button when you focus on it
-        "--btn-text-case": "uppercase", // set default text transform for buttons
+        "--btn-text-case": "none", // set default text transform for buttons
         "--border-btn": "1px", // border width of buttons
         "--tab-border": "1px", // border width of tabs
         "--tab-radius": "0.5rem", // border radius of tabs
