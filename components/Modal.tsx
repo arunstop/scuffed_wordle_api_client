@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { GoInfo } from "react-icons/go";
-import { BsCheck2Circle } from "react-icons/bs";
-import { IoMdCloseCircleOutline } from "react-icons/io";
+// import { BsCheck2Circle } from "react-icons/bs";
+// import { IoMdCloseCircleOutline } from "react-icons/io";
 import { MainColorTypes } from "../utils/models/GeneralModel";
 
 type ModalProps = {
@@ -27,19 +27,19 @@ export default function Modal({
   actionN = () => {},
 }: ModalProps) {
   // console.log(value);
-  function renderButton() {
-    const size: number = 36;
-    switch (color) {
-      case "success":
-        return <BsCheck2Circle size={size} />;
-      case "warning":
-        return <GoInfo size={size} />;
-      case "error":
-        return <IoMdCloseCircleOutline size={size} />;
-      default:
-        return <GoInfo size={size} />;
-    }
-  }
+  // function renderButton() {
+  //   const size: number = 36;
+  //   switch (color) {
+  //     case "success":
+  //       return <BsCheck2Circle size={size} />;
+  //     case "warning":
+  //       return <GoInfo size={size} />;
+  //     case "error":
+  //       return <IoMdCloseCircleOutline size={size} />;
+  //     default:
+  //       return <GoInfo size={size} />;
+  //   }
+  // }
   return (
     <>
       <input
@@ -57,7 +57,7 @@ export default function Modal({
           <div
             className={`mask mask-circle bg-${color} bg-opacity-30 text-${color} rounded-full border-${color} self-center md:self-start p-2`}
           >
-            {renderButton()}
+            <GoInfo size={36} />
           </div>
           <div className="flex flex-col gap-4">
             <p

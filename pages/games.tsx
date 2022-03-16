@@ -88,7 +88,9 @@ export default function Dashboard() {
             {/* Search bar */}
             <div className="form-control">
               <label className="input-group lg:input-group-lg input-group-md">
-                <span><MdSearch size={30}/></span>
+                <span>
+                  <MdSearch size={30} />
+                </span>
                 <input
                   type="search"
                   placeholder="Search..."
