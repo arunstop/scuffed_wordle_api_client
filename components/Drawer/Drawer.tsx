@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { MdOutlineDarkMode, MdMenu } from "react-icons/md";
 import { FiSun } from "react-icons/fi";
 import { RiAppsFill } from "react-icons/ri";
@@ -25,6 +25,18 @@ export default function Drawer({ children }: MainChildren) {
   const router: NextRouter = useRouter();
 
   const [modalLogout, setModalLogout] = useState<ModalValue>(false);
+
+  useEffect(() => {
+    const page = router.pathname.split("/")[1];
+    uiAction.selectMenu(page);
+  }, [router.pathname]);
+
+  useEffect(() => {
+    // Anything in here is fired on component mount.
+    return () => {
+      // Anything in here is fired on component unmount.
+    };
+  }, []);
 
   // const xd: boolean = false;
   // const {theme, setTheme} = useTheme();
@@ -115,6 +127,7 @@ export default function Drawer({ children }: MainChildren) {
           color="primary"
           desc={LOGOUT_MODAL_DESC}
           value={modalLogout}
+          labelY="Log out"
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             toggleModalLogout(event.target.checked)
           }

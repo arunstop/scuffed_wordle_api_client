@@ -9,6 +9,7 @@ export interface Game {
     utcOffset: number;
     refreshInterval: string[];
     playerList: string[];
+    bannedWordList: string[];
     // mode:string;
     createdBy: string;
     editedBy: string;

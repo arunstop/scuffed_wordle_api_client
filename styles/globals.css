@@ -23,3 +23,7 @@ a {
   font-size:1rem;
 }
 
+.bg-pattern{
+  background-image: url("/terrazzo.svg");
+}
+

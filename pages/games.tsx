@@ -23,9 +23,9 @@ export default function Dashboard() {
   const { state: uiState, action: uiAction } = useUiContext();
 
   useEffect(() => {
-    if (uiState.menuOn !== "games") {
-      uiAction.selectMenu("games");
-    }
+    // if (uiState.menuOn !== "games") {
+    //   uiAction.selectMenu("games");
+    // }
   });
 
   const {

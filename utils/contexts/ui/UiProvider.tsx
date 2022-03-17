@@ -44,7 +44,8 @@ const getInitialMenuList = (): UiMenu[] => {
 const INITIAL_STATE: UiState = {
   darkTheme: false,
   menuList: getInitialMenuList(),
-  menuOn: getInitialMenuList()[0].id,
+  // menuOn: getInitialMenuList()[0].id,
+  menuOn: "",
 };
 
 const reducer = (state: UiState, action: UiActionTypes) => {

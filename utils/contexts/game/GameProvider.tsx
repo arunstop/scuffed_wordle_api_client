@@ -19,6 +19,7 @@ export const generateGameData = (id: string): Game => ({
   utcOffset: 2,
   refreshInterval: [],
   playerList: [],
+  bannedWordList: [],
   // mode:string,
   createdBy: `User#${id.substring(0, 5)}`,
   editedBy: `User#${id.substring(0, 5)}`,

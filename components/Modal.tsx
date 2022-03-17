@@ -47,7 +47,7 @@ export default function Modal({
         type="checkbox"
         checked={value}
         onChange={onChange}
-        className="modal-toggle"
+        className="modal-toggle bg-error"
       />
       <label htmlFor={id} className="modal  backdrop-blur-sm z-20">
         <label
