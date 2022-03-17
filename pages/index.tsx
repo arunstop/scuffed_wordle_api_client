@@ -26,14 +26,15 @@ const Home: NextPage = () => {
       <main className="flex w-full justify-center">
         <div className="bg-base-300 sm:max-w-xl rounded-lg w-full">
           <div
-            className={`card h-auto bg-base-100 rounded-none
+            className={`card h-auto bg-base-100 rounded-none text-center
             sm:m-4 sm:rounded-lg
             animatecss animatecss-jackInTheBox animatecss-faster
             `}
-          >
+          > 
             <figure className="px-10 pt-10">
-              <img src="/vercel.svg" alt="icon" />
+              <img src="/icon.png" alt="icon" height={120} width={120} />
             </figure>
+            <h2 className="text-2xl font-bold">{APP_NAME}</h2>
             <div className="card-body items-center text-center gap-4 p-4 sm:p-8">
               {/* <h2 className="card-title">Shoes!</h2> */}
 

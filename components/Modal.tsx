@@ -69,14 +69,14 @@ export default function Modal({
             <div className="modal-action mt-4 flex-wrap md:flex-row-reverse md:justify-start gap-4">
               <label
                 htmlFor={id}
-                className={`btn btn-${color} m-0 btn-block md:w-24 font-bold`}
+                className={`btn btn-${color} m-0 btn-block md:w-fit font-bold`}
                 onClick={() => actionY()}
               >
                 {labelY}
               </label>
               <label
                 htmlFor={id}
-                className="btn btn-outline m-0 btn-block md:w-24"
+                className="btn btn-outline m-0 btn-block md:w-fit"
                 onClick={() => actionN()}
               >
                 Cancel

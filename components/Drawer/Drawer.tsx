@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { MdOutlineDarkMode, MdMenu } from "react-icons/md";
 import { FiSun } from "react-icons/fi";
-import { RiAppsFill } from "react-icons/ri";
+// import { RiAppsFill } from "react-icons/ri";
 // import { useCountContext } from "../../utils/contexts/counter/CounterHooks";
 import { useUiContext } from "../../utils/contexts/ui/UiHooks";
 import {
@@ -63,8 +63,8 @@ export default function Drawer({ children }: MainChildren) {
             <MdMenu size={30} className="text-base-content" />
           </label>
           {/* app name */}
-          <RiAppsFill size={30} className="text-primary" />
-          <div className="flex-1 mx-2 text-lg font-bold text-primary">
+          <img src="/icon.png" alt="icon" height={30} width={30}/>
+          <div className="flex-1 mx-2 text-lg font-bold">
             {APP_NAME}
           </div>
           {/* toggle darktheme */}
