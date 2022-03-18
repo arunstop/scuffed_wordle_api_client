@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import React, { Fragment } from "react";
+import React, { Fragment, PropsWithChildren } from "react";
 import { GoInfo } from "react-icons/go";
 import { MainColorTypes } from "../utils/models/GeneralModel";
 
@@ -12,7 +12,9 @@ type ModalProps = {
   // onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   actionY?: () => void;
   actionN?: () => void;
-  onClose?: (value: boolean) => void;
+  onClose: (value: boolean) => void;
+  noAction?: boolean;
+  big?: boolean;
 };
 
 function HeadlessModal({
@@ -25,13 +27,16 @@ function HeadlessModal({
   actionY = () => {},
   actionN = () => {},
   onClose = () => {},
-}: ModalProps) {
+  children,
+  noAction = false,
+  big = false,
+}: PropsWithChildren<ModalProps>) {
   //   function closeModal() {}
   return (
     <Transition appear show={value} as={Fragment}>
       <Dialog
         as="div"
-        className="modal bg-transparent opacity-100 visible z-20 pointer-events-auto "
+        className="modal bg-transparent opacity-100 visible z-20 pointer-events-auto overflow-hidden"
         onClose={onClose}
       >
         <Transition.Child
@@ -55,8 +60,8 @@ function HeadlessModal({
           </span> */}
         <Transition.Child
           as={"div"}
-          className={`modal-box border-t-8 border-${color} gap-4 
-          sm:border-transparent flex sm:flex-row flex-col transform-none z-10 relative 
+          className={`modal-box border-t-8 border-${color} gap-4 transform-none z-10 overflow-auto
+          flex flex-col sm:border-transparent
           animatecss duration-300
           `}
           enter="sm:animatecss-jackInTheBox animatecss-fadeInUp duration-300"
@@ -66,42 +71,62 @@ function HeadlessModal({
           //   leaveFrom="opacity-100 scale-100"
           //   leaveTo="opacity-0 scale-50"
         >
-          <div
-            className={`mask mask-circle bg-${color} bg-opacity-30 text-${color} rounded-full border-${color} self-center sm:self-start p-2`}
-          >
-            <GoInfo size={36} />
-          </div>
+          <div className={`flex ${big ? `` : `sm:flex-row`} flex-col gap-4`}>
+            {!big && (
+              <div
+                className={`mask mask-circle bg-${color} bg-opacity-30 text-${color} rounded-full border-${color} 
+              self-center p-2 flex-shrink`}
+              >
+                <GoInfo size={36} />
+              </div>
+            )}
 
-          <div className="flex flex-col gap-4">
-            {/* Title */}
-            <Dialog.Title
-              as="p"
-              className={`text-2xl font-bold text-${color} text-center sm:text-left`}
-            >
-              {title}
-            </Dialog.Title>
-            {/* Desc */}
-            <p className="text-center sm:text-left">{desc}</p>
-            {/* BUTTON */}
-            <div className="modal-action mt-4 flex-wrap sm:flex-row-reverse sm:justify-start gap-4">
-              <label
-                className={`btn btn-${color} m-0 btn-block sm:w-40 font-bold truncate capitalize`}
-                onClick={() => {
-                  actionY();
-                  onClose(false);
-                }}
+            <div className="flex flex-col gap-4 w-full">
+              {/* Title */}
+              <Dialog.Title
+                as="p"
+                className={`text-2xl font-bold text-${color} text-center ${
+                  big ? `` : `sm:text-left`
+                }`}
               >
-                {labelY}
-              </label>
-              <label
-                className="btn btn-outline m-0 btn-block sm:w-fit"
-                onClick={() => {
-                  actionN();
-                  onClose(false);
-                }}
-              >
-                Cancel
-              </label>
+                {title}
+              </Dialog.Title>
+              {!!children ? (
+                children
+              ) : (
+                <>
+                  {/* Desc */}
+                  <p className="text-center sm:text-left">{desc}</p>
+                </>
+              )}
+
+              {!!noAction ? (
+                children
+              ) : (
+                <>
+                  {/* BUTTON */}
+                  <div className="modal-action flex-wrap sm:flex-row-reverse sm:justify-start gap-4">
+                    <label
+                      className={`btn btn-${color} m-0 btn-block sm:w-40 font-bold truncate capitalize`}
+                      onClick={() => {
+                        actionY();
+                        onClose(false);
+                      }}
+                    >
+                      {labelY}
+                    </label>
+                    <label
+                      className="btn btn-outline m-0 btn-block sm:w-fit"
+                      onClick={() => {
+                        actionN();
+                        onClose(false);
+                      }}
+                    >
+                      Cancel
+                    </label>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </Transition.Child>

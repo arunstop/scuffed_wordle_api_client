@@ -15,6 +15,7 @@ import { generateGameData } from "../../utils/contexts/game/GameProvider";
 // import { useUiContext } from "../../utils/contexts/ui/UiHooks";
 import { strGameMatrix } from "../../utils/models/GameModel";
 import HeadlessModal from "../../components/HeadlessModal";
+import GamesAddForm from "../../components/Forms/GamesAddForm";
 // import { useCountContext } from "../utils/contexts/counter/CounterHooks";
 // import { useUiContext } from "../utils/contexts/ui/UiHooks";
 
@@ -81,12 +82,16 @@ export default function Dashboard() {
               <IoMdAddCircleOutline size={30} />
             </button>
             <label
-              htmlFor="games-clearall-modal"
+              // htmlFor="games-clearall-modal"
               className={`btn gap-2 lg:btn-lg lg:text-lg btn-md ${
                 searchedList.length !== 0 || !isSearching
                   ? `btn-error`
                   : `btn-disabled`
               }`}
+              onClick={() => {
+                setModalClear(true);
+                // addGame();
+              }}
             >
               Clear all ({searchedList.length})
               <MdClose size={30} />
@@ -167,7 +172,10 @@ export default function Dashboard() {
         onClose={(value) => {
           setModalAdd(value);
         }}
-      />
+        big
+      >
+        <GamesAddForm/>
+      </HeadlessModal>
       <HeadlessModal
         value={modalClear}
         title="Clear All Game Data"
@@ -178,6 +186,9 @@ export default function Dashboard() {
         actionY={() =>
           gameAction.clear([...searchedList.map((game) => game.id)])
         }
+        onClose={(value) => {
+          setModalClear(value);
+        }}
       />
     </>
   );
