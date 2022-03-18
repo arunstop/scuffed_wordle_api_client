@@ -14,9 +14,10 @@ import { MainChildren } from "../../utils/models/GeneralModel";
 import { NextRouter, useRouter } from "next/router";
 import {
   ID_MAIN_DRAWER,
-  ID_MODAL_LOGOUT,
+  // ID_MODAL_LOGOUT,
 } from "../../utils/helpers/constants/ConstantIds";
-import Modal from "../Modal";
+// import Modal from "../Modal";
+import HeadlessModal from "../HeadlessModal";
 type ModalValue = boolean;
 
 export default function Drawer({ children }: MainChildren) {
@@ -63,10 +64,8 @@ export default function Drawer({ children }: MainChildren) {
             <MdMenu size={30} className="text-base-content" />
           </label>
           {/* app name */}
-          <img src="/icon.png" alt="icon" height={30} width={30}/>
-          <div className="flex-1 mx-2 text-lg font-bold">
-            {APP_NAME}
-          </div>
+          <img src="/icon.png" alt="icon" height={30} width={30} />
+          <div className="flex-1 mx-2 text-lg font-bold">{APP_NAME}</div>
           {/* toggle darktheme */}
           <div className="flex items-center">
             <label className="btn btn-circle swap swap-rotate btn-ghost">
@@ -121,17 +120,15 @@ export default function Drawer({ children }: MainChildren) {
           }
           className="modal-toggle"
         /> */}
-        <Modal
-          id={ID_MODAL_LOGOUT}
+        <HeadlessModal
+          // id={"SLSLSL"}
           title={LOGOUT_MODAL_TITLE}
           color="primary"
           desc={LOGOUT_MODAL_DESC}
           value={modalLogout}
           labelY="Log out"
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            toggleModalLogout(event.target.checked)
-          }
-          actionY={() => router.back()}
+          onClose={(value) => toggleModalLogout(value)}
+          actionY={() => router.replace("/")}
         />
       </>
     </main>

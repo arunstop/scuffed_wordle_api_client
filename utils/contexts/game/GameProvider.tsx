@@ -14,12 +14,13 @@ import { GameContext } from "./GameContext";
 export const generateGameData = (id: string): Game => ({
   id: id,
   name: `Game #${Math.round(Math.random() * 100)}`,
-  matrix: `5x5`,
+  matrix: {x:5,y:6,z:1},
   timeZone: "CET",
   utcOffset: 2,
   refreshInterval: [],
   playerList: [],
   bannedWordList: [],
+  completedWordList:[],
   // mode:string,
   createdBy: `User#${id.substring(0, 5)}`,
   editedBy: `User#${id.substring(0, 5)}`,
@@ -67,7 +68,7 @@ const reducer = (state: GameState, action: GameActionTypes): GameState => {
       };
     }
     case "DELETE": {
-      // filter out the data that has id equals with payload
+      // filter out the data that has id equals with gameId
       const id = action.gameId;
       return { ...state, list: state.list.filter((game) => game.id !== id) };
     }

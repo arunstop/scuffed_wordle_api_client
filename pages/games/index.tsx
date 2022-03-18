@@ -1,18 +1,20 @@
 import { nanoid } from "nanoid";
 import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
-import React, { ChangeEvent, useEffect } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { MdClose, MdDelete, MdEdit, MdSearch } from "react-icons/md";
-import Drawer from "../components/Drawer/Drawer";
-import Modal from "../components/Modal";
+import Drawer from "../../components/Drawer/Drawer";
+// import Modal from "../../components/Modal";
 import { BsFillEmojiNeutralFill } from "react-icons/bs";
 // import {GiTumbleweed} from "react-icons/gi";
 // import { ID_MAIN_DRAWER } from "../utils/constants/ConstantIds";
-import { APP_NAME } from "../utils/helpers/constants/ConstantText";
-import { useGameContext } from "../utils/contexts/game/GameHooks";
-import { generateGameData } from "../utils/contexts/game/GameProvider";
-import { useUiContext } from "../utils/contexts/ui/UiHooks";
+import { APP_NAME } from "../../utils/helpers/constants/ConstantText";
+import { useGameContext } from "../../utils/contexts/game/GameHooks";
+import { generateGameData } from "../../utils/contexts/game/GameProvider";
+// import { useUiContext } from "../../utils/contexts/ui/UiHooks";
+import { strGameMatrix } from "../../utils/models/GameModel";
+import HeadlessModal from "../../components/HeadlessModal";
 // import { useCountContext } from "../utils/contexts/counter/CounterHooks";
 // import { useUiContext } from "../utils/contexts/ui/UiHooks";
 
@@ -20,7 +22,8 @@ export default function Dashboard() {
   const router: NextRouter = useRouter();
   // giving alias with colon (:)
   // const { state: countState, action: countAction } = useCountContext();
-  const { state: uiState, action: uiAction } = useUiContext();
+  const [modalAdd, setModalAdd] = useState(false);
+  const [modalClear, setModalClear] = useState(false);
 
   useEffect(() => {
     // if (uiState.menuOn !== "games") {
@@ -69,7 +72,10 @@ export default function Dashboard() {
             <button
               // htmlFor={ID_MAIN_DRAWER}
               className="btn btn-primary gap-2 lg:btn-lg lg:text-lg btn-md"
-              onClick={() => addGame()}
+              onClick={() => {
+                setModalAdd(true);
+                // addGame();
+              }}
             >
               Add games ({gameState.list.length})
               <IoMdAddCircleOutline size={30} />
@@ -121,13 +127,12 @@ export default function Dashboard() {
               {searchedList.map((game, index) => (
                 <div
                   key={game.id}
-                  className={
-                    "card card-compact shadow-lg outline outline-1 outline-primary animatecss animatecss-jackInTheBox animatecss-faster"
-                  }
+                  className={`card card-compact shadow-lg outline outline-1 outline-primary 
+                    animatecss animatecss-jackInTheBox animatecss-faster`}
                 >
                   <h2 className="card-title p-4 bg-primary">{game.name}</h2>
                   <div className="card-body">
-                    <p>{game.matrix}</p>
+                    <p>{strGameMatrix(game.matrix)}</p>
                     <div className="card-actions justify-end">
                       <button
                         key={"btn-game-item-edit-" + index}
@@ -152,8 +157,19 @@ export default function Dashboard() {
         </div>
       </Drawer>
       {/* MODAL */}
-      <Modal
-        id="games-clearall-modal"
+      <HeadlessModal
+        value={modalAdd}
+        title="Clear All Game Data"
+        desc="All game data will be wiped out. This action cannot be undone. Use it wisely!"
+        color="error"
+        labelY="Clear"
+        // clear searched items if exists
+        onClose={(value) => {
+          setModalAdd(value);
+        }}
+      />
+      <HeadlessModal
+        value={modalClear}
         title="Clear All Game Data"
         desc="All game data will be wiped out. This action cannot be undone. Use it wisely!"
         color="error"

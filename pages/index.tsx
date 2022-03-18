@@ -31,7 +31,7 @@ const Home: NextPage = () => {
             animatecss animatecss-jackInTheBox animatecss-faster
             `}
           > 
-            <figure className="px-10 pt-10">
+            <figure className="p-4">
               <img src="/icon.png" alt="icon" height={120} width={120} />
             </figure>
             <h2 className="text-2xl font-bold">{APP_NAME}</h2>
