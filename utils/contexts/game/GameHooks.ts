@@ -1,7 +1,10 @@
+import { TimeZone } from "./../../models/TimeZoneModel";
 import { Game, strGameMatrix } from "./../../models/GameModel";
 import { useContext } from "react";
 import { GameContext } from "./GameContext";
 import _ from "lodash";
+// import timeZoneListJson from "../../../public/timeZoneList.json";
+import timeZoneListJson from "../../../public/timeZoneList2.json";
 export const useGameContext = () => {
   const { state, action } = useContext(GameContext);
   const { search, list } = state;
@@ -28,9 +31,27 @@ export const useGameContext = () => {
   const searchedList = !isSearching
     ? list
     : _.filter(state.list, (game) => filter(game, state.search));
+
+  const timeZoneList: TimeZone[] = timeZoneListJson.map(
+    (raw) =>
+      ({
+        value: raw.value,
+        abbr: raw.abbr,
+        offset: raw.offset,
+        isDst: raw.isdst,
+        text: raw.text,
+        utc: raw.utc,
+      } as TimeZone),
+  );
+  // console.log(timeZoneList.length);
   return {
     state,
     action,
-    getters: { searchedList, isSearching, isEmpty: _.isEmpty(list) },
+    getters: {
+      searchedList,
+      isSearching,
+      isEmpty: _.isEmpty(list),
+      timeZoneList: _.slice(timeZoneList, 0, 100),
+    },
   };
 };
