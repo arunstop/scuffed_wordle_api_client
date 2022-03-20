@@ -164,23 +164,23 @@ export default function Dashboard() {
       {/* MODAL */}
       <HeadlessModal
         value={modalAdd}
-        title="Clear All Game Data"
-        desc="All game data will be wiped out. This action cannot be undone. Use it wisely!"
-        color="error"
-        labelY="Clear"
+        title="Add new Game"
+        desc=""
+        color="primary"
+        labelY="Confirm addition"
         // clear searched items if exists
         onClose={(value) => {
           setModalAdd(value);
         }}
         big
       >
-        <GamesAddForm/>
+        <GamesAddForm actionN={() => setModalAdd(false)} />
       </HeadlessModal>
       <HeadlessModal
         value={modalClear}
         title="Clear All Game Data"
         desc="All game data will be wiped out. This action cannot be undone. Use it wisely!"
-        color="error"
+        color="primary"
         labelY="Clear"
         // clear searched items if exists
         actionY={() =>

@@ -5,4 +5,4 @@ export interface MainChildren {
     // children: JSX.Element | JSX.Element[]
 }
 
-export type MainColorTypes=|'primary'|'secondary'|'accent'|'info'|'warning'|'success'|'error';
+export type MainColorTypes=|'primary'|'secondary'|'accent'|'info'|'warning'|'success'|'error'|"current";

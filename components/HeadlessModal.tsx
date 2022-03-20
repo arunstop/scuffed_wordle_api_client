@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import React, { Fragment, PropsWithChildren } from "react";
+import React, { Fragment, PropsWithChildren, useRef } from "react";
 import { GoInfo } from "react-icons/go";
 import { MainColorTypes } from "../utils/models/GeneralModel";
 
@@ -31,11 +31,13 @@ function HeadlessModal({
   noAction = false,
   big = false,
 }: PropsWithChildren<ModalProps>) {
+  let completeButtonRef = useRef(null);
   //   function closeModal() {}
   return (
     <Transition appear show={value} as={Fragment}>
       <Dialog
         as="div"
+        initialFocus={completeButtonRef}
         className="modal bg-transparent opacity-100 visible z-20 pointer-events-auto overflow-hidden"
         onClose={onClose}
       >
@@ -75,7 +77,7 @@ function HeadlessModal({
             {!big && (
               <div
                 className={`mask mask-circle bg-${color} bg-opacity-30 text-${color} rounded-full border-${color} 
-              self-center p-2 flex-shrink`}
+              self-start p-2 flex-shrink`}
               >
                 <GoInfo size={36} />
               </div>
@@ -83,9 +85,11 @@ function HeadlessModal({
 
             <div className="flex flex-col gap-4 w-full">
               {/* Title */}
+              {/* Workaround to DISABLE INITIAL FOCUS
+              by using as="button" */}
               <Dialog.Title
-                as="p"
-                className={`text-2xl font-bold text-${color} text-center ${
+                as="button"
+                className={`text-2xl font-bold text-${color} text-center  ${
                   big ? `` : `sm:text-left`
                 }`}
               >
@@ -100,9 +104,7 @@ function HeadlessModal({
                 </>
               )}
 
-              {!!noAction ? (
-                children
-              ) : (
+              {!!noAction || big ? null : (
                 <>
                   {/* BUTTON */}
                   <div className="modal-action flex-wrap sm:flex-row-reverse sm:justify-start gap-4">
