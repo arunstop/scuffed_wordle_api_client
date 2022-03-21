@@ -174,7 +174,7 @@ export default function Dashboard() {
         }}
         big
       >
-        <GamesAddForm actionN={() => setModalAdd(false)} />
+        <GamesAddForm onClose={() => setModalAdd(false)} />
       </HeadlessModal>
       <HeadlessModal
         value={modalClear}

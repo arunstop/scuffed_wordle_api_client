@@ -11,23 +11,27 @@ import {
 import { MainChildren } from "../../models/GeneralModel";
 import { GameContext } from "./GameContext";
 
-export const generateGameData = (id: string): Game => ({
-  id: id,
-  name: `Game #${Math.round(Math.random() * 100)}`,
-  matrix: {x:5,y:6,z:1},
-  timeZone: "CET",
-  utcOffset: 2,
-  refreshInterval: [],
-  playerList: [],
-  bannedWordList: [],
-  completedWordList:[],
-  // mode:string,
-  createdBy: `User#${id.substring(0, 5)}`,
-  editedBy: `User#${id.substring(0, 5)}`,
-  dateCreated: Date.now().toString(),
-  dateEdited: Date.now().toString(),
-  status: "ON",
-});
+export const generateGameData = (id?: string): Game => {
+  // check generate id if no param
+  id = id||nanoid();
+  return ({
+    id: id,
+    name: `Game #${Math.round(Math.random() * 100)}`,
+    matrix: { x: 5, y: 6, z: 1 },
+    timeZone: "CET",
+    utcOffset: 2,
+    refreshInterval: [],
+    playerList: [],
+    bannedWordList: [],
+    completedWordList: [],
+    // mode:string,
+    createdBy: `User#${id.substring(0, 5)}`,
+    editedBy: `User#${id.substring(0, 5)}`,
+    dateCreated: Date.now().toString(),
+    dateEdited: Date.now().toString(),
+    status: "ON",
+  });
+};
 
 const getInitialGameList = (): Game[] => {
   const idList: string[] = [];

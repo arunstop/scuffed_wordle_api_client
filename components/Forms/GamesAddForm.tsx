@@ -10,6 +10,8 @@ import { HiSelector } from "react-icons/hi";
 import { MdCheck } from "react-icons/md";
 import Alert from "../Alert";
 import TextInput from "../TextInput";
+import { generateGameData } from "../../utils/contexts/game/GameProvider";
+import _ from "lodash";
 
 // function timeZoneItem({ value, abbr, isDst, text, offset, utc }: TimeZone) {
 //   return (
@@ -22,21 +24,24 @@ import TextInput from "../TextInput";
 
 interface GamesAddFormProps {
   actionY?: () => void;
-  actionN?: () => void;
+  onClose?: () => void;
 }
 export default function GamesAddForm({
   actionY = () => {},
-  actionN = () => {},
+  onClose = () => {},
 }: GamesAddFormProps) {
   const {
     getters: { timeZoneList },
+    action: gameAction,
   } = useGameContext();
 
   const [name, setName] = useState("");
   const [matrixX, setMatrixX] = useState(4);
   const [matrixY, setMatrixY] = useState(5);
   const [matrixZ, setMatrixZ] = useState(1);
-  const [selected, setSelected] = useState(timeZoneList[0]);
+  const [refreshInterval, setRefreshInterval] = useState("");
+  const [bannedWords, setBannedWords] = useState("");
+  const [timeZone, setTimeZone] = useState(timeZoneList[0]);
   const [query, setQuery] = useState("");
 
   const nameAlert = (): ReactNode => {
@@ -73,11 +78,29 @@ export default function GamesAddForm({
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     alert("submit");
+    gameAction.add({
+      ...generateGameData(),
+      name: name,
+      matrix: { x: matrixX, y: matrixY, z: matrixZ },
+      timeZone: timeZone.text,
+      utcOffset: timeZone.offset,
+      // trimming empty value in array
+      refreshInterval: _.filter(
+        refreshInterval.replaceAll(" ", "").split(","),
+        (e) => e !== "",
+      ),
+      bannedWordList: _.filter(
+        bannedWords.replaceAll(" ", "").split(","),
+        (e) => e !== "",
+      ),
+    });
+    onClose();
     event.preventDefault();
   }
 
+  console.log("render");
   return (
-    <form onSubmit={onSubmit}>
+    <form name="gameAddForm" onSubmit={onSubmit}>
       <div className={`flex flex-col w-full`}>
         {/* Name */}
 
@@ -100,7 +123,6 @@ export default function GamesAddForm({
           </label>
           <div className="inline-flex gap-4 w-full">
             <TextInput
-              label="Name :"
               type={"number"}
               icon={"X"}
               value={matrixX}
@@ -111,12 +133,12 @@ export default function GamesAddForm({
               onChange={(event) => setMatrixX(+event.target.value)}
               rules={() =>
                 // (matrixX === 0 ? "" : "Cannot be empty") ||
-                (matrixX > 4 ? "" : "Min. 4") || (matrixX < 12 ? "" : "Max. 12")
+                (matrixX >= 4 ? "" : "Min. 4") ||
+                (matrixX <= 12 ? "" : "Max. 12")
               }
             />
             {/* {matrixX} */}
             <TextInput
-              label="Name :"
               type={"number"}
               icon={"Y"}
               value={matrixY}
@@ -126,30 +148,32 @@ export default function GamesAddForm({
               onChange={(event) => setMatrixY(+event.target.value)}
               rules={() =>
                 // (matrixY === 0 ? "" : "Cannot be empty") ||
-                (matrixX > 4 ? "" : "Min. 4") || (matrixX < 12 ? "" : "Max. 12")
+                (matrixY >= 4 ? "" : "Min. 4") ||
+                (matrixY <= 12 ? "" : "Max. 12")
               }
             />
             <TextInput
-              label="Name :"
               type={"number"}
               icon={"Z"}
               value={matrixZ}
               placeholder="4-12"
-              min={4}
+              min={1}
               max={12}
               onChange={(event) => setMatrixZ(+event.target.value)}
               rules={() =>
                 // (matrixZ === 0 ? "" : "Cannot be empty") ||
-                (matrixX > 4 ? "" : "Min. 4") || (matrixX < 12 ? "" : "Max. 12")
+                (matrixZ >= 1 ? "" : "Min. 1") ||
+                (matrixZ <= 12 ? "" : "Max. 12")
               }
             />
           </div>
         </div>
+        {/* Timezone */}
         <div className="w-full">
           <label className="label">
             <span className="label-text">Time Zone :</span>
           </label>
-          <Combobox value={selected} onChange={setSelected}>
+          <Combobox value={timeZone} onChange={setTimeZone}>
             <div className="relative">
               <div>
                 <label className="input-group">
@@ -191,12 +215,12 @@ export default function GamesAddForm({
                       Nothing found.
                     </div>
                   ) : (
-                    filteredTimeZoneList.map((timeZone) => {
+                    filteredTimeZoneList.map((tzItem) => {
                       const isSelected: boolean =
-                        timeZone.text === selected.text;
+                        tzItem.text === timeZone.text;
                       return (
                         <Combobox.Option
-                          key={timeZone.text}
+                          key={tzItem.text}
                           className={({
                             active,
                           }) => `cursor-default select-none relative py-2 pl-10 pr-4 
@@ -207,16 +231,18 @@ export default function GamesAddForm({
                             : ""
                         }
                         `}
-                          value={timeZone}
+                          value={tzItem}
                         >
                           <>
+                            {/* time zone text e.g (GMT+07:00) Some Place */}
                             <span
                               className={`block truncate ${
                                 isSelected ? "font-medium" : "font-normal"
                               }`}
                             >
-                              {timeZone.text}
+                              {tzItem.text}
                             </span>
+                            {/* Cehck icon */}
                             {isSelected ? (
                               <span
                                 className={`absolute inset-y-0 left-0 flex items-center pl-3 `}
@@ -237,60 +263,30 @@ export default function GamesAddForm({
             </div>
           </Combobox>
         </div>
-        {/* Timezone */}
-        <div>
-          {/* <label className="label">
-          <span className="label-text">Name</span>
-        </label> */}
-          {/* {timeZoneList.map((timeZone) => timeZoneItem(timeZone))} */}
-          <div className="inline-flex w-full gap-4">
-            {/* <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text">Timezone</span>
-            </label>
-            <label className="input-group">
-              <span className="bg-primary bg-opacity-30">
-                <BiWorld className="" size={30} />
-              </span>
-              <input
-                type="text"
-                placeholder="Jakarta"
-                className="input input-bordered focus:input-primary w-full"
-              />
-            </label>
-          </div> */}
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text">Refresh Interval :</span>
-              </label>
-              <label className="input-group">
-                <span className="bg-primary bg-opacity-30">
-                  <MdRefresh className="" size={30} />
-                </span>
-                <input
-                  type="text"
-                  placeholder="12:00,13:10..."
-                  className="input input-bordered focus:input-primary w-full"
-                />
-              </label>
-            </div>
-          </div>
-        </div>
-        <div className="form-control w-full">
-          <label className="label">
-            <span className="label-text">Banned Words :</span>
-          </label>
-          <label className="input-group">
-            <span className="bg-primary bg-opacity-30">
-              <HiBan className="" size={30} />
-            </span>
-            <input
-              type="text"
-              placeholder="1 - 12"
-              className="input input-bordered focus:input-primary w-full"
-            />
-          </label>
-        </div>
+        {/* Refresh interval */}
+
+        <TextInput
+          label="Refresh Interval :"
+          type={"text"}
+          icon={<MdRefresh className="" size={30} />}
+          value={refreshInterval}
+          placeholder="12:00, 13:10..."
+          min={1}
+          max={12}
+          onChange={(event) => setRefreshInterval(event.target.value)}
+          rules={() => (refreshInterval !== "" ? "" : "Cannot be empty")}
+        />
+        <TextInput
+          label="Banned Words :"
+          type={"text"}
+          icon={<HiBan className="" size={30} />}
+          value={bannedWords}
+          placeholder="word1,word2"
+          min={1}
+          max={12}
+          onChange={(event) => setBannedWords(event.target.value)}
+          rules={() => (bannedWords !== "" ? "" : "Cannot be empty")}
+        />
         <div className="flex flex-col mt-4 gap-4">
           <button type="submit" className="btn btn-primary">
             Submit
@@ -298,7 +294,7 @@ export default function GamesAddForm({
           <button
             type="button"
             className="btn btn-outline"
-            onClick={() => actionN()}
+            onClick={() => onClose()}
           >
             Cancel
           </button>

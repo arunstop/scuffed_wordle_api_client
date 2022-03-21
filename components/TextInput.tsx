@@ -24,8 +24,8 @@ export default function TextInput({
   }
 
   return (
-    <div className="form-control w-full">
-      {label !== "" ? (
+    <div className={`form-control w-full ${isError ? "text-input-error" : ""}`}>
+      {label == "" ? (
         ""
       ) : (
         <label className="label input-primary input-error">
@@ -34,7 +34,9 @@ export default function TextInput({
         </label>
       )}
       <label className="input-group">
-        <span className={`bg-${color} bg-opacity-30 font-black text-3xl`}>{icon}</span>
+        <span className={`bg-${color} bg-opacity-30 font-black text-3xl`}>
+          {icon}
+        </span>
         <input
           className={`input input-bordered w-full
           focus:${isError ? `input-error` : "input-primary"}

@@ -48,7 +48,7 @@ export const useGameContext = () => {
     state,
     action,
     getters: {
-      searchedList,
+      searchedList:_.reverse(searchedList),
       isSearching,
       isEmpty: _.isEmpty(list),
       timeZoneList: _.slice(timeZoneList, 0, 100),
