@@ -28,7 +28,7 @@ const Home: NextPage = () => {
           <div
             className={`card h-auto bg-base-100 rounded-none text-center
             sm:m-4 sm:rounded-lg
-            animatecss animatecss-jackInTheBox animatecss-faster
+            animated animated-jackInTheBox animated-faster
             `}
           > 
             <figure className="p-4">

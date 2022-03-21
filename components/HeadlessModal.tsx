@@ -64,12 +64,12 @@ function HeadlessModal({
           as={"div"}
           className={`modal-box border-t-8 border-${color} gap-4 transform-none z-10 overflow-auto
           flex flex-col sm:border-transparent
-          animatecss duration-300
+          animated duration-300
           `}
-          enter="sm:animatecss-jackInTheBox animatecss-fadeInUp duration-300"
+          enter="sm:animated-jackInTheBox animated-fadeInUp duration-300"
           // enterFrom="opacity-0 scale-95"
           // enterTo="opacity-100 scale-100"
-          leave="sm:animatecss-zoomOut animatecss-fadeOutDownBig duration-300"
+          leave="sm:animated-zoomOut animated-fadeOutDownBig duration-300"
           //   leaveFrom="opacity-100 scale-100"
           //   leaveTo="opacity-0 scale-50"
         >

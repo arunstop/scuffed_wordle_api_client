@@ -16,6 +16,7 @@ import { generateGameData } from "../../utils/contexts/game/GameProvider";
 import { strGameMatrix } from "../../utils/models/GameModel";
 import HeadlessModal from "../../components/HeadlessModal";
 import GamesAddForm from "../../components/Forms/GamesAddForm";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 // import { useCountContext } from "../utils/contexts/counter/CounterHooks";
 // import { useUiContext } from "../utils/contexts/ui/UiHooks";
 
@@ -55,7 +56,7 @@ export default function Dashboard() {
   function onSearch(event: ChangeEvent<HTMLInputElement>) {
     gameAction.search(event.target.value);
   }
-  const anim: string = "animatecss animatecss-backInUp animatecss-faster";
+  const anim: string = "animated animated-backInUp animated-faster";
 
   return (
     // <CounterProvider>
@@ -79,6 +80,17 @@ export default function Dashboard() {
               }}
             >
               Add games ({gameState.list.length})
+              <IoMdAddCircleOutline size={30} />
+            </button>
+            <button
+              // htmlFor={ID_MAIN_DRAWER}
+              className="btn btn-primary gap-2 lg:btn-lg lg:text-lg btn-md"
+              onClick={() => {
+                gameAction.add(generateGameData());
+                // addGame();
+              }}
+            >
+              Add random
               <IoMdAddCircleOutline size={30} />
             </button>
             <label
@@ -115,7 +127,7 @@ export default function Dashboard() {
           </div>
           {searchedList.length === 0 ? (
             <div
-              className={`flex flex-col items-center m-auto m gap-4 text-center animatecss animatecss-jackInTheBox animatecss-faster`}
+              className={`flex flex-col items-center m-auto m gap-4 text-center animated animated-jackInTheBox animated-faster`}
             >
               <div className="inline-flex items-center text-4xl font-black gap-1 text-warning">
                 ¯\__
@@ -128,36 +140,44 @@ export default function Dashboard() {
               </h2>
             </div>
           ) : (
-            <div className="flex flex-wrap justify-center gap-4 transition">
+            <TransitionGroup component="div" className="flex flex-wrap justify-center gap-4 transition" >
               {searchedList.map((game, index) => (
-                <div
-                  key={game.id}
-                  className={`card card-compact shadow-lg outline outline-1 outline-primary 
-                    animatecss animatecss-jackInTheBox animatecss-faster`}
+                <CSSTransition key={game.id} classNames={{
+                  enter:"animated",
+                  enterActive: "animated-jackInTheBox",
+                  exit:"animated",
+                  exitActive:"animated-zoomOut",
+                }}
+                timeout={300}
                 >
-                  <h2 className="card-title p-4 bg-primary">{game.name}</h2>
-                  <div className="card-body">
-                    <p>{strGameMatrix(game.matrix)}</p>
-                    <div className="card-actions justify-end">
-                      <button
-                        key={"btn-game-item-edit-" + index}
-                        className="btn btn-sm btn-circle"
-                        // onClick={() => deleteGame(game.id)}
-                      >
-                        <MdEdit size={18} />
-                      </button>
-                      <button
-                        key={"btn-game-item-delete-" + index}
-                        className="btn btn-sm btn-circle btn-error"
-                        onClick={() => deleteGame(game.id)}
-                      >
-                        <MdDelete size={18} />
-                      </button>
+                  <div
+                    className={`card card-compact shadow-lg outline outline-1 outline-primary 
+                    `}
+                  >
+                    <h2 className="card-title p-4 bg-primary">{game.name}</h2>
+                    <div className="card-body">
+                      <p>{strGameMatrix(game.matrix)}</p>
+                      <div className="card-actions justify-end">
+                        <button
+                          key={"btn-game-item-edit-" + index}
+                          className="btn btn-sm btn-circle"
+                          // onClick={() => deleteGame(game.id)}
+                        >
+                          <MdEdit size={18} />
+                        </button>
+                        <button
+                          key={"btn-game-item-delete-" + index}
+                          className="btn btn-sm btn-circle btn-error"
+                          onClick={() => deleteGame(game.id)}
+                        >
+                          <MdDelete size={18} />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </CSSTransition>
               ))}
-            </div>
+            </TransitionGroup>
           )}
         </div>
       </Drawer>

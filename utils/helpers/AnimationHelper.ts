@@ -100,9 +100,9 @@ type AnimationHelperProp = {
     type: AnimationType;
     speed?: AnimationSpeed;
 };
-const PREFIX: string = "animatecss";
+const PREFIX: string = "animated";
 
-export const animateCss = (type:AnimationType,speed:AnimationSpeed =""): string => {
+export const animated = (type:AnimationType,speed:AnimationSpeed =""): string => {
     const typeStr = `${PREFIX}-${type}`;
     const speedStr = speed === "" ? `` : `${PREFIX}-${speed}`;
     return `${PREFIX} ${typeStr} ${speedStr}`;

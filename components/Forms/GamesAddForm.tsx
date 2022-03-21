@@ -211,7 +211,7 @@ export default function GamesAddForm({
                 bg-base-100 rounded-md shadow-lg max-h-60 focus:outline-none sm:text-sm"
                 >
                   {filteredTimeZoneList.length === 0 && query !== "" ? (
-                    <div className="cursor-default select-none relative py-2 px-4 text-gray-700">
+                    <div className="cursor-default select-none relative py-2 px-4 text-center">
                       Nothing found.
                     </div>
                   ) : (
