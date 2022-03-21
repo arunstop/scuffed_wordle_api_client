@@ -60,7 +60,7 @@ function HeadlessModal({
           >
             &#8203;
           </span> */}
-        <button className="h-0"></button>
+        {!big ? "" : <button className="h-0" />}
 
         <Transition.Child
           as={"div"}
@@ -110,16 +110,17 @@ function HeadlessModal({
                 <>
                   {/* BUTTON */}
                   <div className="modal-action flex-wrap sm:flex-row-reverse sm:justify-start gap-4">
-                    <label
+                    <button
                       className={`btn btn-${color} m-0 btn-block sm:w-40 font-bold truncate capitalize`}
                       onClick={() => {
                         actionY();
                         onClose(false);
                       }}
+                      tabIndex={1}
                     >
                       {labelY}
-                    </label>
-                    <label
+                    </button>
+                    <button
                       className="btn btn-outline m-0 btn-block sm:w-fit"
                       onClick={() => {
                         actionN();
@@ -127,7 +128,7 @@ function HeadlessModal({
                       }}
                     >
                       Cancel
-                    </label>
+                    </button>
                   </div>
                 </>
               )}

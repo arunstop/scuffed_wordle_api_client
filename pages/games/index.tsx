@@ -127,12 +127,14 @@ export default function Dashboard() {
           </div>
           {searchedList.length === 0 ? (
             <div
-              className={`flex flex-col items-center m-auto m gap-4 text-center animated animated-jackInTheBox animated-faster`}
+              className={`flex flex-col items-center m-auto m gap-4 text-center transition-all
+              scale-50
+              animated animated-jackInTheBox animated-faster`}
             >
-              <div className="inline-flex items-center text-4xl font-black gap-1 text-warning">
-                <span className="tracking-tighter">¯\__</span>
-                <BsFillEmojiNeutralFill size={120} />
-                <span className="tracking-tighter">__/¯</span>
+              <div className="inline-flex items-center text-4xl font-black gap-1 text-warning ">
+                <span className="sm:block hidden tracking-[-0.4rem] mr-[0.42rem]">¯\__</span>
+                <BsFillEmojiNeutralFill className="sm:text-9xl text-6xl" />
+                <span className="sm:block hidden tracking-[-0.4rem]">__/¯</span>
               </div>
               <h2 className="text-3xl font-bold">No results found</h2>
               <h2 className="text-lg">
@@ -145,7 +147,7 @@ export default function Dashboard() {
                 <CSSTransition key={game.id} classNames={{
                   enter:"animated",
                   enterActive: "animated-jackInTheBox",
-                  exit:"animated",
+                  exit:"animated duration-200",
                   exitActive:"animated-zoomOut",
                 }}
                 timeout={300}

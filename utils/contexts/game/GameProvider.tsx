@@ -6,6 +6,7 @@ import {
   GameAction,
   GameActionTypes,
   GameContextProps,
+  GameDifficulty,
   GameState,
 } from "../../models/GameModel";
 import { MainChildren } from "../../models/GeneralModel";
@@ -18,6 +19,7 @@ export const generateGameData = (id?: string): Game => {
     id: id,
     name: `Game #${Math.round(Math.random() * 100)}`,
     matrix: { x: 5, y: 6, z: 1 },
+    difficulty: GameDifficulty.EASY,
     timeZone: "CET",
     utcOffset: 2,
     refreshInterval: [],

@@ -5,6 +5,7 @@ export interface Game {
   id: string;
   name: string;
   matrix: GameMatrix;
+  difficulty: GameDifficulty;
   timeZone: string;
   utcOffset: number;
   refreshInterval: string[];
@@ -25,7 +26,14 @@ export interface GameMatrix {
   z: number;
 }
 
-export const strGameMatrix = ({ x, y, z }: GameMatrix):string => `${x}x${y}x${z}`;
+export enum GameDifficulty {
+  EASY="EASY",
+  NORMAL="NORMAL",
+  HARD="HARD",
+}
+
+export const strGameMatrix = ({ x, y, z }: GameMatrix): string =>
+  `${x}x${y}x${z}`;
 
 // State
 export interface GameState {

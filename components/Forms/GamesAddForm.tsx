@@ -12,6 +12,8 @@ import Alert from "../Alert";
 import TextInput from "../TextInput";
 import { generateGameData } from "../../utils/contexts/game/GameProvider";
 import _ from "lodash";
+import { GameDifficulty } from "../../utils/models/GameModel";
+import { BiBrain } from "react-icons/bi";
 
 // function timeZoneItem({ value, abbr, isDst, text, offset, utc }: TimeZone) {
 //   return (
@@ -39,10 +41,16 @@ export default function GamesAddForm({
   const [matrixX, setMatrixX] = useState(4);
   const [matrixY, setMatrixY] = useState(5);
   const [matrixZ, setMatrixZ] = useState(1);
+  const [difficulty, setDifficulty] = useState("EASY");
   const [refreshInterval, setRefreshInterval] = useState("");
   const [bannedWords, setBannedWords] = useState("");
   const [timeZone, setTimeZone] = useState(timeZoneList[0]);
   const [query, setQuery] = useState("");
+
+  // Mapping an enum
+  const gameDifficultyList = Object.values(GameDifficulty).filter(
+    (e) => typeof e !== "number",
+  );
 
   const nameAlert = (): ReactNode => {
     if (name == "xd") {
@@ -82,6 +90,7 @@ export default function GamesAddForm({
       ...generateGameData(),
       name: name,
       matrix: { x: matrixX, y: matrixY, z: matrixZ },
+      difficulty: GameDifficulty[difficulty as GameDifficulty],
       timeZone: timeZone.text,
       utcOffset: timeZone.offset,
       // trimming empty value in array
@@ -94,6 +103,7 @@ export default function GamesAddForm({
         (e) => e !== "",
       ),
     });
+    alert(GameDifficulty[difficulty as GameDifficulty]);
     onClose();
     event.preventDefault();
   }
@@ -121,7 +131,7 @@ export default function GamesAddForm({
           <label className="label">
             <span className="label-text">Matrix :</span>
           </label>
-          <div className="inline-flex gap-4 w-full">
+          <div className="sm:inline-flex flex flex-col gap-4 w-full">
             <TextInput
               type={"number"}
               icon={"X"}
@@ -166,6 +176,30 @@ export default function GamesAddForm({
                 (matrixZ <= 12 ? "" : "Max. 12")
               }
             />
+          </div>
+        </div>
+        {/* Difficulty */}
+        <div className="form-control w-full">
+          <label className="label input-primary input-error">
+            <span className="label-text">Difficulty :</span>
+            {/* <div>{focused && "focused"}</div> */}
+          </label>
+          <div className="input-group">
+            <span className={`bg-primary bg-opacity-30 font-black text-3xl`}>
+              <BiBrain size={30}/>
+            </span>
+            <select
+              value={difficulty}
+              onChange={(event) => setDifficulty(event.target.value)}
+              className="select select-bordered flex-grow capitalize !font-normal focus:select-primary"
+            >
+              {/* Map the difficulty list */}
+              {gameDifficultyList.map((e) => (
+                <option key={e.toString()} value={e} className="capitalize">
+                  {(e + "").toLowerCase()}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         {/* Timezone */}
@@ -216,8 +250,7 @@ export default function GamesAddForm({
                     </div>
                   ) : (
                     filteredTimeZoneList.map((tzItem) => {
-                      const isSelected: boolean =
-                        tzItem.text === timeZone.text;
+                      const isSelected: boolean = tzItem.text === timeZone.text;
                       return (
                         <Combobox.Option
                           key={tzItem.text}
