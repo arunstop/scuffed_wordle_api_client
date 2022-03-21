@@ -131,7 +131,7 @@ export default function GamesAddForm({
           <label className="label">
             <span className="label-text">Matrix :</span>
           </label>
-          <div className="sm:inline-flex flex flex-col gap-4 w-full">
+          <div className="sm:inline-flex grid gap-4 w-full">
             <TextInput
               type={"number"}
               icon={"X"}
