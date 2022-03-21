@@ -130,9 +130,9 @@ export default function Dashboard() {
               className={`flex flex-col items-center m-auto m gap-4 text-center animated animated-jackInTheBox animated-faster`}
             >
               <div className="inline-flex items-center text-4xl font-black gap-1 text-warning">
-                ¯\__
+                <span className="tracking-tighter">¯\__</span>
                 <BsFillEmojiNeutralFill size={120} />
-                __/¯
+                <span className="tracking-tighter">__/¯</span>
               </div>
               <h2 className="text-3xl font-bold">No results found</h2>
               <h2 className="text-lg">
@@ -200,7 +200,7 @@ export default function Dashboard() {
         value={modalClear}
         title="Clear All Game Data"
         desc="All game data will be wiped out. This action cannot be undone. Use it wisely!"
-        color="primary"
+        color="error"
         labelY="Clear"
         // clear searched items if exists
         actionY={() =>

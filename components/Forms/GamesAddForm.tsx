@@ -77,7 +77,7 @@ export default function GamesAddForm({
         });
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    alert("submit");
+    // alert("submit");
     gameAction.add({
       ...generateGameData(),
       name: name,
@@ -101,7 +101,7 @@ export default function GamesAddForm({
   console.log("render");
   return (
     <form name="gameAddForm" onSubmit={onSubmit}>
-      <div className={`flex flex-col w-full`}>
+      <div className={`flex flex-col w-full gap-2`}>
         {/* Name */}
 
         <TextInput
@@ -113,7 +113,7 @@ export default function GamesAddForm({
           onChange={(event) => setName(event.target.value)}
           rules={() =>
             (name !== "" ? "" : "Cannot be empty") ||
-            (name.length >= 8 ? "" : "Minimum 7 letters")
+            (name.length >= 4 ? "" : "Minimum 4 letters")
           }
         />
         {/* MATRIX */}

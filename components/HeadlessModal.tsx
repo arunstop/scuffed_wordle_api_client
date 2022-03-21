@@ -60,16 +60,18 @@ function HeadlessModal({
           >
             &#8203;
           </span> */}
+        <button className="h-0"></button>
+
         <Transition.Child
           as={"div"}
           className={`modal-box border-t-8 border-${color} gap-4 transform-none z-10 overflow-auto
           flex flex-col sm:border-transparent
-          animated duration-300
+          animated
           `}
-          enter="sm:animated-jackInTheBox animated-fadeInUp duration-300"
+          enter="sm:animated-jackInTheBox animated-fadeInUp"
           // enterFrom="opacity-0 scale-95"
           // enterTo="opacity-100 scale-100"
-          leave="sm:animated-zoomOut animated-fadeOutDownBig duration-300"
+          leave="sm:animated-zoomOut animated-fadeOutDownBig"
           //   leaveFrom="opacity-100 scale-100"
           //   leaveTo="opacity-0 scale-50"
         >
@@ -77,7 +79,7 @@ function HeadlessModal({
             {!big && (
               <div
                 className={`mask mask-circle bg-${color} bg-opacity-30 text-${color} rounded-full border-${color} 
-              self-start p-2 flex-shrink`}
+              sm:self-start self-center p-2 flex-shrink`}
               >
                 <GoInfo size={36} />
               </div>
@@ -88,7 +90,7 @@ function HeadlessModal({
               {/* Workaround to DISABLE INITIAL FOCUS
               by using as="button" */}
               <Dialog.Title
-                as="button"
+                as="div"
                 className={`text-2xl font-bold text-${color} text-center  ${
                   big ? `` : `sm:text-left`
                 }`}
