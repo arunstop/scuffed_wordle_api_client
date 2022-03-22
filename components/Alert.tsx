@@ -40,38 +40,39 @@ export default function Alert({
   const isMultiLined = subtitle !== "";
   return (
     <>
-      <div className={`alert alert-${color} alert-info rounded-xl pb-5`}>
-        <div className="flex-grow">
+      <div className={`alert alert-${color} alert-info rounded-xl items-stretch`}>
+        <div className="!flex !flex-grow !justify-between">
           <span
-            className={`${
+            className={`sm:text-3xl text-2xl
+            ${
               isMultiLined
-                ? "sm:text-4xl text-3xl self-start"
-                : "sm:text-3xl text-2xl"
+                ? "self-start"
+                : "sm:self-center self-start"
             }`}
           >
             {icon || iconComponent}
           </span>
 
-          <div className="flex sm:flex-row flex-col gap-4 items-start flex-grow">
+          <div className="flex sm:flex-row flex-col gap-4 sm:items-center item-start flex-grow">
             {/* Text section */}
-            <div className="flex flex-col flex-grow gap-1">
+            <div className="flex flex-col flex-grow gap-2 items-start">
               {subtitle !== "" ? (
                 <h3 className="font-bold sm:text-lg text-base">{title}</h3>
               ) : (
-                <h3 className="">{title}</h3>
+                <h3 className="font-semibold sm:text-lg text-base">{title}</h3>
               )}
               {subtitle !== "" && (
-                <p className="sm:text-sm text-xs">{subtitle}</p>
+                <p className="sm:text-base text-sm">{subtitle}</p>
               )}
             </div>
             {/* Button section */}
             <div className="flex-none my-auto">
               {action && (
                 <button
-                  className="btn btn-sm sm:btn-md min-w-24"
+                  className="btn min-w-24"
                   onClick={() => action()}
                 >
-                  <span className="first-letter:uppercase sm:text-base text-sm">
+                  <span className="first-letter:uppercase ">
                     {actionLabel}
                   </span>
                 </button>

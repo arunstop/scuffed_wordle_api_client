@@ -20,8 +20,8 @@ export default function PagePhrases() {
             <Alert
               color="info"
               title="Phrases page is used to manage phrases"
-              subtitle={`Phrases are used for the user-end app to show expressions to users, e.g. Good Luck, Nice Try, Well done, etc. 
-            Phrases mainly appear in pop-up messages when users start playing the game or when the game is over.`}
+            //   subtitle={`Phrases are used for the user-end app to show expressions to users, e.g. Good Luck, Nice Try, Well done, etc. 
+            // Phrases mainly appear in pop-up messages when users start playing the game or when the game is over.`}
               action={() => setAlertInfo(false)}
               actionLabel="I understand"
             />

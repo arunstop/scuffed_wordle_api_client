@@ -1,6 +1,8 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, PropsWithChildren, useRef } from "react";
 import { GoInfo } from "react-icons/go";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
+
 import { MainColorTypes } from "../utils/models/GeneralModel";
 
 type ModalProps = {
@@ -91,11 +93,23 @@ function HeadlessModal({
               by using as="button" */}
               <Dialog.Title
                 as="div"
-                className={`text-2xl font-bold text-${color} text-center  ${
-                  big ? `` : `sm:text-left`
+                className={` text-2xl font-bold text-center  ${
+                  big
+                    ? `flex items-center justify-between text-right`
+                    : `sm:text-left text-${color}`
                 }`}
               >
-                {title}
+                {/* BACK BUTTON */}
+                {big && (
+                  <button
+                  // [background-color:hsl(var(--bc)_/_0.3)]
+                    className="btn btn-circle btn-secondary !text-3xl btn-outline ![color:hsl(var(--bc))] border-0 bg-primary bg-opacity-30"
+                    onClick={() => onClose(false)}
+                  >
+                    <MdOutlineArrowBackIosNew />
+                  </button>
+                )}
+                <span className="self-center">{title}</span>
               </Dialog.Title>
               {!!children ? (
                 children

@@ -118,7 +118,7 @@ export default function GamesAddForm({
         <TextInput
           label="Name :"
           type={"text"}
-          icon={<TiSortAlphabetically className="" size={30} />}
+          icon={<TiSortAlphabetically className="" />}
           value={name}
           placeholder="Catchy board game name"
           onChange={(event) => setName(event.target.value)}
@@ -186,8 +186,8 @@ export default function GamesAddForm({
             {/* <div>{focused && "focused"}</div> */}
           </label>
           <div className="input-group">
-            <span className={`bg-primary bg-opacity-30 font-black text-3xl`}>
-              <BiBrain size={30}/>
+            <span className={`bg-primary bg-opacity-30 font-black sm:text-3xl text-2xl`}>
+              <BiBrain/>
             </span>
             <select
               value={difficulty}
@@ -213,7 +213,7 @@ export default function GamesAddForm({
               <div>
                 <label className="input-group">
                   <span className="bg-primary bg-opacity-30">
-                    <BiWorld className="" size={30} />
+                    <BiWorld className="sm:text-3xl text-2xl" />
                   </span>
                   <Combobox.Input
                     as={Fragment}
@@ -302,7 +302,7 @@ export default function GamesAddForm({
         <TextInput
           label="Refresh Interval :"
           type={"text"}
-          icon={<MdRefresh className="" size={30} />}
+          icon={<MdRefresh className="" />}
           value={refreshInterval}
           placeholder="12:00, 13:10..."
           min={1}
@@ -313,7 +313,7 @@ export default function GamesAddForm({
         <TextInput
           label="Banned Words :"
           type={"text"}
-          icon={<HiBan className="" size={30} />}
+          icon={<HiBan className="" />}
           value={bannedWords}
           placeholder="word1,word2"
           min={1}

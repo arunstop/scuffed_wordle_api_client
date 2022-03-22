@@ -34,7 +34,7 @@ export default function TextInput({
         </label>
       )}
       <label className="input-group">
-        <span className={`bg-${color} bg-opacity-30 font-black text-3xl`}>
+        <span className={`bg-${color} bg-opacity-30 font-black sm:text-3xl text-2xl `}>
           {icon}
         </span>
         <input

@@ -72,11 +72,10 @@ export default function Dashboard() {
 
       <Drawer>
         {/* CONTENT */}
-        <div className="flex flex-col p-2 lg:p-4 gap-y-4 flex-grow">
-          <button
-            className="btn"
-            onClick={() => setAlertInfo(!alertInfo)}
-          ></button>
+        <div className="flex flex-col p-4 gap-y-4 flex-grow">
+          <button className="btn" onClick={() => setAlertInfo(!alertInfo)}>
+            Toggle alert
+          </button>
           {/* <Transition
             show={alertInfo}
             enter="transition-all duration-75"
@@ -97,12 +96,12 @@ export default function Dashboard() {
           <CSSTransition
             in={alertInfo}
             classNames={{
-              enter: "animated",
-              enterActive: "animated-bounceIn",
-              exit: "animated",
-              exitActive: "animated-zoomOut",
+              enter: "animated animated-faster",
+              enterActive: "animated-zoomIn animated-faster",
+              exit: "animated animated-faster",
+              exitActive: "animated-zoomOut animated-faster",
             }}
-            timeout={300}
+            timeout={200}
             unmountOnExit
           >
             <Alert
@@ -117,7 +116,7 @@ export default function Dashboard() {
           <div className="flex flex-wrap items-center gap-4">
             <button
               // htmlFor={ID_MAIN_DRAWER}
-              className="btn btn-primary gap-2 lg:btn-lg lg:text-lg btn-md"
+              className="btn btn-primary gap-2 lg:btn-lg lg:text-lg btn-md sm:w-auto btn-block"
               onClick={() => {
                 setModalAdd(true);
                 // addGame();
@@ -128,9 +127,9 @@ export default function Dashboard() {
             </button>
             <button
               // htmlFor={ID_MAIN_DRAWER}
-              className="btn btn-primary gap-2 lg:btn-lg lg:text-lg btn-md"
+              className="btn btn-primary gap-2 lg:btn-lg lg:text-lg btn-md sm:w-auto btn-block"
               onClick={() => {
-                gameAction.add(generateGameData());
+                addGame();
                 // addGame();
               }}
             >
@@ -139,7 +138,8 @@ export default function Dashboard() {
             </button>
             <button
               // htmlFor="games-clearall-modal"
-              className={`btn gap-2 lg:btn-lg lg:text-lg btn-md ${
+              className={`btn gap-2 lg:btn-lg lg:text-lg btn-md sm:w-auto btn-block 
+              ${
                 searchedList.length !== 0 || !isSearching
                   ? `btn-error`
                   : `btn-disabled`
@@ -153,7 +153,7 @@ export default function Dashboard() {
               <MdClose size={30} />
             </button>
             {/* Search bar */}
-            <div className="form-control">
+            <div className="form-control sm:w-auto w-full">
               <label className="input-group lg:input-group-lg input-group-md">
                 <span>
                   <MdSearch size={30} />
@@ -161,7 +161,7 @@ export default function Dashboard() {
                 <input
                   type="search"
                   placeholder="Search..."
-                  className={`input input-bordered input-secondary w-full max-w-xs lg:input-lg input-md`}
+                  className={`input input-bordered input-secondary w-full sm:max-w-xs lg:input-lg input-md`}
                   value={gameState.search || ""}
                   disabled={isEmpty}
                   onChange={onSearch}
@@ -171,7 +171,7 @@ export default function Dashboard() {
           </div>
           {searchedList.length === 0 ? (
             <div
-              className={`flex flex-col items-center m-auto m gap-4 text-center transition-all
+              className={`flex flex-col items-center m-auto m gap-4 text-center transition-all mx-4 
               scale-50
               animated animated-jackInTheBox animated-faster`}
             >
