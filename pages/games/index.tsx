@@ -17,6 +17,8 @@ import { strGameMatrix } from "../../utils/models/GameModel";
 import HeadlessModal from "../../components/HeadlessModal";
 import GamesAddForm from "../../components/Forms/GamesAddForm";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import Alert from "../../components/Alert";
+// import { Transition } from "@headlessui/react";
 // import { useCountContext } from "../utils/contexts/counter/CounterHooks";
 // import { useUiContext } from "../utils/contexts/ui/UiHooks";
 
@@ -26,6 +28,7 @@ export default function Dashboard() {
   // const { state: countState, action: countAction } = useCountContext();
   const [modalAdd, setModalAdd] = useState(false);
   const [modalClear, setModalClear] = useState(false);
+  const [alertInfo, setAlertInfo] = useState(true);
 
   useEffect(() => {
     // if (uiState.menuOn !== "games") {
@@ -70,6 +73,47 @@ export default function Dashboard() {
       <Drawer>
         {/* CONTENT */}
         <div className="flex flex-col p-2 lg:p-4 gap-y-4 flex-grow">
+          <button
+            className="btn"
+            onClick={() => setAlertInfo(!alertInfo)}
+          ></button>
+          {/* <Transition
+            show={alertInfo}
+            enter="transition-all duration-75"
+            enterFrom="scale-0"
+            enterTo="scale-100"
+            leave="transition-all duration-150"
+            leaveFrom="scale-100"
+            leaveTo="scale-0"
+          >
+            <Alert
+              color="info"
+              title="Games page are used to manage games"
+              subtitle={`Users create games with their desired format, different matrix, different difficulty, different refresh time, etc.`}
+              action={() => setAlertInfo(false)}
+              actionLabel="I understand"
+            />
+          </Transition> */}
+          <CSSTransition
+            in={alertInfo}
+            classNames={{
+              enter: "animated",
+              enterActive: "animated-bounceIn",
+              exit: "animated",
+              exitActive: "animated-zoomOut",
+            }}
+            timeout={300}
+            unmountOnExit
+          >
+            <Alert
+              color="info"
+              title="Games page are used to manage games"
+              subtitle={`Users create games with their desired format, different matrix, different difficulty, different refresh time, etc.`}
+              action={() => setAlertInfo(false)}
+              actionLabel="I understand"
+            />
+          </CSSTransition>
+
           <div className="flex flex-wrap items-center gap-4">
             <button
               // htmlFor={ID_MAIN_DRAWER}
@@ -93,7 +137,7 @@ export default function Dashboard() {
               Add random
               <IoMdAddCircleOutline size={30} />
             </button>
-            <label
+            <button
               // htmlFor="games-clearall-modal"
               className={`btn gap-2 lg:btn-lg lg:text-lg btn-md ${
                 searchedList.length !== 0 || !isSearching
@@ -107,7 +151,7 @@ export default function Dashboard() {
             >
               Clear all ({searchedList.length})
               <MdClose size={30} />
-            </label>
+            </button>
             {/* Search bar */}
             <div className="form-control">
               <label className="input-group lg:input-group-lg input-group-md">
@@ -132,7 +176,9 @@ export default function Dashboard() {
               animated animated-jackInTheBox animated-faster`}
             >
               <div className="inline-flex items-center text-4xl font-black gap-1 text-warning ">
-                <span className="sm:block hidden tracking-[-0.4rem] mr-[0.42rem]">¯\__</span>
+                <span className="sm:block hidden tracking-[-0.4rem] mr-[0.42rem]">
+                  ¯\__
+                </span>
                 <BsFillEmojiNeutralFill className="sm:text-9xl text-6xl" />
                 <span className="sm:block hidden tracking-[-0.4rem]">__/¯</span>
               </div>
@@ -142,15 +188,20 @@ export default function Dashboard() {
               </h2>
             </div>
           ) : (
-            <TransitionGroup component="div" className="flex flex-wrap justify-center gap-4 transition" >
+            <TransitionGroup
+              component="div"
+              className="flex flex-wrap justify-center gap-4 transition"
+            >
               {searchedList.map((game, index) => (
-                <CSSTransition key={game.id} classNames={{
-                  enter:"animated",
-                  enterActive: "animated-jackInTheBox",
-                  exit:"animated duration-200",
-                  exitActive:"animated-zoomOut",
-                }}
-                timeout={300}
+                <CSSTransition
+                  key={game.id}
+                  classNames={{
+                    enter: "animated",
+                    enterActive: "animated-jackInTheBox",
+                    exit: "animated duration-200",
+                    exitActive: "animated-zoomOut",
+                  }}
+                  timeout={300}
                 >
                   <div
                     className={`card card-compact shadow-lg outline outline-1 outline-primary 

@@ -8,7 +8,7 @@ import { TimeZone } from "../../utils/models/TimeZoneModel";
 import { Combobox, Transition } from "@headlessui/react";
 import { HiSelector } from "react-icons/hi";
 import { MdCheck } from "react-icons/md";
-import Alert from "../Alert";
+import TextInputMessage from "../TextInputMessage";
 import TextInput from "../TextInput";
 import { generateGameData } from "../../utils/contexts/game/GameProvider";
 import _ from "lodash";
@@ -54,7 +54,7 @@ export default function GamesAddForm({
 
   const nameAlert = (): ReactNode => {
     if (name == "xd") {
-      return <Alert color="error" label="Cannot be empty" />;
+      return <TextInputMessage color="error" label="Cannot be empty" />;
     }
   };
 
@@ -90,6 +90,7 @@ export default function GamesAddForm({
       ...generateGameData(),
       name: name,
       matrix: { x: matrixX, y: matrixY, z: matrixZ },
+      // EASY || NORMAL || HARD
       difficulty: GameDifficulty[difficulty as GameDifficulty],
       timeZone: timeZone.text,
       utcOffset: timeZone.offset,
@@ -103,7 +104,7 @@ export default function GamesAddForm({
         (e) => e !== "",
       ),
     });
-    alert(GameDifficulty[difficulty as GameDifficulty]);
+    // alert(GameDifficulty[difficulty as GameDifficulty]); 
     onClose();
     event.preventDefault();
   }

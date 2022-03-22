@@ -88,6 +88,7 @@ export default function Drawer({ children }: MainChildren) {
         {/* CONTENT */}
         {children}
       </div>
+      {/* Drawer side */}
       <div className="drawer-side">
         <label
           htmlFor={ID_MAIN_DRAWER}

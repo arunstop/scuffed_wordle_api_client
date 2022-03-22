@@ -14,6 +14,7 @@ import {MdOutlineSpaceDashboard,MdOutlineErrorOutline} from "react-icons/md";
 import {GoBook} from "react-icons/go";
 import {HiOutlineLogout} from "react-icons/hi";
 import {RiApps2Line} from "react-icons/ri";
+import { BsChatQuote } from "react-icons/bs";
 
 
 const getInitialMenuList = (): UiMenu[] => {
@@ -22,6 +23,7 @@ const getInitialMenuList = (): UiMenu[] => {
     { title: "Dictionary", type: "PAGE",icon:<GoBook size={24}/> },
     { title: "Games", type: "PAGE",icon:<RiApps2Line size={24} /> },
     { title: "Issue Reports", type: "PAGE",icon:<MdOutlineErrorOutline size={24} /> },
+    { title: "Phrases", type: "PAGE",icon:<BsChatQuote size={24} /> },
     { title: "Logout", type: "MODAL",icon:<HiOutlineLogout size={24} className="rotate-180" /> },
   ];
 

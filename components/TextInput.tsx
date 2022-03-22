@@ -1,6 +1,6 @@
 import { Transition } from "@headlessui/react";
 import React, { InputHTMLAttributes, ReactNode, useState } from "react";
-import Alert from "./Alert";
+import TextInputMessage from "./TextInputMessage";
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   //   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -58,7 +58,7 @@ export default function TextInput({
         leaveFrom="scale-y-100"
         leaveTo=" scale-y-0"
       >
-        <Alert color={color} label={rules()} />
+        <TextInputMessage color={color} label={rules()} />
       </Transition>
       {/* {isError && <Alert color={color} label="Cannot be empty" />} */}
     </div>
