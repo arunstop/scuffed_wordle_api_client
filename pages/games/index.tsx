@@ -116,7 +116,7 @@ export default function Dashboard() {
           <div className="flex flex-wrap items-center gap-4">
             <button
               // htmlFor={ID_MAIN_DRAWER}
-              className="btn btn-primary gap-2 lg:btn-lg lg:text-lg btn-md sm:w-auto btn-block"
+              className="btn btn-primary gap-2 sm:w-auto btn-block"
               onClick={() => {
                 setModalAdd(true);
                 // addGame();
@@ -127,7 +127,7 @@ export default function Dashboard() {
             </button>
             <button
               // htmlFor={ID_MAIN_DRAWER}
-              className="btn btn-primary gap-2 lg:btn-lg lg:text-lg btn-md sm:w-auto btn-block"
+              className="btn btn-primary gap-2 sm:w-auto btn-block"
               onClick={() => {
                 addGame();
                 // addGame();
@@ -138,7 +138,7 @@ export default function Dashboard() {
             </button>
             <button
               // htmlFor="games-clearall-modal"
-              className={`btn gap-2 lg:btn-lg lg:text-lg btn-md sm:w-auto btn-block 
+              className={`btn gap-2 sm:w-auto btn-block 
               ${
                 searchedList.length !== 0 || !isSearching
                   ? `btn-error`
@@ -153,20 +153,30 @@ export default function Dashboard() {
               <MdClose size={30} />
             </button>
             {/* Search bar */}
-            <div className="form-control sm:w-auto w-full">
-              <label className="input-group lg:input-group-lg input-group-md">
-                <span>
-                  <MdSearch size={30} />
+            <div className="form-control sm:w-auto w-full relative">
+              <label className="input-group input-group-md">
+                <span className="sm:text-3xl text-2xl">
+                  <MdSearch />
                 </span>
                 <input
-                  type="search"
+                  type="text"
                   placeholder="Search..."
-                  className={`input input-bordered input-secondary w-full sm:max-w-xs lg:input-lg input-md`}
+                  className={`input input-bordered input-secondary w-full pr-12 sm:max-w-xs `}
                   value={gameState.search || ""}
                   disabled={isEmpty}
                   onChange={onSearch}
                 />
               </label>
+              {isSearching && (
+                <div className="absolute right-2 top-2 bottom-2 my-auto animated animated-zoomIn animated-faster">
+                  <label className="btn btn-outline  min-h-min h-full w-9" onClick={()=>gameAction.search("")}>
+                  {/* ![color:hsl(var(--bc)_/_1)] */}
+                    <span className="sm:text-3xl text-2xl">
+                      <MdClose />
+                    </span>
+                  </label>
+                </div>
+              )}
             </div>
           </div>
           {searchedList.length === 0 ? (

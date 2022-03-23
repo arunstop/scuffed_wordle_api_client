@@ -69,7 +69,7 @@ export default function Alert({
             <div className="flex-none my-auto">
               {action && (
                 <button
-                  className="btn min-w-24"
+                  className="btn min-w-24 float-right"
                   onClick={() => action()}
                 >
                   <span className="first-letter:uppercase ">

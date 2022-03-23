@@ -68,6 +68,7 @@ function HeadlessModal({
           as={"div"}
           className={`modal-box border-t-8 border-${color} gap-4 transform-none z-10 overflow-auto
           flex flex-col sm:border-transparent
+          max-h-full sm:max-h-[calc(100vh_-_5em)]
           animated
           `}
           enter="sm:animated-jackInTheBox animated-fadeInUp"

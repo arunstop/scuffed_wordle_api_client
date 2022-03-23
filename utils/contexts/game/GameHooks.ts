@@ -26,7 +26,7 @@ export const useGameContext = () => {
     );
   }
   // check if state.search is not empty
-  const isSearching: boolean = search !== "" || !_.isNull(search);
+  const isSearching: boolean = search.trim() !== "" || _.isNull(search);
   // if state.search is empty/not searching, return the original state.list
   const searchedList = !isSearching
     ? list
