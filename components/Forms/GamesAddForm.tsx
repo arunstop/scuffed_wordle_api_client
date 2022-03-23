@@ -321,7 +321,7 @@ export default function GamesAddForm({
           onChange={(event) => setBannedWords(event.target.value)}
           rules={() => (bannedWords !== "" ? "" : "Cannot be empty")}
         />
-        <div className="flex flex-col mt-4 gap-4">
+        <div className="flex flex-col mt-9 gap-4">
           <button type="submit" className="btn btn-primary">
             Submit
           </button>

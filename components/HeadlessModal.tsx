@@ -66,8 +66,13 @@ function HeadlessModal({
 
         <Transition.Child
           as={"div"}
-          className={`modal-box border-t-8 border-${color} gap-4 transform-none z-10 overflow-auto
-          flex flex-col sm:border-transparent
+          className={`modal-box  gap-4 transform-none z-10 overflow-auto
+          ${
+            big
+              ? "sm:border-8 border-0 border-base-100 "
+              : `border-t-8 border-${color}`
+          }
+          flex flex-col sm:border-transparent shadow-${color}/30 shadow-2xl
           max-h-full sm:max-h-[calc(100vh_-_5em)]
           animated
           `}
@@ -103,7 +108,7 @@ function HeadlessModal({
                 {/* BACK BUTTON */}
                 {big && (
                   <button
-                  // [background-color:hsl(var(--bc)_/_0.3)]
+                    // [background-color:hsl(var(--bc)_/_0.3)]
                     className="btn btn-circle btn-secondary !text-3xl btn-outline ![color:hsl(var(--bc))] border-0 bg-primary bg-opacity-30"
                     onClick={() => onClose(false)}
                   >

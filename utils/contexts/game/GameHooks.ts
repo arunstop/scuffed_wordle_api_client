@@ -26,10 +26,10 @@ export const useGameContext = () => {
     );
   }
   // check if state.search is not empty
-  const isSearching: boolean = search.trim() !== "" || _.isNull(search);
+  const isSearching: boolean = search.trim() !== "";
   // if state.search is empty/not searching, return the original state.list
   const searchedList = !isSearching
-    ? list
+    ? [...list]
     : _.filter(state.list, (game) => filter(game, state.search));
 
   const timeZoneList: TimeZone[] = timeZoneListJson.map(
