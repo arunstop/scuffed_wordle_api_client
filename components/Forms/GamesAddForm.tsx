@@ -1,19 +1,15 @@
-import React, { Fragment, ReactNode, useState } from "react";
-import { HiBan } from "react-icons/hi";
-import { TiSortAlphabetically } from "react-icons/ti";
-import { BiWorld } from "react-icons/bi";
-import { MdRefresh } from "react-icons/md";
-import { useGameContext } from "../../utils/contexts/game/GameHooks";
-import { TimeZone } from "../../utils/models/TimeZoneModel";
 import { Combobox, Transition } from "@headlessui/react";
-import { HiSelector } from "react-icons/hi";
-import { MdCheck } from "react-icons/md";
-import TextInputMessage from "../TextInputMessage";
-import TextInput from "../TextInput";
-import { generateGameData } from "../../utils/contexts/game/GameProvider";
 import _ from "lodash";
+import React, { Fragment, useState } from "react";
+import { BiBrain, BiWorld } from "react-icons/bi";
+import { HiBan, HiSelector } from "react-icons/hi";
+import { MdCheck, MdRefresh } from "react-icons/md";
+import { TiSortAlphabetically } from "react-icons/ti";
+import { useGameContext } from "../../utils/contexts/game/GameHooks";
+import { generateGameData } from "../../utils/contexts/game/GameProvider";
 import { GameDifficulty } from "../../utils/models/GameModel";
-import { BiBrain } from "react-icons/bi";
+import { TimeZone } from "../../utils/models/TimeZoneModel";
+import TextInput from "../TextInput";
 
 // function timeZoneItem({ value, abbr, isDst, text, offset, utc }: TimeZone) {
 //   return (
@@ -29,8 +25,8 @@ interface GamesAddFormProps {
   onClose?: () => void;
 }
 export default function GamesAddForm({
-  actionY = () => {},
-  onClose = () => {},
+  actionY = () => null,
+  onClose = () => null,
 }: GamesAddFormProps) {
   const {
     getters: { timeZoneList },
@@ -51,22 +47,6 @@ export default function GamesAddForm({
   const gameDifficultyList = Object.values(GameDifficulty).filter(
     (e) => typeof e !== "number",
   );
-
-  const nameAlert = (): ReactNode => {
-    if (name == "xd") {
-      return <TextInputMessage color="error" label="Cannot be empty" />;
-    }
-  };
-
-  // const filteredPeople =
-  //   query === ""
-  //     ? timeZoneList
-  //     : timeZoneList.filter((person) =>
-  //         person.text
-  //           .toLowerCase()
-  //           .replace(/\s+/g, "")
-  //           .includes(query.toLowerCase().replace(/\s+/g, "")),
-  //       );
 
   const filteredTimeZoneList =
     query === ""
@@ -104,7 +84,7 @@ export default function GamesAddForm({
         (e) => e !== "",
       ),
     });
-    // alert(GameDifficulty[difficulty as GameDifficulty]); 
+    // alert(GameDifficulty[difficulty as GameDifficulty]);
     onClose();
     event.preventDefault();
   }
@@ -132,7 +112,7 @@ export default function GamesAddForm({
           <label className="label">
             <span className="label-text">Matrix :</span>
           </label>
-          <div className="sm:inline-flex grid gap-4 w-full">
+          <div className="grid w-full gap-4 sm:inline-flex">
             <TextInput
               type={"number"}
               icon={"X"}
@@ -182,17 +162,17 @@ export default function GamesAddForm({
         {/* Difficulty */}
         <div className="form-control w-full">
           <label className="label input-primary input-error">
-            <span className="label-text">Difficulty :</span>
+            <span className="label-text">Difficulty : </span>
             {/* <div>{focused && "focused"}</div> */}
           </label>
           <div className="input-group">
-            <span className={`bg-primary bg-opacity-30 font-black sm:text-3xl text-2xl`}>
-              <BiBrain/>
+            <span className={`bg-primary/30 font-black sm:text-3xl text-2xl`}>
+              <BiBrain />
             </span>
             <select
               value={difficulty}
               onChange={(event) => setDifficulty(event.target.value)}
-              className="select select-bordered flex-grow capitalize !font-normal focus:select-primary"
+              className="select-bordered select grow !font-normal capitalize focus:select-primary"
             >
               {/* Map the difficulty list */}
               {gameDifficultyList.map((e) => (
@@ -212,8 +192,8 @@ export default function GamesAddForm({
             <div className="relative">
               <div>
                 <label className="input-group">
-                  <span className="bg-primary bg-opacity-30">
-                    <BiWorld className="sm:text-3xl text-2xl" />
+                  <span className="bg-primary/30">
+                    <BiWorld className="text-2xl sm:text-3xl" />
                   </span>
                   <Combobox.Input
                     as={Fragment}
@@ -223,13 +203,13 @@ export default function GamesAddForm({
                     <input
                       type="text"
                       placeholder="Game Name"
-                      className="input input-bordered focus:input-primary w-full pr-8"
+                      className="input-bordered input w-full pr-8 focus:input-primary"
                     />
                   </Combobox.Input>
                 </label>
                 <Combobox.Button className="absolute  inset-y-0 right-0 flex items-center pr-2">
                   <HiSelector
-                    className="w-5 h-5 text-gray-400"
+                    className="h-5 w-5 text-gray-400"
                     aria-hidden="true"
                   />
                 </Combobox.Button>
@@ -242,11 +222,11 @@ export default function GamesAddForm({
                 afterLeave={() => setQuery("")}
               >
                 <Combobox.Options
-                  className="absolute w-full py-1 overflow-auto text-base border-4 border-primary
-                bg-base-100 rounded-md shadow-lg max-h-60 focus:outline-none sm:text-sm"
+                  className="absolute max-h-60 w-full overflow-auto rounded-md border-4 border-primary
+                bg-base-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm"
                 >
                   {filteredTimeZoneList.length === 0 && query !== "" ? (
-                    <div className="cursor-default select-none relative py-2 px-4 text-center">
+                    <div className="relative cursor-default select-none py-2 px-4 text-center">
                       Nothing found.
                     </div>
                   ) : (
@@ -258,7 +238,7 @@ export default function GamesAddForm({
                           className={({
                             active,
                           }) => `cursor-default select-none relative py-2 pl-10 pr-4 
-                        ${active ? "text-white bg-primary bg-opacity-100" : ""}
+                        ${active ? "text-white bg-primary/100" : ""}
                         ${
                           isSelected && !active
                             ? "bg-primary-content text-primary-focus"
@@ -282,7 +262,7 @@ export default function GamesAddForm({
                                 className={`absolute inset-y-0 left-0 flex items-center pl-3 `}
                               >
                                 <MdCheck
-                                  className="w-6 h-6"
+                                  className="h-6 w-6"
                                   aria-hidden="true"
                                 />
                               </span>
@@ -321,13 +301,13 @@ export default function GamesAddForm({
           onChange={(event) => setBannedWords(event.target.value)}
           rules={() => (bannedWords !== "" ? "" : "Cannot be empty")}
         />
-        <div className="flex flex-col mt-9 gap-4">
+        <div className="mt-9 flex flex-col gap-4">
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
           <button
             type="button"
-            className="btn btn-outline"
+            className="btn-outline btn"
             onClick={() => onClose()}
           >
             Cancel

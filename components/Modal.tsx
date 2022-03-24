@@ -22,9 +22,9 @@ export default function Modal({
   color = "info",
   value,
   labelY = "OK",
-  onChange = () => {},
-  actionY = () => {},
-  actionN = () => {},
+  onChange = () => null,
+  actionY = () => null,
+  actionN = () => null,
 }: ModalProps) {
   // console.log(value);
   // function renderButton() {
@@ -49,13 +49,13 @@ export default function Modal({
         onChange={onChange}
         className="modal-toggle bg-error"
       />
-      <label htmlFor={id} className="modal  backdrop-blur-sm z-20">
+      <label htmlFor={id} className="modal z-20 backdrop-blur-sm">
         <label
           htmlFor=""
           className={`modal-box border-t-8 border-${color} gap-4 sm:border-transparent flex md:flex-row flex-col `}
         >
           <div
-            className={`mask mask-circle bg-${color} bg-opacity-30 text-${color} rounded-full border-${color} self-center md:self-start p-2`}
+            className={`mask mask-circle bg-${color}/30 text-${color} rounded-full border-${color} self-center md:self-start p-2`}
           >
             <GoInfo size={36} />
           </div>
@@ -66,7 +66,7 @@ export default function Modal({
               {title}
             </p>
             <p className="text-center md:text-left">{desc}</p>
-            <div className="modal-action mt-4 flex-wrap md:flex-row-reverse md:justify-start gap-4">
+            <div className="modal-action mt-4 flex-wrap gap-4 md:flex-row-reverse md:justify-start">
               <label
                 htmlFor={id}
                 className={`btn btn-${color} m-0 btn-block md:w-40 font-bold truncate capitalize`}
@@ -76,7 +76,7 @@ export default function Modal({
               </label>
               <label
                 htmlFor={id}
-                className="btn btn-outline m-0 btn-block md:w-fit"
+                className="btn-outline btn btn-block m-0 md:w-fit"
                 onClick={() => actionN()}
               >
                 Cancel

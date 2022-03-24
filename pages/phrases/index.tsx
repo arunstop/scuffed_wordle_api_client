@@ -1,11 +1,18 @@
+import { Transition } from "@headlessui/react";
+import _ from "lodash";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
+import { MdAddCircle, MdClose } from "react-icons/md";
 import Alert from "../../components/Alert";
 import Drawer from "../../components/Drawer/Drawer";
+import HeadlessModal from "../../components/HeadlessModal";
 import { APP_NAME } from "../../utils/helpers/constants/ConstantText";
 
 export default function PagePhrases() {
   const [alertInfo, setAlertInfo] = useState(true);
+  const [modalAdd, setModalAdd] = useState(false);
+  const [modalClear, setModalClear] = useState(false);
+  const [dummyRows, setDummyRows] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
   return (
     <>
@@ -15,19 +22,115 @@ export default function PagePhrases() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Drawer>
-        <div className="flex flex-col p-2 lg:p-4 gap-y-4 flex-grow">
+        <div className="flex grow flex-col gap-y-4 p-2 lg:p-4">
           {alertInfo && (
             <Alert
               color="info"
               title="Phrases page is used to manage phrases"
-            //   subtitle={`Phrases are used for the user-end app to show expressions to users, e.g. Good Luck, Nice Try, Well done, etc. 
-            // Phrases mainly appear in pop-up messages when users start playing the game or when the game is over.`}
+              //   subtitle={`Phrases are used for the user-end app to show expressions to users, e.g. Good Luck, Nice Try, Well done, etc.
+              // Phrases mainly appear in pop-up messages when users start playing the game or when the game is over.`}
               action={() => setAlertInfo(false)}
               actionLabel="I understand"
             />
           )}
+          {/* BUTTONS */}
+          <div className="flex flex-wrap items-center gap-4">
+            <button
+              className="btn btn-primary btn-block gap-2 sm:w-auto"
+              onClick={() => setModalAdd(true)}
+            >
+              Add a phrase
+              <span className="text-2xl">
+                <MdAddCircle />
+              </span>
+            </button>
+            <button
+              className="btn btn-primary btn-block gap-2 sm:w-auto"
+              onClick={() =>
+                setDummyRows([...dummyRows, Math.round(Math.random() * 100)])
+              }
+            >
+              Add a random phrase
+              <span className="text-2xl">
+                <MdAddCircle />
+              </span>
+            </button>
+            <button
+              className="btn btn-error btn-block gap-2 sm:w-auto"
+              onClick={() => setModalClear(true)}
+            >
+              Clear all phrases
+              <span className="text-2xl">
+                <MdClose />
+              </span>
+            </button>
+          </div>
+          <div className="overflow-x-auto rounded-3xl border-2 border-neutral">
+            <table className="table w-full">
+              {/* head */}
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Job</th>
+                  <th>Favorite Color</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dummyRows.length === 0 ? (
+                  <tr>
+                    <td className="text-center" colSpan={4}>
+                      Nothing found.
+                    </td>
+                  </tr>
+                ) : (
+                  _.reverse([...dummyRows]).map((e, i) => {
+                    return (
+                      <Transition
+                        show={dummyRows.includes(e)}
+                        as={Fragment}
+                        key={e}
+                        appear
+                        enter="transform transition duration-200"
+                        enterFrom="scale-90 opacity-0"
+                        enterTo="scale-100 opacity-100"
+                        leave="transform transition duration-200"
+                        leaveFrom="scale-100 opacity-100"
+                        leaveTo="scale-90 opacity-0"
+                      >
+                        <tr className={`${i % 2 !== 0 ? "active" : ""}`}>
+                          <th>{i + 1}</th>
+                          <td>Cy Ganderton</td>
+                          <td>Quality Control Specialist</td>
+                          <td>Blue {e}</td>
+                        </tr>
+                      </Transition>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </Drawer>
+      <HeadlessModal
+        value={modalAdd}
+        title="Add A Phrase"
+        onClose={() => setModalAdd(false)}
+        isBig
+      >
+        <div>add phrases form</div>
+      </HeadlessModal>
+      <HeadlessModal
+        value={modalClear}
+        title="Clear all phrases"
+        desc="All phrases will be wiped out, the player's app is going to be expresionless. Proceed?"
+        color="error"
+        onClose={() => setModalClear(false)}
+        actionY={() => setDummyRows([])}
+      >
+        {/* <div>add phrases form</div> */}
+      </HeadlessModal>
     </>
   );
 }

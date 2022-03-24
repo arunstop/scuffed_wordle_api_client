@@ -59,7 +59,7 @@ export default function Dashboard() {
   function onSearch(event: ChangeEvent<HTMLInputElement>) {
     gameAction.search(event.target.value);
   }
-  const anim: string = "animated animated-backInUp animated-faster";
+  const anim = "animated animated-backInUp animated-faster";
 
   return (
     // <CounterProvider>
@@ -72,7 +72,7 @@ export default function Dashboard() {
 
       <Drawer>
         {/* CONTENT */}
-        <div className="flex flex-col p-4 gap-y-4 flex-grow">
+        <div className="flex grow flex-col gap-y-4 p-4">
           <button className="btn" onClick={() => setAlertInfo(!alertInfo)}>
             Toggle alert
           </button>
@@ -116,7 +116,7 @@ export default function Dashboard() {
           <div className="flex flex-wrap items-center gap-4">
             <button
               // htmlFor={ID_MAIN_DRAWER}
-              className="btn btn-primary gap-2 sm:w-auto btn-block"
+              className="btn btn-primary btn-block gap-2 sm:w-auto"
               onClick={() => {
                 setModalAdd(true);
                 // addGame();
@@ -127,7 +127,7 @@ export default function Dashboard() {
             </button>
             <button
               // htmlFor={ID_MAIN_DRAWER}
-              className="btn btn-primary gap-2 sm:w-auto btn-block"
+              className="btn btn-primary btn-block gap-2 sm:w-auto"
               onClick={() => {
                 addGame();
                 // addGame();
@@ -139,11 +139,7 @@ export default function Dashboard() {
             <button
               // htmlFor="games-clearall-modal"
               className={`btn gap-2 sm:w-auto btn-block 
-              ${
-                searchedList.length !== 0 || !isSearching
-                  ? `btn-error`
-                  : `btn-disabled`
-              }`}
+              ${searchedList.length !== 0 ? `btn-error` : `btn-disabled`}`}
               onClick={() => {
                 setModalClear(true);
                 // addGame();
@@ -153,25 +149,28 @@ export default function Dashboard() {
               <MdClose size={30} />
             </button>
             {/* Search bar */}
-            <div className="form-control sm:w-auto w-full relative">
-              <label className="input-group input-group-md">
-                <span className="sm:text-3xl text-2xl">
+            <div className="form-control relative w-full sm:w-auto">
+              <label className="input-group-md input-group">
+                <span className="text-2xl sm:text-3xl">
                   <MdSearch />
                 </span>
                 <input
                   type="text"
+                  value={gameState.search || ""}
                   placeholder="Search..."
                   className={`input input-bordered input-secondary w-full pr-12 sm:max-w-xs `}
-                  value={gameState.search || ""}
                   disabled={isEmpty}
                   onChange={onSearch}
                 />
               </label>
               {isSearching && (
-                <div className="absolute right-2 top-2 bottom-2 my-auto animated animated-zoomIn animated-faster">
-                  <label className="btn btn-outline  min-h-min h-full w-9" onClick={()=>gameAction.search("")}>
-                  {/* ![color:hsl(var(--bc)_/_1)] */}
-                    <span className="sm:text-3xl text-2xl">
+                <div className="absolute inset-y-2 right-2 my-auto animated-faster animated animated-zoomIn">
+                  <label
+                    className="btn-outline btn  h-full min-h-min w-9"
+                    onClick={() => gameAction.search("")}
+                  >
+                    {/* ![color:hsl(var(--bc)_/_1)] */}
+                    <span className="text-2xl sm:text-3xl">
                       <MdClose />
                     </span>
                   </label>
@@ -185,12 +184,12 @@ export default function Dashboard() {
               scale-50
               animated animated-jackInTheBox animated-faster`}
             >
-              <div className="inline-flex items-center text-4xl font-black gap-1 text-warning ">
-                <span className="sm:block hidden tracking-[-0.4rem] mr-[0.42rem]">
+              <div className="inline-flex items-center gap-1 text-4xl font-black text-warning ">
+                <span className="mr-[0.42rem] hidden tracking-[-0.4rem] sm:block">
                   ¯\__
                 </span>
-                <BsFillEmojiNeutralFill className="sm:text-9xl text-6xl" />
-                <span className="sm:block hidden tracking-[-0.4rem]">__/¯</span>
+                <BsFillEmojiNeutralFill className="text-6xl sm:text-9xl" />
+                <span className="hidden tracking-[-0.4rem] sm:block">__/¯</span>
               </div>
               <h2 className="text-3xl font-bold">No results found</h2>
               <h2 className="text-lg">
@@ -214,10 +213,9 @@ export default function Dashboard() {
                   timeout={300}
                 >
                   <div
-                    className={`card card-compact shadow-lg outline outline-1 outline-primary 
-                    `}
+                    className={`card card-compact shadow-lg border rounded-t-lg border-primary`}
                   >
-                    <h2 className="card-title p-4 bg-primary">{game.name}</h2>
+                    <h2 className="card-title bg-primary p-4">{game.name}</h2>
                     <div className="card-body">
                       <p>{strGameMatrix(game.matrix)}</p>
                       <div className="card-actions justify-end">
@@ -230,7 +228,7 @@ export default function Dashboard() {
                         </button>
                         <button
                           key={"btn-game-item-delete-" + index}
-                          className="btn btn-sm btn-circle btn-error"
+                          className="btn btn-error btn-sm btn-circle"
                           onClick={() => deleteGame(game.id)}
                         >
                           <MdDelete size={18} />
@@ -255,7 +253,7 @@ export default function Dashboard() {
         onClose={(value) => {
           setModalAdd(value);
         }}
-        big
+        isBig
       >
         <GamesAddForm onClose={() => setModalAdd(false)} />
       </HeadlessModal>

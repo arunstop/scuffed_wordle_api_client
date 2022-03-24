@@ -14,8 +14,8 @@ import { GameContext } from "./GameContext";
 
 export const generateGameData = (id?: string): Game => {
   // check generate id if no param
-  id = id||nanoid();
-  return ({
+  id = id || nanoid();
+  return {
     id: id,
     name: `Game #${Math.round(Math.random() * 100)}`,
     matrix: { x: 5, y: 6, z: 1 },
@@ -32,7 +32,7 @@ export const generateGameData = (id?: string): Game => {
     dateCreated: Date.now().toString(),
     dateEdited: Date.now().toString(),
     status: "ON",
-  });
+  };
 };
 
 const getInitialGameList = (): Game[] => {
@@ -85,8 +85,9 @@ const reducer = (state: GameState, action: GameActionTypes): GameState => {
         // clear selected items from list
         // by checking if each of the game's id
         // is NOT included in action.gameIdList
-        const clearedItemList = _.filter(state.list, (game) =>
-          !gameIdList.includes(game.id),
+        const clearedItemList = _.filter(
+          state.list,
+          (game) => !gameIdList.includes(game.id),
         );
         return { ...state, search: "", list: clearedItemList };
       }

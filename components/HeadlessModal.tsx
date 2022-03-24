@@ -1,13 +1,13 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, PropsWithChildren, useRef } from "react";
 import { GoInfo } from "react-icons/go";
-import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import { FaArrowLeft } from "react-icons/fa";
 
 import { MainColorTypes } from "../utils/models/GeneralModel";
 
 type ModalProps = {
   title: string;
-  desc: string;
+  desc?: string;
   color?: MainColorTypes;
   value: boolean;
   labelY?: string;
@@ -16,7 +16,7 @@ type ModalProps = {
   actionN?: () => void;
   onClose: (value: boolean) => void;
   noAction?: boolean;
-  big?: boolean;
+  isBig?: boolean;
 };
 
 function HeadlessModal({
@@ -26,21 +26,21 @@ function HeadlessModal({
   value,
   labelY = "OK",
   // onChange = () => {},
-  actionY = () => {},
-  actionN = () => {},
-  onClose = () => {},
+  actionY = () => null,
+  actionN = () => null,
+  onClose = () => null,
   children,
   noAction = false,
-  big = false,
+  isBig = false,
 }: PropsWithChildren<ModalProps>) {
-  let completeButtonRef = useRef(null);
+  const completeButtonRef = useRef(null);
   //   function closeModal() {}
   return (
     <Transition appear show={value} as={Fragment}>
       <Dialog
         as="div"
         initialFocus={completeButtonRef}
-        className="modal bg-transparent opacity-100 visible z-20 pointer-events-auto overflow-hidden"
+        className="modal pointer-events-auto visible z-20 overflow-hidden bg-transparent opacity-100"
         onClose={onClose}
       >
         <Transition.Child
@@ -52,8 +52,9 @@ function HeadlessModal({
           leaveFrom="opacity-100 "
           leaveTo="opacity-0 "
         >
-          <Dialog.Overlay className="fixed inset-0 hero-overlay" />
+          <Dialog.Overlay className="hero-overlay fixed inset-0" />
         </Transition.Child>
+        <div className="hidden ring-info ring-success ring-warning ring-error"></div>
 
         {/* This element is to trick the browser into centering the modal contents. */}
         {/* <span
@@ -62,18 +63,17 @@ function HeadlessModal({
           >
             &#8203;
           </span> */}
-        {!big ? "" : <button className="h-0" />}
+        {!isBig ? "" : <button className="h-0" />}
 
         <Transition.Child
           as={"div"}
-          className={`modal-box  gap-4 transform-none z-10 overflow-auto
+          className={`modal-box gap-4 transform-none z-10 overflow-auto
           ${
-            big
-              ? "sm:border-8 border-0 border-base-100 "
+            isBig
+              ? "sm:border-8 border-0 border-base-100 h-full sm:h-auto max-h-full sm:max-h-[calc(100vh_-_5em)]"
               : `border-t-8 border-${color}`
           }
           flex flex-col sm:border-transparent shadow-${color}/30 shadow-2xl
-          max-h-full sm:max-h-[calc(100vh_-_5em)]
           animated
           `}
           enter="sm:animated-jackInTheBox animated-fadeInUp"
@@ -83,8 +83,8 @@ function HeadlessModal({
           //   leaveFrom="opacity-100 scale-100"
           //   leaveTo="opacity-0 scale-50"
         >
-          <div className={`flex ${big ? `` : `sm:flex-row`} flex-col gap-4`}>
-            {!big && (
+          <div className={`flex ${isBig ? `` : `sm:flex-row`} flex-col gap-4`}>
+            {!isBig && (
               <div
                 className={`mask mask-circle bg-${color} bg-opacity-30 text-${color} rounded-full border-${color} 
               sm:self-start self-center p-2 flex-shrink`}
@@ -93,31 +93,31 @@ function HeadlessModal({
               </div>
             )}
 
-            <div className="flex flex-col gap-4 w-full">
+            <div className="flex w-full flex-col gap-4">
               {/* Title */}
               {/* Workaround to DISABLE INITIAL FOCUS
               by using as="button" */}
               <Dialog.Title
                 as="div"
                 className={` text-2xl font-bold text-center  ${
-                  big
+                  isBig
                     ? `flex items-center justify-between text-right`
                     : `sm:text-left text-${color}`
                 }`}
               >
                 {/* BACK BUTTON */}
-                {big && (
-                  <button
+                {isBig && (
+                  <label
                     // [background-color:hsl(var(--bc)_/_0.3)]
-                    className="btn btn-circle btn-secondary !text-3xl btn-outline ![color:hsl(var(--bc))] border-0 bg-primary bg-opacity-30"
+                    className="btn-outline btn btn-secondary btn-circle flex items-center justify-center border-0 bg-primary/30 !text-3xl leading-none ![color:hsl(var(--bc))]"
                     onClick={() => onClose(false)}
                   >
-                    <MdOutlineArrowBackIosNew />
-                  </button>
+                    <FaArrowLeft />
+                  </label>
                 )}
                 <span className="self-center">{title}</span>
               </Dialog.Title>
-              {!!children ? (
+              {children ? (
                 children
               ) : (
                 <>
@@ -126,10 +126,10 @@ function HeadlessModal({
                 </>
               )}
 
-              {!!noAction || big ? null : (
+              {!!noAction || isBig ? null : (
                 <>
                   {/* BUTTON */}
-                  <div className="modal-action flex-wrap sm:flex-row-reverse sm:justify-start gap-4">
+                  <div className="modal-action flex-wrap gap-4 sm:flex-row-reverse sm:justify-start">
                     <button
                       className={`btn btn-${color} m-0 btn-block sm:w-40 font-bold truncate capitalize`}
                       onClick={() => {
@@ -141,7 +141,7 @@ function HeadlessModal({
                       {labelY}
                     </button>
                     <button
-                      className="btn btn-outline m-0 btn-block sm:w-fit"
+                      className="btn-outline btn btn-block m-0 sm:w-fit"
                       onClick={() => {
                         actionN();
                         onClose(false);

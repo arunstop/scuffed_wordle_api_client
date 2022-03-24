@@ -18,7 +18,7 @@ export default function TextInput({
   const isError = rules() !== "" && focused;
   const color = isError ? "error" : "primary";
 
-  //   set focused state to true after input text has been clicked
+  // set focused state to true after input text has been clicked
   function handleFocus() {
     setFocused(true);
   }
@@ -34,7 +34,7 @@ export default function TextInput({
         </label>
       )}
       <label className="input-group">
-        <span className={`bg-${color} bg-opacity-30 font-black sm:text-3xl text-2xl `}>
+        <span className={`bg-${color}/30 font-black sm:text-3xl text-2xl `}>
           {icon}
         </span>
         <input

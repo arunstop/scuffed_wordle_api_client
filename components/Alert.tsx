@@ -29,10 +29,13 @@ export default function Alert({
         break;
       case "success":
         iconComponent = <BsCheckCircle />;
+        break;
       case "warning":
         iconComponent = <TiWarningOutline />;
+        break;
       case "error":
         iconComponent = <RiCloseCircleLine />;
+        break;
       default:
         break;
     }
@@ -40,41 +43,34 @@ export default function Alert({
   const isMultiLined = subtitle !== "";
   return (
     <>
-      <div className={`alert alert-${color} alert-info rounded-xl items-stretch`}>
-        <div className="!flex !flex-grow !justify-between">
+      <div
+        className={`alert alert-${color} alert-info rounded-xl items-stretch`}
+      >
+        <div className="!flex !grow !justify-between">
           <span
             className={`sm:text-3xl text-2xl
-            ${
-              isMultiLined
-                ? "self-start"
-                : "sm:self-center self-start"
-            }`}
+            ${isMultiLined ? "self-start" : "sm:self-center self-start"}`}
           >
             {icon || iconComponent}
           </span>
 
-          <div className="flex sm:flex-row flex-col gap-4 sm:items-center item-start flex-grow">
+          <div className="item-start flex grow flex-col gap-4 sm:flex-row sm:items-center">
             {/* Text section */}
-            <div className="flex flex-col flex-grow gap-2 items-start">
+            <div className="flex grow flex-col items-start gap-2">
               {subtitle !== "" ? (
-                <h3 className="font-bold sm:text-lg text-base">{title}</h3>
+                <h3 className="text-base font-bold sm:text-lg">{title}</h3>
               ) : (
-                <h3 className="font-semibold sm:text-lg text-base">{title}</h3>
+                <h3 className="text-base font-semibold sm:text-lg">{title}</h3>
               )}
               {subtitle !== "" && (
-                <p className="sm:text-base text-sm">{subtitle}</p>
+                <p className="text-sm sm:text-base">{subtitle}</p>
               )}
             </div>
             {/* Button section */}
-            <div className="flex-none my-auto">
+            <div className="my-auto flex-none ">
               {action && (
-                <button
-                  className="btn min-w-24 float-right"
-                  onClick={() => action()}
-                >
-                  <span className="first-letter:uppercase ">
-                    {actionLabel}
-                  </span>
+                <button className="min-w-24 btn" onClick={() => action()}>
+                  <span className="first-letter:uppercase ">{actionLabel}</span>
                 </button>
               )}
             </div>
