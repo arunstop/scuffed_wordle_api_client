@@ -22,7 +22,7 @@ type ModalProps = {
 function HeadlessModal({
   title,
   desc,
-  color = "info",
+  color = "primary",
   value,
   labelY = "OK",
   // onChange = () => {},
@@ -40,7 +40,7 @@ function HeadlessModal({
       <Dialog
         as="div"
         initialFocus={completeButtonRef}
-        className="modal pointer-events-auto visible z-20 overflow-hidden bg-transparent opacity-100"
+        className="modal pointer-events-auto visible transform-none overflow-hidden bg-transparent opacity-100 transition-none"
         onClose={onClose}
       >
         <Transition.Child
@@ -67,91 +67,110 @@ function HeadlessModal({
 
         <Transition.Child
           as={"div"}
-          className={`modal-box gap-4 transform-none z-10 overflow-auto
-          ${
+          className={`animated transition-all transform w-full h-full overflow-auto pointer-events-none flex items-end sm:items-center justify-center`}
+          // enter="sm:animated-rotateIn animated-fadeInUp duration-1000"
+          enter="duration-[300ms] "
+          // if isBig show scaling animation
+          // if it's not show slide up animation
+          enterFrom={`${
             isBig
-              ? "sm:border-8 border-0 border-base-100 h-full sm:h-auto max-h-full sm:max-h-[calc(100vh_-_5em)]"
-              : `border-t-8 border-${color}`
-          }
-          flex flex-col sm:border-transparent shadow-${color}/30 shadow-2xl
-          animated
-          `}
-          enter="sm:animated-jackInTheBox animated-fadeInUp"
-          // enterFrom="opacity-0 scale-95"
-          // enterTo="opacity-100 scale-100"
-          leave="sm:animated-zoomOut animated-fadeOutDownBig"
-          //   leaveFrom="opacity-100 scale-100"
-          //   leaveTo="opacity-0 scale-50"
+              ? "scale-y-0 sm:scale-[1.5] origin-bottom sm:origin-center"
+              : "scale-y-0 sm:scale-[1.5] origin-bottom sm:origin-center"
+          }  opacity-0`}
+          enterTo={`${
+            isBig
+              ? "scale-90"
+              : "scale-90 sm:scale-90 origin-bottom sm:origin-center"
+          }  opacity-100`}
+          leave="animated-backOutDown sm:animated-zoomOut duration-200"
+          // leave="transform transition duration-200"
+          // leaveFrom="scale-100 opacity-100"
+          // leaveTo="scale-0 opacity-0"
         >
-          <div className={`flex ${isBig ? `` : `sm:flex-row`} flex-col gap-4`}>
-            {!isBig && (
-              <div
-                className={`mask mask-circle bg-${color} bg-opacity-30 text-${color} rounded-full border-${color} 
+          <div
+            className={
+              "modal-box pointer-events-auto z-10 flex !scale-100 flex-col gap-4 overflow-auto shadow-2xl [--tw-translate-y:0] sm:border-transparent" +
+              `
+              shadow-${color}/20
+              ${
+                isBig
+                  ? "sm:border-8 border-0 border-base-100 h-full sm:h-auto max-h-full sm:max-h-[calc(100vh_-_5em)]"
+                  : `border-t-8 border-${color}`
+              }`
+            }
+          >
+            <div
+              className={`flex ${isBig ? `` : `sm:flex-row`} flex-col gap-4`}
+            >
+              {!isBig && (
+                <div
+                  className={`mask mask-circle bg-${color} bg-opacity-30 text-${color} rounded-full border-${color} 
               sm:self-start self-center p-2 flex-shrink`}
-              >
-                <GoInfo size={36} />
-              </div>
-            )}
+                >
+                  <GoInfo size={36} />
+                </div>
+              )}
 
-            <div className="flex w-full flex-col gap-4">
-              {/* Title */}
-              {/* Workaround to DISABLE INITIAL FOCUS
+              <div className="flex w-full flex-col gap-4">
+                {/* Title */}
+                {/* Workaround to DISABLE INITIAL FOCUS
               by using as="button" */}
-              <Dialog.Title
-                as="div"
-                className={` text-2xl font-bold text-center  ${
-                  isBig
-                    ? `flex items-center justify-between text-right`
-                    : `sm:text-left text-${color}`
-                }`}
-              >
-                {/* BACK BUTTON */}
-                {isBig && (
-                  <label
-                    // [background-color:hsl(var(--bc)_/_0.3)]
-                    className="btn-outline btn btn-secondary btn-circle flex items-center justify-center border-0 bg-primary/30 !text-3xl leading-none ![color:hsl(var(--bc))]"
-                    onClick={() => onClose(false)}
-                  >
-                    <FaArrowLeft />
-                  </label>
+                <Dialog.Title
+                  as="div"
+                  className={` text-2xl font-bold text-center  ${
+                    isBig
+                      ? `flex items-center justify-between text-right`
+                      : `sm:text-left text-${color}`
+                  }`}
+                >
+                  {/* BACK BUTTON */}
+                  {isBig && (
+                    <label
+                      // [background-color:hsl(var(--bc)_/_0.3)]
+                      className="btn-outline btn btn-secondary btn-circle flex items-center justify-center border-0 bg-primary/30 !text-3xl leading-none ![color:hsl(var(--bc))]"
+                      onClick={() => onClose(false)}
+                    >
+                      <FaArrowLeft />
+                    </label>
+                  )}
+                  <span className="self-center">{title}</span>
+                </Dialog.Title>
+                {children ? (
+                  children
+                ) : (
+                  <>
+                    {/* Desc */}
+                    <p className="text-center sm:text-left">{desc}</p>
+                  </>
                 )}
-                <span className="self-center">{title}</span>
-              </Dialog.Title>
-              {children ? (
-                children
-              ) : (
-                <>
-                  {/* Desc */}
-                  <p className="text-center sm:text-left">{desc}</p>
-                </>
-              )}
 
-              {!!noAction || isBig ? null : (
-                <>
-                  {/* BUTTON */}
-                  <div className="modal-action flex-wrap gap-4 sm:flex-row-reverse sm:justify-start">
-                    <button
-                      className={`btn btn-${color} m-0 btn-block sm:w-40 font-bold truncate capitalize`}
-                      onClick={() => {
-                        actionY();
-                        onClose(false);
-                      }}
-                      tabIndex={1}
-                    >
-                      {labelY}
-                    </button>
-                    <button
-                      className="btn-outline btn btn-block m-0 sm:w-fit"
-                      onClick={() => {
-                        actionN();
-                        onClose(false);
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </>
-              )}
+                {!!noAction || isBig ? null : (
+                  <>
+                    {/* BUTTON */}
+                    <div className="modal-action flex-wrap gap-4 sm:flex-row-reverse sm:justify-start">
+                      <button
+                        className={`btn btn-${color} m-0 btn-block sm:w-40 font-bold truncate capitalize`}
+                        onClick={() => {
+                          actionY();
+                          onClose(false);
+                        }}
+                        tabIndex={1}
+                      >
+                        {labelY}
+                      </button>
+                      <button
+                        className="btn-outline btn btn-block m-0 sm:w-fit"
+                        onClick={() => {
+                          actionN();
+                          onClose(false);
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </Transition.Child>

@@ -1,5 +1,6 @@
 import { Transition } from "@headlessui/react";
 import _ from "lodash";
+import { nanoid } from "nanoid";
 import Head from "next/head";
 import React, { Fragment, useState } from "react";
 import { MdAddCircle, MdClose } from "react-icons/md";
@@ -12,7 +13,17 @@ export default function PagePhrases() {
   const [alertInfo, setAlertInfo] = useState(true);
   const [modalAdd, setModalAdd] = useState(false);
   const [modalClear, setModalClear] = useState(false);
-  const [dummyRows, setDummyRows] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  const [dummyRows, setDummyRows] = useState<string[]>([
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+  ]);
 
   return (
     <>
@@ -22,7 +33,7 @@ export default function PagePhrases() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Drawer>
-        <div className="flex grow flex-col gap-y-4 p-2 lg:p-4">
+        <div className="flex grow flex-col gap-y-4 p-2 sm:p-4">
           {alertInfo && (
             <Alert
               color="info"
@@ -46,9 +57,7 @@ export default function PagePhrases() {
             </button>
             <button
               className="btn btn-primary btn-block gap-2 sm:w-auto"
-              onClick={() =>
-                setDummyRows([...dummyRows, Math.round(Math.random() * 100)])
-              }
+              onClick={() => setDummyRows([...dummyRows, nanoid()])}
             >
               Add a random phrase
               <span className="text-2xl">
@@ -58,6 +67,7 @@ export default function PagePhrases() {
             <button
               className="btn btn-error btn-block gap-2 sm:w-auto"
               onClick={() => setModalClear(true)}
+              disabled={dummyRows.length === 0}
             >
               Clear all phrases
               <span className="text-2xl">
@@ -65,7 +75,7 @@ export default function PagePhrases() {
               </span>
             </button>
           </div>
-          <div className="overflow-x-auto rounded-3xl border-2 border-neutral">
+          <div className="overflow-x-auto rounded-xl border-2 border-neutral">
             <table className="table w-full">
               {/* head */}
               <thead>
@@ -100,8 +110,8 @@ export default function PagePhrases() {
                       >
                         <tr className={`${i % 2 !== 0 ? "active" : ""}`}>
                           <th>{i + 1}</th>
-                          <td>Cy Ganderton</td>
                           <td>Quality Control Specialist</td>
+                          <td>Cy Ganderton</td>
                           <td>Blue {e}</td>
                         </tr>
                       </Transition>

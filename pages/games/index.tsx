@@ -1,23 +1,24 @@
+// import { Transition } from "@headlessui/react";
 import { nanoid } from "nanoid";
 import Head from "next/head";
 import { NextRouter, useRouter } from "next/router";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { IoMdAddCircleOutline } from "react-icons/io";
-import { MdClose, MdDelete, MdEdit, MdSearch } from "react-icons/md";
-import Drawer from "../../components/Drawer/Drawer";
 // import Modal from "../../components/Modal";
 import { BsFillEmojiNeutralFill } from "react-icons/bs";
+import { IoMdAddCircleOutline } from "react-icons/io";
+import { MdClose, MdDelete, MdEdit, MdSearch } from "react-icons/md";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import Alert from "../../components/Alert";
+import Drawer from "../../components/Drawer/Drawer";
+import GamesAddForm from "../../components/Forms/GamesAddForm";
+import HeadlessModal from "../../components/HeadlessModal";
+import { useGameContext } from "../../utils/contexts/game/GameHooks";
+import { generateGameData } from "../../utils/contexts/game/GameProvider";
 // import {GiTumbleweed} from "react-icons/gi";
 // import { ID_MAIN_DRAWER } from "../utils/constants/ConstantIds";
 import { APP_NAME } from "../../utils/helpers/constants/ConstantText";
-import { useGameContext } from "../../utils/contexts/game/GameHooks";
-import { generateGameData } from "../../utils/contexts/game/GameProvider";
 // import { useUiContext } from "../../utils/contexts/ui/UiHooks";
 import { strGameMatrix } from "../../utils/models/GameModel";
-import HeadlessModal from "../../components/HeadlessModal";
-import GamesAddForm from "../../components/Forms/GamesAddForm";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import Alert from "../../components/Alert";
 // import { Transition } from "@headlessui/react";
 // import { useCountContext } from "../utils/contexts/counter/CounterHooks";
 // import { useUiContext } from "../utils/contexts/ui/UiHooks";
@@ -239,6 +240,48 @@ export default function Dashboard() {
                 </CSSTransition>
               ))}
             </TransitionGroup>
+            // <main className="flex flex-wrap justify-center gap-4 transtiion all">
+            //   {searchedList.map((game, index) => (
+            //     <Transition
+            //       show={searchedList.includes(game)}
+            //       appear
+            //       key={game.id}
+            //       as={"div"}
+            //       className={"animated"}
+            //       enter="duration-[300ms] "
+            //       // if isBig show scaling animation
+            //       // if it's not show slide up animation
+            //       enterFrom={`scale-y-0 sm:scale-[1.5] origin-bottom sm:origin-center opacity-0`}
+            //       enterTo={`scale-90 sm:scale-90 origin-bottom sm:origin-center opacity-100`}
+            //       leave="sm:animated-zoomOut animated-fadeOutDownBig duration-200"
+            //     >
+            //       <div
+            //         className={`card card-compact shadow-lg border rounded-t-lg border-primary`}
+            //       >
+            //         <h2 className="card-title bg-primary p-4">{game.name}</h2>
+            //         <div className="card-body">
+            //           <p>{strGameMatrix(game.matrix)}</p>
+            //           <div className="card-actions justify-end">
+            //             <button
+            //               key={"btn-game-item-edit-" + index}
+            //               className="btn btn-sm btn-circle"
+            //               // onClick={() => deleteGame(game.id)}
+            //             >
+            //               <MdEdit size={18} />
+            //             </button>
+            //             <button
+            //               key={"btn-game-item-delete-" + index}
+            //               className="btn btn-error btn-sm btn-circle"
+            //               onClick={() => deleteGame(game.id)}
+            //             >
+            //               <MdDelete size={18} />
+            //             </button>
+            //           </div>
+            //         </div>
+            //       </div>
+            //     </Transition>
+            //   ))}
+            // </main>
           )}
         </div>
       </Drawer>
