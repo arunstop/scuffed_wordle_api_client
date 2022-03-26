@@ -43,6 +43,8 @@ module.exports = {
     "tailwindcss/no-arbitrary-value": "off",
     "tailwindcss/no-custom-classname": "off",
     "tailwindcss/no-contradicting-classname": "error",
+    "no-empty-function": "off",
+    "@typescript-eslint/no-empty-function": ["off"],
   },
   ignorePatterns: ["**/*.js"],
   settings: {

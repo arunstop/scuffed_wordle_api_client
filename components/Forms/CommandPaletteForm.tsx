@@ -1,11 +1,12 @@
 import { Combobox, Transition } from "@headlessui/react";
 import _ from "lodash";
 import React, { Fragment, useState } from "react";
-import { FaArrowLeft, FaTerminal } from "react-icons/fa";
+import { FaTerminal } from "react-icons/fa";
 import { HiSelector } from "react-icons/hi";
 // import { MdCheck } from "react-icons/md";
 import { useUiContext } from "../../utils/contexts/ui/UiHooks";
-import { UiMenu } from "../../utils/models/UiModel";
+import { UiCommand } from "../../utils/models/UiModel";
+import ModalBackButton from "../ModalBackButton";
 // import TextInput from "../TextInput";
 
 export default function CommandPaletteForm({
@@ -14,18 +15,18 @@ export default function CommandPaletteForm({
   onClose: (value: boolean) => void;
 }) {
   const { state: uiState, action: uiAction } = useUiContext();
-  const [selected, setSelected] = useState<UiMenu | null>();
+  const [selected, setSelected] = useState<UiCommand | null>();
   const [query, setQuery] = useState("");
   const filteredList = !query
-    ? uiState.menuList
-    : _.filter(uiState.menuList, (menu) =>
-        menu.title.toLowerCase().trim().includes(query.toLowerCase().trim()),
+    ? uiState.command.list
+    : _.filter(uiState.command.list, (command) =>
+        command.title.toLowerCase().trim().includes(query.toLowerCase().trim()),
       );
   return (
     <div
       className={`modal-box pointer-events-auto z-10 transition-all transform !scale-100 gap-4 [--tw-translate-y:0] max-h-full
       h-full sm:h-auto p-6 sm:p-6 self-start ${
-        query.length === 0 ? "sm:mt-24" : "sm:mt-24"
+        query.length === 0 ? "sm:mt-[25vh]" : "sm:mt-[25vh]"
       } flex flex-col rounded-none sm:rounded-xl
       overflow-auto sm:overflow-visible 
     `}
@@ -34,18 +35,19 @@ export default function CommandPaletteForm({
         className={` text-2xl font-bold  flex items-center justify-between text-right`}
       >
         {/* BACK BUTTON */}
-        <label
-          // [background-color:hsl(var(--bc)_/_0.3)]
-          className="btn-outline btn btn-secondary btn-circle flex items-center justify-center border-0 bg-primary/30 !text-3xl leading-none ![color:hsl(var(--bc))]"
-          onClick={() => onClose(false)}
-        >
-          <FaArrowLeft />
-        </label>
+        <ModalBackButton action={() => onClose(false)} />
         <span className="self-center">Command Palette</span>
       </div>
       {/* {JSON.stringify(query)} */}
       <div className="form-control">
-        <Combobox value={selected} onChange={setSelected}>
+        <Combobox
+          value={selected}
+          onChange={(command) => {
+            setSelected(command);
+            uiAction.toggleCommandPalette();
+            command?.action();
+          }}
+        >
           <div className="relative">
             <div>
               <label className="input-group">
@@ -54,13 +56,16 @@ export default function CommandPaletteForm({
                 </span>
                 <Combobox.Input
                   as={Fragment}
-                  displayValue={(menu: UiMenu) => menu.title}
-                  onChange={(event) => setQuery(event.target.value)}
+                  displayValue={(command: UiCommand) => command.title}
+                  onChange={(event) => {
+                    setQuery(event.target.value);
+                  }}
                 >
                   <input
                     type="text"
+                    value={query}
                     placeholder="Search commands..."
-                    className="input-bordered input w-full pr-8 focus:input-primary input-md sm:input-lg !rounded-r-xl"
+                    className="input-bordered input input-md w-full !rounded-r-xl pr-8 focus:input-primary sm:input-lg"
                     autoFocus
                   />
                 </Combobox.Input>
@@ -80,48 +85,60 @@ export default function CommandPaletteForm({
               afterLeave={() => setQuery("")}
             >
               <Combobox.Options
-                className="absolute max-h-60 w-full overflow-auto rounded-md rounded-t-sm bg-base-100
-                 mt-2 text-base shadow-lg focus:outline-none"
+                className="absolute mt-2 max-h-60 w-full overflow-auto rounded-md rounded-t-sm
+                 bg-base-100 text-base shadow-lg focus:outline-none"
               >
                 {filteredList.length === 0 && query !== "" ? (
                   <div className="relative cursor-default select-none py-2 px-4 text-center">
-                    Nothing found.
+                    Nothing command found.
                   </div>
                 ) : (
-                  filteredList.map((menu) => {
-                    const isSelected: boolean = menu.title === selected?.title;
+                  filteredList.map((command) => {
+                    const isSelected: boolean =
+                      command.title === selected?.title;
                     return (
                       <Combobox.Option
-                        key={menu.title}
+                        key={command.title}
                         className={({
                           active,
-                        }) => `cursor-default select-none relative py-2 pl-10 pr-4 
+                        }) => `cursor-default select-none relative py-2 pl-12 pr-4 
                         ${active ? "text-white bg-primary/100" : ""}
                         ${
                           isSelected && !active
                             ? "bg-primary-content text-primary-focus"
                             : ""
-                        }
-                        `}
-                        value={menu}
+                        }`}
+                        value={command}
                       >
                         <>
                           {/* time zone text e.g (GMT+07:00) Some Place */}
-                          <span
-                            className={`block truncate ${
-                              isSelected ? "font-medium" : "font-normal"
-                            }`}
-                          >
-                            {menu.title}
-                          </span>
-                          {/* Cehck icon */}
-                          {/* {isSelected ? (
-                            <span
-                              className={`absolute inset-y-0 left-0 flex items-center pl-3 `}
+                          <span className="gap-2 grid">
+                            <h1
+                              className={`block truncate text-md sm:text-lg ${
+                                isSelected ? "font-bold" : "font-medium"
+                              }`}
                             >
-                              <MdCheck className="h-6 w-6" aria-hidden="true" />
-                            </span>
-                          ) : null} */}
+                              {command.title}
+                            </h1>
+                            {command.desc && (
+                              <p
+                                className={`text-xs sm:text-sm pb-2 ${
+                                  isSelected ? "" : "text-inherit"
+                                }`}
+                              >
+                                {command.desc}
+                              </p>
+                            )}
+                          </span>
+                          {/* Check icon */}
+
+                          <span
+                            className={`absolute ${
+                              command.desc ? "top-0 mt-2" : "inset-y-0"
+                            } left-0 flex items-center pl-3 text-2xl`}
+                          >
+                            {command.icon}
+                          </span>
                         </>
                       </Combobox.Option>
                     );

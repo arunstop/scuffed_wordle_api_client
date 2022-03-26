@@ -2,12 +2,32 @@ import { ReactNode } from "react";
 // State
 export interface UiState {
   darkTheme: boolean;
-  menuList: UiMenu[];
-  menuOn: string;
-  isDrawerOpen: boolean;
-  isCommandPaletteOpen: boolean;
+  menu: {
+    list: UiMenu[];
+    active: string;
+    isDrawerOpen: boolean;
+  };
+  command: {
+    isPaletteOpen: boolean;
+    list: UiCommand[];
+    recentlyUsed: UiCommandId;
+  };
 }
 
+export interface UiCommand {
+  id: UiCommandId;
+  title: string;
+  desc: string;
+  type: UiCommandTypes;
+  icon: ReactNode;
+  lastUsedAt: string;
+  action: () => void;
+}
+export type UiCommandId = string;
+
+export type UiCommandTypes = "NAVIGATION" | "ALTERATION" | "OTHER";
+
+// UiMenu
 export interface UiMenu {
   id: string;
   title: string;
@@ -19,10 +39,10 @@ export type UiMenuTypes = "MODAL" | "PAGE";
 
 // Action
 export interface UiAction {
-  toggleDarkTheme: (value: boolean) => void;
+  toggleDarkTheme: () => void;
   selectMenu: (menuId: string) => void;
-  toggleDrawer: (value: boolean) => void;
-  toggleCommandPalette: (value: boolean) => void;
+  toggleDrawer: () => void;
+  toggleCommandPalette: () => void;
 }
 
 // Action types

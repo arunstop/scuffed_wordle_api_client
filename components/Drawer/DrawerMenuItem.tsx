@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import { ID_MODAL_LOGOUT } from "../../utils/helpers/constants/ConstantIds";
 import { UiMenu } from "../../utils/models/UiModel";
 
 type MenuItemProps = {
@@ -13,6 +14,7 @@ export default function MenuItem({
   isActive,
   action,
 }: MenuItemProps) {
+  const isModal = type === "MODAL";
   const activeClass = isActive
     ? // active
       "btn-primary text-white font-semibold"
@@ -20,16 +22,17 @@ export default function MenuItem({
       "bg-base-300 hover:bg-transparent hover:border-current";
   const item = (
     <a
+      id={isModal ? ID_MODAL_LOGOUT : ""}
       className={`btn justify-start text-sm normal-case h-auto border-transparent ${activeClass}`}
       onClick={action}
     >
-      {icon}
+      <span className="text-2xl">{icon}</span>
       {title}
     </a>
   );
   return (
     <li>
-      {type !== "PAGE" ? (
+      {isModal ? (
         item
       ) : (
         <Link href={`/${id}`} replace>

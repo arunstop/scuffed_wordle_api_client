@@ -73,7 +73,7 @@ export default function Dashboard() {
             type="checkbox"
             className="toggle-primary toggle"
             checked={uiState.darkTheme}
-            onChange={() => uiAction.toggleDarkTheme(!uiState.darkTheme)}
+            onChange={() => uiAction.toggleDarkTheme()}
           />
 
           <div className="m-4">

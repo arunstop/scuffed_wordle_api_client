@@ -5,17 +5,25 @@ import { slugify } from "../../models/GlobalModel";
 import {
   UiAction,
   UiActionTypes,
+  UiCommand,
   UiContextProps,
   UiMenu,
   UiState,
 } from "../../models/UiModel";
 import { UiContext } from "./UiContext";
-import { MdOutlineSpaceDashboard, MdOutlineErrorOutline } from "react-icons/md";
+import {
+  MdOutlineSpaceDashboard,
+  MdOutlineErrorOutline,
+  MdOutlineDarkMode,
+} from "react-icons/md";
 import { GoBook } from "react-icons/go";
 import { HiOutlineLogout } from "react-icons/hi";
 import { RiApps2Line } from "react-icons/ri";
 import { BsChatQuote } from "react-icons/bs";
 import { NextRouter, useRouter } from "next/router";
+import moment from "moment";
+import { FiSun } from "react-icons/fi";
+import { ID_MODAL_LOGOUT } from "../../helpers/constants/ConstantIds";
 // import { ID_MAIN_DRAWER } from "../../helpers/constants/ConstantIds";
 
 const getInitialMenuList = (): UiMenu[] => {
@@ -23,20 +31,20 @@ const getInitialMenuList = (): UiMenu[] => {
     {
       title: "Dashboard",
       type: "PAGE",
-      icon: <MdOutlineSpaceDashboard size={24} />,
+      icon: <MdOutlineSpaceDashboard />,
     },
-    { title: "Dictionary", type: "PAGE", icon: <GoBook size={24} /> },
-    { title: "Games", type: "PAGE", icon: <RiApps2Line size={24} /> },
+    { title: "Dictionary", type: "PAGE", icon: <GoBook /> },
+    { title: "Games", type: "PAGE", icon: <RiApps2Line /> },
     {
       title: "Issue Reports",
       type: "PAGE",
-      icon: <MdOutlineErrorOutline size={24} />,
+      icon: <MdOutlineErrorOutline />,
     },
-    { title: "Phrases", type: "PAGE", icon: <BsChatQuote size={24} /> },
+    { title: "Phrases", type: "PAGE", icon: <BsChatQuote /> },
     {
       title: "Logout",
       type: "MODAL",
-      icon: <HiOutlineLogout size={24} className="rotate-180" />,
+      icon: <HiOutlineLogout className="rotate-180" />,
     },
   ];
 
@@ -58,11 +66,17 @@ const getInitialMenuList = (): UiMenu[] => {
 
 const INITIAL_STATE: UiState = {
   darkTheme: false,
-  menuList: getInitialMenuList(),
+  menu: {
+    list: getInitialMenuList(),
+    active: "",
+    isDrawerOpen: false,
+  },
   // menuOn: getInitialMenuList()[0].id,
-  menuOn: "",
-  isDrawerOpen: false,
-  isCommandPaletteOpen: false,
+  command: {
+    isPaletteOpen: false,
+    list: [],
+    recentlyUsed: "",
+  },
 };
 
 const reducer = (state: UiState, action: UiActionTypes): UiState => {
@@ -72,11 +86,14 @@ const reducer = (state: UiState, action: UiActionTypes): UiState => {
     case "TOGGLE_DARK_THEME":
       return { ...state, darkTheme: payload.value };
     case "SELECT_MENU":
-      return { ...state, menuOn: payload.menuId };
+      return { ...state, menu: { ...state.menu, active: payload.menuId } };
     case "TOGGLE_DRAWER":
-      return { ...state, isDrawerOpen: payload.value };
+      return { ...state, menu: { ...state.menu, isDrawerOpen: payload.value } };
     case "TOGGLE_COMMAND_PALETTE":
-      return { ...state, isCommandPaletteOpen: payload.value };
+      return {
+        ...state,
+        command: { ...state.command, isPaletteOpen: payload.value },
+      };
     default:
       return state;
   }
@@ -85,17 +102,76 @@ const reducer = (state: UiState, action: UiActionTypes): UiState => {
 export const UiProvider = ({ children }: ContextChildren) => {
   // HYDRATION ERROR
   const { theme, setTheme } = useTheme();
+  const router: NextRouter = useRouter();
+
+  // Creating command list
+  function getCommandList(): UiCommand[] {
+    const navigationCommandList = getInitialMenuList().map((nav) => {
+      const commandTitle =
+        nav.type === "MODAL"
+          ? `Execute: ${nav.title}`
+          : `Go to: ${nav.title} page`;
+      return {
+        id: `cmd-nav-page-${nav.id}`,
+        title: commandTitle,
+        desc: "",
+        lastUsedAt: moment.now().toString(),
+        type: "NAVIGATION",
+        icon: nav.icon,
+        action: () => {
+          if (nav.type === "PAGE") {
+            router.push(`/${nav.id}`);
+          } else {
+            document.getElementById(ID_MODAL_LOGOUT)?.click();
+          }
+        },
+      } as UiCommand;
+    });
+    const alterationCommandList: UiCommand[] = [
+      {
+        id: `cmd-alter-light-mode-on`,
+        title: `Turn on the Light Mode`,
+        desc: `Turning on Light Mode meaning, the app appearance will be as bright as daylight. 
+        Suited for day-time use. If light mode is already on, this action is futile`,
+        lastUsedAt: moment.now().toString(),
+        type: "ALTERATION",
+        icon: <FiSun />,
+        action: () => toggleDarkTheme(false),
+      },
+      {
+        id: `cmd-alter-dark-mode-on`,
+        title: `Turn on the Dark Mode`,
+        desc: `Turning on Dark Mode meaning, the app appearance will be as dim as night. 
+        Suited for night-time use. If dark mode is already on, this action is futile`,
+        lastUsedAt: moment.now().toString(),
+        type: "ALTERATION",
+        icon: <MdOutlineDarkMode />,
+        action: () => toggleDarkTheme(true),
+      },
+    ];
+    return [...navigationCommandList, ...alterationCommandList];
+  }
+
   const [uiState, dispatch] = useReducer(reducer, {
     ...INITIAL_STATE,
+    command: {
+      ...INITIAL_STATE.command,
+      list: getCommandList(),
+    },
     darkTheme: theme === "business",
   });
+
+  function toggleDarkTheme(value: boolean) {
+    dispatch({
+      type: "TOGGLE_DARK_THEME",
+      payload: { value },
+    });
+    setTheme(value ? "business" : "corporate");
+  }
+
   const uiAction: UiAction = {
-    toggleDarkTheme: (value: boolean) => {
-      setTheme(value ? "business" : "corporate");
-      dispatch({
-        type: "TOGGLE_DARK_THEME",
-        payload: { value },
-      });
+    toggleDarkTheme: () => {
+      toggleDarkTheme(!uiState.darkTheme);
     },
     selectMenu: (menuId: string) => {
       // alert(menuId);
@@ -103,17 +179,22 @@ export const UiProvider = ({ children }: ContextChildren) => {
         type: "SELECT_MENU",
         payload: { menuId },
       });
-    },
-    toggleDrawer: (value) => {
+      // HIDE DRAWER
       dispatch({
         type: "TOGGLE_DRAWER",
-        payload: { value },
+        payload: { value: false },
       });
     },
-    toggleCommandPalette: (value) => {
+    toggleDrawer: () => {
+      dispatch({
+        type: "TOGGLE_DRAWER",
+        payload: { value: !uiState.menu.isDrawerOpen },
+      });
+    },
+    toggleCommandPalette: () => {
       dispatch({
         type: "TOGGLE_COMMAND_PALETTE",
-        payload: { value },
+        payload: { value: !uiState.command.isPaletteOpen },
       });
     },
   };
@@ -121,8 +202,7 @@ export const UiProvider = ({ children }: ContextChildren) => {
     state: uiState,
     action: uiAction,
   };
-  //
-  const router: NextRouter = useRouter();
+
   // keydown listeners
   useEffect(() => {
     const handleKeydown = (event: KeyboardEvent) => {
@@ -132,11 +212,11 @@ export const UiProvider = ({ children }: ContextChildren) => {
       const key: string = event.key.toLowerCase();
       // OPEN COMMAND PALETTE
       if (event.ctrlKey && key === "/") {
-        uiAction.toggleCommandPalette(!uiState.isCommandPaletteOpen);
+        uiAction.toggleCommandPalette();
       }
       // OPEN DRAWER
       else if (event.ctrlKey && key === "m") {
-        uiAction.toggleDrawer(!uiState.isDrawerOpen);
+        uiAction.toggleDrawer();
       }
     };
     document.addEventListener("keydown", handleKeydown);
@@ -144,7 +224,12 @@ export const UiProvider = ({ children }: ContextChildren) => {
     return () => {
       document.removeEventListener("keydown", handleKeydown);
     };
-  }, [router.pathname, uiState]);
+  }, [
+    router.pathname,
+    // watch uiState change to monitor drawer, etc
+    uiState,
+  ]);
+
   return (
     <UiContext.Provider value={value}>
       <>{children}</>

@@ -1,9 +1,8 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, PropsWithChildren, ReactNode, useRef } from "react";
 import { GoInfo } from "react-icons/go";
-import { FaArrowLeft } from "react-icons/fa";
-
 import { MainColorTypes } from "../utils/models/GeneralModel";
+import ModalBackButton from "./ModalBackButton";
 
 type ModalProps = {
   title?: string;
@@ -57,15 +56,7 @@ function HeadlessModal({
       }`}
     >
       {/* BACK BUTTON */}
-      {isBig && (
-        <label
-          // [background-color:hsl(var(--bc)_/_0.3)]
-          className="btn-outline btn btn-secondary btn-circle flex items-center justify-center border-0 bg-primary/30 !text-3xl leading-none ![color:hsl(var(--bc))]"
-          onClick={() => onClose(false)}
-        >
-          <FaArrowLeft />
-        </label>
-      )}
+      {isBig && <ModalBackButton action={() => onClose(false)} />}
       <span className="self-center">{title}</span>
     </Dialog.Title>
   );
@@ -73,6 +64,7 @@ function HeadlessModal({
   return (
     <Transition appear show={value} as={Fragment}>
       <Dialog
+        open={value}
         as="div"
         initialFocus={completeButtonRef}
         className="modal pointer-events-auto visible transform-none overflow-hidden bg-transparent opacity-100 transition-none"
@@ -91,13 +83,7 @@ function HeadlessModal({
         </Transition.Child>
         <div className="hidden ring-info ring-success ring-warning ring-error"></div>
 
-        {/* This element is to trick the browser into centering the modal contents. */}
-        {/* <span
-            className="inline-block h-screen align-middle"
-            aria-hidden="true"
-          >
-            &#8203;
-          </span> */}
+        {/* Workaround to dodge initial focus */}
         {!isBig ? "" : <button className="h-0" />}
 
         <Transition.Child

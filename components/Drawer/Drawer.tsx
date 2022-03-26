@@ -53,9 +53,9 @@ export default function Drawer({ children }: MainChildren) {
         id={ID_MAIN_DRAWER}
         type="checkbox"
         className="btn drawer-toggle"
-        checked={uiState.isDrawerOpen}
+        checked={uiState.menu.isDrawerOpen}
         onChange={(event) => {
-          uiAction.toggleDrawer(event.target.checked);
+          uiAction.toggleDrawer();
         }}
       />
       <div className="drawer-content flex flex-col">
@@ -78,7 +78,7 @@ export default function Drawer({ children }: MainChildren) {
                 type="checkbox"
                 checked={uiState.darkTheme}
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  uiAction.toggleDarkTheme(event.target.checked)
+                  uiAction.toggleDarkTheme()
                 }
               />
               {/* if darktheme on show the light theme icon */}
@@ -101,11 +101,11 @@ export default function Drawer({ children }: MainChildren) {
         />
         {/* <!-- Sidebar content here --> */}
         <ul className="menu w-60 overflow-y-auto bg-base-300 p-4 text-base-content">
-          {uiState.menuList.map((menu, index) => (
+          {uiState.menu.list.map((menu, index) => (
             <MenuItem
               key={index}
               menu={menu}
-              isActive={menu.id === uiState.menuOn}
+              isActive={menu.id === uiState.menu.active}
               action={() =>
                 menu.type == "PAGE"
                   ? uiAction.selectMenu(menu.id)
@@ -136,17 +136,17 @@ export default function Drawer({ children }: MainChildren) {
           onClose={(value) => toggleModalLogout(value)}
           actionY={() => {
             router.replace("/");
-            alert(router.pathname);
+            // alert(router.pathname);
           }}
         />
         {/* COMMAND PALETTE MODAL */}
         <HeadlessModal
           isRaw={true}
-          value={uiState.isCommandPaletteOpen}
-          onClose={(value) => uiAction.toggleCommandPalette(value)}
+          value={uiState.command.isPaletteOpen}
+          onClose={(value) => uiAction.toggleCommandPalette()}
         >
           <CommandPaletteForm
-            onClose={(value) => uiAction.toggleCommandPalette(value)}
+            onClose={(value) => uiAction.toggleCommandPalette()}
           />
         </HeadlessModal>
       </>
