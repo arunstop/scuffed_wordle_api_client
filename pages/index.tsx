@@ -9,14 +9,16 @@ import { APP_NAME } from "../utils/helpers/constants/ConstantText";
 const Home: NextPage = () => {
   return (
     <div
-      className="flex justify-center items-center min-h-screen flex-col bg-base-300 bg-pattern"
-      style={{
-        // backgroundImage: `url("${"/pattern.svg"}")`,
-        // eslint-disable-next-line max-len
-        // backgroundColor: `#DFDBE5`,
-        // eslint-disable-next-line max-len
-        // backgroundImage: `url(/terrazzo.svg)`,
-      }}
+      className="bg-pattern flex min-h-screen flex-col items-center justify-center bg-base-300"
+      style={
+        {
+          // backgroundImage: `url("${"/pattern.svg"}")`,
+          // eslint-disable-next-line max-len
+          // backgroundColor: `#DFDBE5`,
+          // eslint-disable-next-line max-len
+          // backgroundImage: `url(/terrazzo.svg)`,
+        }
+      }
     >
       <Head>
         <title>{APP_NAME}</title>
@@ -24,22 +26,22 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex w-full justify-center">
-        <div className="bg-base-300 sm:max-w-xl rounded-lg w-full">
+        <div className="w-full rounded-lg bg-base-300 sm:max-w-xl">
           <div
             className={`card h-auto bg-base-100 rounded-none text-center
             sm:m-4 sm:rounded-lg
             animated animated-jackInTheBox animated-faster
             `}
-          > 
+          >
             <figure className="p-4">
               <img src="/icon.png" alt="icon" height={120} width={120} />
             </figure>
             <h2 className="text-2xl font-bold">{APP_NAME}</h2>
-            <div className="card-body items-center text-center gap-4 p-4 sm:p-8">
+            <div className="card-body items-center gap-4 p-4 text-center sm:p-8">
               {/* <h2 className="card-title">Shoes!</h2> */}
 
               <div className="form-control w-full">
-                <label className="input-group lg:input-group-lg input-group-md">
+                <label className="input-group-md input-group lg:input-group-lg">
                   <span>
                     <MdAlternateEmail size={30} />
                   </span>
@@ -52,7 +54,7 @@ const Home: NextPage = () => {
               </div>
 
               <div className="form-control w-full">
-                <label className="input-group lg:input-group-lg input-group-md">
+                <label className="input-group-md input-group lg:input-group-lg">
                   <span>
                     <GoKey size={30} />
                   </span>

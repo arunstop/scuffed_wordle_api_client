@@ -5,6 +5,9 @@ import { UiProvider } from "../utils/contexts/ui/UiProvider";
 // import { useUiContext } from "../utils/contexts/ui/UiHooks";
 import { ThemeProvider } from "next-themes";
 import GameProvider from "../utils/contexts/game/GameProvider";
+// import { useEffect } from "react";
+// import { NextRouter, useRouter } from "next/router";
+// import MainComponent from "../components/MainComponent";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -13,7 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <CounterProvider>
           <UiProvider>
             <GameProvider>
-            <Component {...pageProps} />
+              <Component {...pageProps} />
             </GameProvider>
           </UiProvider>
         </CounterProvider>

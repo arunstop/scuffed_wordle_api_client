@@ -34,9 +34,11 @@ export default function TextInput({
         </label>
       )}
       <label className="input-group">
-        <span className={`bg-${color}/30 font-black sm:text-3xl text-2xl `}>
-          {icon}
-        </span>
+        {!icon ? null : (
+          <span className={`bg-${color}/30 font-black sm:text-3xl text-2xl `}>
+            {icon}
+          </span>
+        )}
         <input
           className={`input input-bordered w-full
           focus:${isError ? `input-error` : "input-primary"}

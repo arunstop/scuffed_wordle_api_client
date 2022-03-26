@@ -18,6 +18,7 @@ import {
 } from "../../utils/helpers/constants/ConstantIds";
 // import Modal from "../Modal";
 import HeadlessModal from "../HeadlessModal";
+import CommandPaletteForm from "../Forms/CommandPaletteForm";
 type ModalValue = boolean;
 
 export default function Drawer({ children }: MainChildren) {
@@ -47,28 +48,32 @@ export default function Drawer({ children }: MainChildren) {
     // console.log(modalLogout);
   }
   return (
-    <main className="drawer drawer-mobile w-full min-h-screen">
+    <main className="drawer-mobile drawer min-h-screen w-full">
       <input
         id={ID_MAIN_DRAWER}
         type="checkbox"
-        className="drawer-toggle btn"
+        className="btn drawer-toggle"
+        checked={uiState.isDrawerOpen}
+        onChange={(event) => {
+          uiAction.toggleDrawer(event.target.checked);
+        }}
       />
       <div className="drawer-content flex flex-col">
         {/* <!-- Navbar --> */}
-        <div className="w-full navbar bg-base-300 sticky">
+        <div className="navbar sticky w-full bg-base-300">
           {/* toggle menu button */}
           <label
-            className="mr-2 btn btn-circle lg:hidden btn-ghost"
+            className="btn btn-ghost btn-circle mr-2 lg:hidden"
             htmlFor={ID_MAIN_DRAWER}
           >
             <MdMenu size={30} className="text-base-content" />
           </label>
           {/* app name */}
           <img src="/icon.png" alt="icon" height={30} width={30} />
-          <div className="flex-1 mx-2 text-lg font-bold">{APP_NAME}</div>
+          <div className="mx-2 flex-1 text-lg font-bold">{APP_NAME}</div>
           {/* toggle darktheme */}
           <div className="flex items-center">
-            <label className="btn btn-circle swap swap-rotate btn-ghost">
+            <label className="swap btn btn-ghost swap-rotate btn-circle">
               <input
                 type="checkbox"
                 checked={uiState.darkTheme}
@@ -92,10 +97,10 @@ export default function Drawer({ children }: MainChildren) {
       <div className="drawer-side">
         <label
           htmlFor={ID_MAIN_DRAWER}
-          className="drawer-overlay backdrop-blur-sm !cursor-default"
+          className="drawer-overlay !cursor-default backdrop-blur-sm"
         />
         {/* <!-- Sidebar content here --> */}
-        <ul className="menu p-4 overflow-y-auto w-60 bg-base-300 text-base-content">
+        <ul className="menu w-60 overflow-y-auto bg-base-300 p-4 text-base-content">
           {uiState.menuList.map((menu, index) => (
             <MenuItem
               key={index}
@@ -129,8 +134,21 @@ export default function Drawer({ children }: MainChildren) {
           value={modalLogout}
           labelY="Log out"
           onClose={(value) => toggleModalLogout(value)}
-          actionY={() => router.replace("/")}
+          actionY={() => {
+            router.replace("/");
+            alert(router.pathname);
+          }}
         />
+        {/* COMMAND PALETTE MODAL */}
+        <HeadlessModal
+          isRaw={true}
+          value={uiState.isCommandPaletteOpen}
+          onClose={(value) => uiAction.toggleCommandPalette(value)}
+        >
+          <CommandPaletteForm
+            onClose={(value) => uiAction.toggleCommandPalette(value)}
+          />
+        </HeadlessModal>
       </>
     </main>
   );
