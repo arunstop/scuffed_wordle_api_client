@@ -65,7 +65,7 @@ export default function PagePhrases() {
               </span>
             </button>
             <button
-              className="btn btn-error btn-block gap-2 sm:w-auto"
+              className="btn btn-secondary btn-block gap-2 sm:w-auto"
               onClick={() => setModalClear(true)}
               disabled={dummyRows.length === 0}
             >

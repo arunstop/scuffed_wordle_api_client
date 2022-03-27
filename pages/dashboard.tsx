@@ -49,12 +49,23 @@ export default function Dashboard() {
             Open drawer
           </label>
           {/* <Link href={"/"} passHref> */}
-          <button className="btn btn-primary" onClick={() => router.back()}>
+          <button
+            className="btn btn-primary"
+            onClick={() => router.replace("/")}
+          >
             Back
           </button>
           {/* </Link> */}
           <h2>Counter</h2>
-          <p>Count : {countState.count}</p>
+          <p>
+            Count :
+            <span
+              key={countState.count}
+              className="animated-faster animated animated-rotateIn"
+            >
+              {countState.count}
+            </span>
+          </p>
           <button
             className="btn btn-primary"
             onClick={() => countAction.increase(1)}

@@ -140,7 +140,7 @@ export default function Dashboard() {
             <button
               // htmlFor="games-clearall-modal"
               className={`btn gap-2 sm:w-auto btn-block 
-              ${searchedList.length !== 0 ? `btn-error` : `btn-disabled`}`}
+              ${searchedList.length !== 0 ? `btn-secondary` : `btn-disabled`}`}
               onClick={() => {
                 setModalClear(true);
                 // addGame();
@@ -229,7 +229,7 @@ export default function Dashboard() {
                         </button>
                         <button
                           key={"btn-game-item-delete-" + index}
-                          className="btn btn-error btn-sm btn-circle"
+                          className="btn btn-secondary btn-sm btn-circle"
                           onClick={() => deleteGame(game.id)}
                         >
                           <MdDelete size={18} />
@@ -271,7 +271,7 @@ export default function Dashboard() {
             //             </button>
             //             <button
             //               key={"btn-game-item-delete-" + index}
-            //               className="btn btn-error btn-sm btn-circle"
+            //               className="btn btn-secondary btn-sm btn-circle"
             //               onClick={() => deleteGame(game.id)}
             //             >
             //               <MdDelete size={18} />
