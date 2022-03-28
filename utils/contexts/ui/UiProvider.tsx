@@ -15,6 +15,7 @@ import {
   MdOutlineSpaceDashboard,
   MdOutlineErrorOutline,
   MdOutlineDarkMode,
+  MdRefresh,
 } from "react-icons/md";
 import { GoBook } from "react-icons/go";
 import { HiOutlineLogout } from "react-icons/hi";
@@ -22,8 +23,11 @@ import { RiApps2Line } from "react-icons/ri";
 import { BsChatQuote } from "react-icons/bs";
 import { NextRouter, useRouter } from "next/router";
 import moment from "moment";
-import { FiSun } from "react-icons/fi";
-import { ID_MODAL_LOGOUT } from "../../helpers/constants/ConstantIds";
+import { FiExternalLink, FiSun } from "react-icons/fi";
+import {
+  ID_DIALOG_OVERLAY,
+  ID_MODAL_LOGOUT,
+} from "../../helpers/constants/ConstantIds";
 // import { ID_MAIN_DRAWER } from "../../helpers/constants/ConstantIds";
 
 const getInitialMenuList = (): UiMenu[] => {
@@ -106,33 +110,53 @@ export const UiProvider = ({ children }: ContextChildren) => {
 
   // Creating command list
   function getCommandList(): UiCommand[] {
-    const navigationCommandList = getInitialMenuList().map((nav) => {
-      const commandTitle =
-        nav.type === "MODAL"
-          ? `Execute: ${nav.title}`
-          : `Go to: ${nav.title} page`;
-      return {
-        id: `cmd-nav-page-${nav.id}`,
-        title: commandTitle,
-        desc: "",
+    const navigationCommandList: UiCommand[] = [
+      ...getInitialMenuList().map((nav) => {
+        const commandTitle =
+          nav.type === "MODAL"
+            ? `Execute: ${nav.title}`
+            : `Go to: ${nav.title} page`;
+        return {
+          id: `cmd-nav-page-${nav.id}`,
+          title: commandTitle,
+          desc: "",
+          lastUsedAt: moment.now().toString(),
+          type: "NAVIGATION",
+          icon: nav.icon,
+          action: () => {
+            if (nav.type === "PAGE") {
+              router.push(`/${nav.id}`);
+            } else {
+              document.getElementById(ID_MODAL_LOGOUT)?.click();
+            }
+          },
+        } as UiCommand;
+      }),
+      {
+        id: `cmd-nav-reload`,
+        title: `Reload app`,
+        desc: ``,
         lastUsedAt: moment.now().toString(),
         type: "NAVIGATION",
-        icon: nav.icon,
-        action: () => {
-          if (nav.type === "PAGE") {
-            router.push(`/${nav.id}`);
-          } else {
-            document.getElementById(ID_MODAL_LOGOUT)?.click();
-          }
-        },
-      } as UiCommand;
-    });
+        icon: <MdRefresh />,
+        action: () => router.reload(),
+      },
+    ];
     const alterationCommandList: UiCommand[] = [
+      {
+        id: `cmd-alter-open-game-app`,
+        title: `Open game app`,
+        desc: `Will open the Game app in a new tab -> https://scuffed-wordle.web.app/`,
+        lastUsedAt: moment.now().toString(),
+        type: "ALTERATION",
+        icon: <FiExternalLink />,
+        action: () => window.open("https://scuffed-wordle.web.app/", "_blank"),
+      },
       {
         id: `cmd-alter-light-mode-on`,
         title: `Turn on the Light Mode`,
         desc: `Turning on Light Mode meaning, the app appearance will be as bright as daylight. 
-        Suited for day-time use. If light mode is already on, this action is futile`,
+        Suited for day-time use. If light mode is already on, this action is futile.`,
         lastUsedAt: moment.now().toString(),
         type: "ALTERATION",
         icon: <FiSun />,
@@ -142,7 +166,7 @@ export const UiProvider = ({ children }: ContextChildren) => {
         id: `cmd-alter-dark-mode-on`,
         title: `Turn on the Dark Mode`,
         desc: `Turning on Dark Mode meaning, the app appearance will be as dim as night. 
-        Suited for night-time use. If dark mode is already on, this action is futile`,
+        Suited for night-time use. If dark mode is already on, this action is futile.`,
         lastUsedAt: moment.now().toString(),
         type: "ALTERATION",
         icon: <MdOutlineDarkMode />,
@@ -212,6 +236,16 @@ export const UiProvider = ({ children }: ContextChildren) => {
       const key: string = event.key.toLowerCase();
       // OPEN COMMAND PALETTE
       if (event.ctrlKey && key === "/") {
+        if (uiState.menu.isDrawerOpen) {
+          uiAction.toggleDrawer();
+        }
+        // Close all modal & drawer
+        const activeModalOverlayList: HTMLElement[] = Array.from(
+          document.getElementsByClassName(ID_DIALOG_OVERLAY),
+        ) as HTMLElement[];
+        activeModalOverlayList.forEach((element) => {
+          element.click();
+        });
         uiAction.toggleCommandPalette();
       }
       // OPEN DRAWER

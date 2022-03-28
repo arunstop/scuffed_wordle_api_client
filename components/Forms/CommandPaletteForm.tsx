@@ -25,7 +25,8 @@ export default function CommandPaletteForm({
 
   const GRADIENT_BG = (
     <div
-      className={`absolute inset-0 h-40 -z-[1] bg-gradient-to-b from-primary/40 via-primary/20 to-transparent rounded-xl`}
+      className={`absolute inset-0 h-40 -z-[1] bg-gradient-to-b 
+      from-primary/40 via-primary/20 to-transparent sm:rounded-xl`}
     ></div>
   );
 

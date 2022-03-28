@@ -97,7 +97,7 @@ export default function Drawer({ children }: MainChildren) {
       <div className="drawer-side">
         <label
           htmlFor={ID_MAIN_DRAWER}
-          className="drawer-overlay !cursor-default backdrop-blur-sm"
+          className={`drawer-overlay !cursor-default backdrop-blur-sm`}
         />
         {/* <!-- Sidebar content here --> */}
         <ul className="menu w-60 overflow-y-auto bg-base-300 p-4 text-base-content">

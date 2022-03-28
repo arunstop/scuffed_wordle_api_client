@@ -89,11 +89,12 @@ export default function GamesAddForm({
     event.preventDefault();
   }
 
-  console.log("render");
+  // console.log("render");
   return (
     <form name="gameAddForm" onSubmit={onSubmit}>
       <div className={`flex flex-col w-full gap-2`}>
         {/* Name */}
+        <div className={`hidden bg-error/30 bg-primary/30`}></div>
 
         <TextInput
           label="Name :"

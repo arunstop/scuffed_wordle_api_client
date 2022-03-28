@@ -1,6 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, PropsWithChildren, ReactNode, useRef } from "react";
 import { GoInfo } from "react-icons/go";
+import { ID_DIALOG_OVERLAY } from "../utils/helpers/constants/ConstantIds";
 import { MainColorTypes } from "../utils/models/GeneralModel";
 import ModalBackButton from "./ModalBackButton";
 
@@ -58,7 +59,7 @@ export default function HeadlessModal({
         leaveTo="opacity-0 "
       >
         <Dialog.Overlay
-          className="hero-overlay fixed inset-0"
+          className={`hero-overlay fixed inset-0 ${ID_DIALOG_OVERLAY}`}
           onClick={() => alert("click")}
         />
       </Transition.Child>
@@ -66,6 +67,7 @@ export default function HeadlessModal({
         className="hidden text-error text-primary text-info shadow-error/20 shadow-primary/20 shadow-info/20
       from-error/30 from-primary/30 from-info/30 via-error/10 via-primary/10 via-info/10
       border-error/40 border-primary/40 border-info/40
+      btn-error btn-primary btn-info
       "
       ></div>
     </>
@@ -121,7 +123,7 @@ export default function HeadlessModal({
   );
 
   // Action buttons
-  const ACTIONS =
+  const ACTION_BUTTONS =
     !!noAction || isBig ? null : (
       <>
         {/* BUTTON */}
@@ -177,7 +179,7 @@ export default function HeadlessModal({
         <div className="flex w-full flex-col gap-4">
           {TITLE}
           {DESC}
-          {ACTIONS}
+          {ACTION_BUTTONS}
         </div>
       </div>
       {GRADIENT_BG}

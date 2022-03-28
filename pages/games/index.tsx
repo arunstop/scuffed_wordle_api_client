@@ -165,7 +165,7 @@ export default function Dashboard() {
                 />
               </label>
               {isSearching && (
-                <div className="absolute inset-y-2 right-2 my-auto animated-faster animated animated-zoomIn">
+                <div className="absolute inset-y-2 right-2 my-auto animated animated-zoomIn animated-faster">
                   <label
                     className="btn-outline btn  h-full min-h-min w-9"
                     onClick={() => gameAction.search("")}
