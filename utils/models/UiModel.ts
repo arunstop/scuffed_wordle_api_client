@@ -10,7 +10,7 @@ export interface UiState {
   command: {
     isPaletteOpen: boolean;
     list: UiCommand[];
-    recentlyUsed: UiCommandId;
+    recentlyUsedId: UiCommandId;
   };
 }
 
@@ -43,6 +43,7 @@ export interface UiAction {
   selectMenu: (menuId: string) => void;
   toggleDrawer: () => void;
   toggleCommandPalette: () => void;
+  runCommand: (commandId: UiCommandId) => void;
 }
 
 // Action types
@@ -50,7 +51,8 @@ export type UiActionTypes =
   | { type: "TOGGLE_DARK_THEME"; payload: { value: boolean } }
   | { type: "SELECT_MENU"; payload: { menuId: string } }
   | { type: "TOGGLE_DRAWER"; payload: { value: boolean } }
-  | { type: "TOGGLE_COMMAND_PALETTE"; payload: { value: boolean } };
+  | { type: "TOGGLE_COMMAND_PALETTE"; payload: { value: boolean } }
+  | { type: "RUN_COMMAND"; payload: { commandId: UiCommandId } };
 
 export type UiContextProps = {
   state: UiState;

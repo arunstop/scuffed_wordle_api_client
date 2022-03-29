@@ -12,6 +12,7 @@ type ModalProps = {
   value: boolean;
   labelY?: string;
   // onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  children?: ReactNode | ((onClose: (value: boolean) => void) => ReactNode);
   actionY?: () => void;
   actionN?: () => void;
   onClose: (value: boolean) => void;
@@ -43,7 +44,7 @@ export default function HeadlessModal({
   noAction = false,
   isBig = false,
   isRaw = false,
-}: PropsWithChildren<ModalProps>) {
+}: ModalProps) {
   const completeButtonRef = useRef(null);
   //   function closeModal() {}
 
@@ -113,15 +114,7 @@ export default function HeadlessModal({
   );
 
   // Description
-  const DESC = children ? (
-    children
-  ) : (
-    <>
-      {/* Desc */}
-      <p className="text-center sm:text-left">{desc}</p>
-    </>
-  );
-
+  const DESC = <p className="text-center sm:text-left">{desc}</p>;
   // Action buttons
   const ACTION_BUTTONS =
     !!noAction || isBig ? null : (
@@ -150,6 +143,9 @@ export default function HeadlessModal({
         </div>
       </>
     );
+
+  const PROCESSED_CHILDREN =
+    typeof children === "function" ? children(onClose) : children;
   // Raw content meaning no title, desc and buttons
   const CONTENT_RAW = children;
 
@@ -178,7 +174,9 @@ export default function HeadlessModal({
         {ICON}
         <div className="flex w-full flex-col gap-4">
           {TITLE}
-          {DESC}
+          {/* check if children is a function  */}
+          {children ? PROCESSED_CHILDREN : DESC}
+          {}
           {ACTION_BUTTONS}
         </div>
       </div>

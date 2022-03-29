@@ -145,9 +145,7 @@ export default function Drawer({ children }: MainChildren) {
           value={uiState.command.isPaletteOpen}
           onClose={(value) => uiAction.toggleCommandPalette()}
         >
-          <CommandPaletteForm
-            onClose={(value) => uiAction.toggleCommandPalette()}
-          />
+          {(onClose) => <CommandPaletteForm onClose={onClose} />}
         </HeadlessModal>
       </>
     </main>

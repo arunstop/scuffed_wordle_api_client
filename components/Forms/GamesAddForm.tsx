@@ -22,7 +22,7 @@ import TextInput from "../TextInput";
 
 interface GamesAddFormProps {
   actionY?: () => void;
-  onClose?: () => void;
+  onClose?: (value: boolean) => void;
 }
 export default function GamesAddForm({
   actionY = () => null,
@@ -85,235 +85,255 @@ export default function GamesAddForm({
       ),
     });
     // alert(GameDifficulty[difficulty as GameDifficulty]);
-    onClose();
+    onClose(false);
     event.preventDefault();
   }
 
-  // console.log("render");
+  const INPUT_NAME = (
+    <TextInput
+      label="Name :"
+      type={"text"}
+      icon={<TiSortAlphabetically className="" />}
+      value={name}
+      placeholder="Catchy board game name"
+      onChange={(event) => setName(event.target.value)}
+      rules={() =>
+        (name !== "" ? "" : "Cannot be empty") ||
+        (name.length >= 4 ? "" : "Minimum 4 letters")
+      }
+    />
+  );
+
+  const INPUT_MATRIX = (
+    <div>
+      <label className="label">
+        <span className="label-text">Matrix :</span>
+      </label>
+      <div className="grid w-full gap-4 sm:inline-flex">
+        <TextInput
+          type={"number"}
+          icon={"X"}
+          value={matrixX}
+          placeholder="4-12"
+          min={4}
+          max={12}
+          // cast to number with +
+          onChange={(event) => setMatrixX(+event.target.value)}
+          rules={() =>
+            // (matrixX === 0 ? "" : "Cannot be empty") ||
+            (matrixX >= 4 ? "" : "Min. 4") || (matrixX <= 12 ? "" : "Max. 12")
+          }
+        />
+        {/* {matrixX} */}
+        <TextInput
+          type={"number"}
+          icon={"Y"}
+          value={matrixY}
+          placeholder="4-12"
+          min={4}
+          max={12}
+          onChange={(event) => setMatrixY(+event.target.value)}
+          rules={() =>
+            // (matrixY === 0 ? "" : "Cannot be empty") ||
+            (matrixY >= 4 ? "" : "Min. 4") || (matrixY <= 12 ? "" : "Max. 12")
+          }
+        />
+        <TextInput
+          type={"number"}
+          icon={"Z"}
+          value={matrixZ}
+          placeholder="4-12"
+          min={1}
+          max={12}
+          onChange={(event) => setMatrixZ(+event.target.value)}
+          rules={() =>
+            // (matrixZ === 0 ? "" : "Cannot be empty") ||
+            (matrixZ >= 1 ? "" : "Min. 1") || (matrixZ <= 12 ? "" : "Max. 12")
+          }
+        />
+      </div>
+    </div>
+  );
+
+  const INPUT_DIFFICULTY = (
+    <div className="form-control w-full">
+      <label className="label input-primary input-error">
+        <span className="label-text">Difficulty: </span>
+        {/* <div>{focused && "focused"}</div> */}
+      </label>
+      <div className="input-group">
+        <span className={`bg-primary/30 font-black sm:text-3xl text-2xl`}>
+          <BiBrain />
+        </span>
+        <select
+          value={difficulty}
+          onChange={(event) => setDifficulty(event.target.value)}
+          className="select-bordered select grow !font-normal capitalize focus:select-primary"
+        >
+          {/* Map the difficulty list */}
+          {gameDifficultyList.map((e) => (
+            <option key={e.toString()} value={e} className="capitalize">
+              {(e + "").toLowerCase()}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+
+  const INPUT_TIME_ZONE = (
+    <div className="w-full">
+      <label className="label">
+        <span className="label-text">Time Zone :</span>
+      </label>
+      <Combobox value={timeZone} onChange={setTimeZone}>
+        <div className="relative">
+          <div>
+            <label className="input-group">
+              <span className="bg-primary/30">
+                <BiWorld className="text-2xl sm:text-3xl" />
+              </span>
+              <Combobox.Input
+                as={Fragment}
+                displayValue={(timeZone: TimeZone) => timeZone.text}
+                onChange={(event) => setQuery(event.target.value)}
+              >
+                <input
+                  type="text"
+                  placeholder="Game Name"
+                  className="input-bordered input w-full pr-8 focus:input-primary"
+                />
+              </Combobox.Input>
+            </label>
+            <Combobox.Button className="absolute  inset-y-0 right-0 flex items-center pr-2">
+              <HiSelector
+                className="h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
+            </Combobox.Button>
+          </div>
+          <Transition
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+            afterLeave={() => setQuery("")}
+          >
+            <Combobox.Options
+              className="absolute max-h-60 w-full overflow-auto rounded-md border-4 border-primary
+              bg-base-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm"
+            >
+              {filteredTimeZoneList.length === 0 && query !== "" ? (
+                <div className="relative cursor-default select-none py-2 px-4 text-center">
+                  Nothing found.
+                </div>
+              ) : (
+                filteredTimeZoneList.map((tzItem) => {
+                  const isSelected: boolean = tzItem.text === timeZone.text;
+                  return (
+                    <Combobox.Option
+                      key={tzItem.text}
+                      className={({
+                        active,
+                      }) => `cursor-default select-none relative py-2 pl-10 pr-4 
+                ${active ? "text-white bg-primary/100" : ""}
+                ${
+                  isSelected && !active
+                    ? "bg-primary-content text-primary-focus"
+                    : ""
+                }
+                `}
+                      value={tzItem}
+                    >
+                      <>
+                        {/* time zone text e.g (GMT+07:00) Some Place */}
+                        <span
+                          className={`block truncate ${
+                            isSelected ? "font-medium" : "font-normal"
+                          }`}
+                        >
+                          {tzItem.text}
+                        </span>
+                        {/* Cehck icon */}
+                        {isSelected ? (
+                          <span
+                            className={`absolute inset-y-0 left-0 flex items-center pl-3 `}
+                          >
+                            <MdCheck className="h-6 w-6" aria-hidden="true" />
+                          </span>
+                        ) : null}
+                      </>
+                    </Combobox.Option>
+                  );
+                })
+              )}
+            </Combobox.Options>
+          </Transition>
+        </div>
+      </Combobox>
+    </div>
+  );
+
+  const INPUT_REFRESH_INTERVAL = (
+    <TextInput
+      label="Refresh Interval :"
+      type={"text"}
+      icon={<MdRefresh className="" />}
+      value={refreshInterval}
+      placeholder="12:00, 13:10..."
+      min={1}
+      max={12}
+      onChange={(event) => setRefreshInterval(event.target.value)}
+      rules={() => (refreshInterval !== "" ? "" : "Cannot be empty")}
+    />
+  );
+
+  const INPUT_BANNED_WORDS = (
+    <TextInput
+      label="Banned Words :"
+      type={"text"}
+      icon={<HiBan className="" />}
+      value={bannedWords}
+      placeholder="word1,word2"
+      min={1}
+      max={12}
+      onChange={(event) => setBannedWords(event.target.value)}
+      rules={() => (bannedWords !== "" ? "" : "Cannot be empty")}
+    />
+  );
+
+  const ACTION_BUTTONS = (
+    <div className="flex flex-col gap-4">
+      <button type="submit" className="btn btn-primary">
+        Submit
+      </button>
+      <button
+        type="button"
+        className="btn-outline btn"
+        onClick={() => onClose(false)}
+      >
+        Cancel
+      </button>
+    </div>
+  );
   return (
     <form name="gameAddForm" onSubmit={onSubmit}>
       <div className={`flex flex-col w-full gap-2`}>
-        {/* Name */}
+        {/* Tailwind workaround */}
         <div className={`hidden bg-error/30 bg-primary/30`}></div>
-
-        <TextInput
-          label="Name :"
-          type={"text"}
-          icon={<TiSortAlphabetically className="" />}
-          value={name}
-          placeholder="Catchy board game name"
-          onChange={(event) => setName(event.target.value)}
-          rules={() =>
-            (name !== "" ? "" : "Cannot be empty") ||
-            (name.length >= 4 ? "" : "Minimum 4 letters")
-          }
-        />
+        {INPUT_NAME}
         {/* MATRIX */}
-        <div>
-          <label className="label">
-            <span className="label-text">Matrix :</span>
-          </label>
-          <div className="grid w-full gap-4 sm:inline-flex">
-            <TextInput
-              type={"number"}
-              icon={"X"}
-              value={matrixX}
-              placeholder="4-12"
-              min={4}
-              max={12}
-              // cast to number with +
-              onChange={(event) => setMatrixX(+event.target.value)}
-              rules={() =>
-                // (matrixX === 0 ? "" : "Cannot be empty") ||
-                (matrixX >= 4 ? "" : "Min. 4") ||
-                (matrixX <= 12 ? "" : "Max. 12")
-              }
-            />
-            {/* {matrixX} */}
-            <TextInput
-              type={"number"}
-              icon={"Y"}
-              value={matrixY}
-              placeholder="4-12"
-              min={4}
-              max={12}
-              onChange={(event) => setMatrixY(+event.target.value)}
-              rules={() =>
-                // (matrixY === 0 ? "" : "Cannot be empty") ||
-                (matrixY >= 4 ? "" : "Min. 4") ||
-                (matrixY <= 12 ? "" : "Max. 12")
-              }
-            />
-            <TextInput
-              type={"number"}
-              icon={"Z"}
-              value={matrixZ}
-              placeholder="4-12"
-              min={1}
-              max={12}
-              onChange={(event) => setMatrixZ(+event.target.value)}
-              rules={() =>
-                // (matrixZ === 0 ? "" : "Cannot be empty") ||
-                (matrixZ >= 1 ? "" : "Min. 1") ||
-                (matrixZ <= 12 ? "" : "Max. 12")
-              }
-            />
-          </div>
-        </div>
+        {INPUT_MATRIX}
         {/* Difficulty */}
-        <div className="form-control w-full">
-          <label className="label input-primary input-error">
-            <span className="label-text">Difficulty : </span>
-            {/* <div>{focused && "focused"}</div> */}
-          </label>
-          <div className="input-group">
-            <span className={`bg-primary/30 font-black sm:text-3xl text-2xl`}>
-              <BiBrain />
-            </span>
-            <select
-              value={difficulty}
-              onChange={(event) => setDifficulty(event.target.value)}
-              className="select-bordered select grow !font-normal capitalize focus:select-primary"
-            >
-              {/* Map the difficulty list */}
-              {gameDifficultyList.map((e) => (
-                <option key={e.toString()} value={e} className="capitalize">
-                  {(e + "").toLowerCase()}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        {INPUT_DIFFICULTY}
         {/* Timezone */}
-        <div className="w-full">
-          <label className="label">
-            <span className="label-text">Time Zone :</span>
-          </label>
-          <Combobox value={timeZone} onChange={setTimeZone}>
-            <div className="relative">
-              <div>
-                <label className="input-group">
-                  <span className="bg-primary/30">
-                    <BiWorld className="text-2xl sm:text-3xl" />
-                  </span>
-                  <Combobox.Input
-                    as={Fragment}
-                    displayValue={(timeZone: TimeZone) => timeZone.text}
-                    onChange={(event) => setQuery(event.target.value)}
-                  >
-                    <input
-                      type="text"
-                      placeholder="Game Name"
-                      className="input-bordered input w-full pr-8 focus:input-primary"
-                    />
-                  </Combobox.Input>
-                </label>
-                <Combobox.Button className="absolute  inset-y-0 right-0 flex items-center pr-2">
-                  <HiSelector
-                    className="h-5 w-5 text-gray-400"
-                    aria-hidden="true"
-                  />
-                </Combobox.Button>
-              </div>
-              <Transition
-                as={Fragment}
-                leave="transition ease-in duration-100"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-                afterLeave={() => setQuery("")}
-              >
-                <Combobox.Options
-                  className="absolute max-h-60 w-full overflow-auto rounded-md border-4 border-primary
-                bg-base-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm"
-                >
-                  {filteredTimeZoneList.length === 0 && query !== "" ? (
-                    <div className="relative cursor-default select-none py-2 px-4 text-center">
-                      Nothing found.
-                    </div>
-                  ) : (
-                    filteredTimeZoneList.map((tzItem) => {
-                      const isSelected: boolean = tzItem.text === timeZone.text;
-                      return (
-                        <Combobox.Option
-                          key={tzItem.text}
-                          className={({
-                            active,
-                          }) => `cursor-default select-none relative py-2 pl-10 pr-4 
-                        ${active ? "text-white bg-primary/100" : ""}
-                        ${
-                          isSelected && !active
-                            ? "bg-primary-content text-primary-focus"
-                            : ""
-                        }
-                        `}
-                          value={tzItem}
-                        >
-                          <>
-                            {/* time zone text e.g (GMT+07:00) Some Place */}
-                            <span
-                              className={`block truncate ${
-                                isSelected ? "font-medium" : "font-normal"
-                              }`}
-                            >
-                              {tzItem.text}
-                            </span>
-                            {/* Cehck icon */}
-                            {isSelected ? (
-                              <span
-                                className={`absolute inset-y-0 left-0 flex items-center pl-3 `}
-                              >
-                                <MdCheck
-                                  className="h-6 w-6"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            ) : null}
-                          </>
-                        </Combobox.Option>
-                      );
-                    })
-                  )}
-                </Combobox.Options>
-              </Transition>
-            </div>
-          </Combobox>
-        </div>
+        {INPUT_TIME_ZONE}
         {/* Refresh interval */}
-
-        <TextInput
-          label="Refresh Interval :"
-          type={"text"}
-          icon={<MdRefresh className="" />}
-          value={refreshInterval}
-          placeholder="12:00, 13:10..."
-          min={1}
-          max={12}
-          onChange={(event) => setRefreshInterval(event.target.value)}
-          rules={() => (refreshInterval !== "" ? "" : "Cannot be empty")}
-        />
-        <TextInput
-          label="Banned Words :"
-          type={"text"}
-          icon={<HiBan className="" />}
-          value={bannedWords}
-          placeholder="word1,word2"
-          min={1}
-          max={12}
-          onChange={(event) => setBannedWords(event.target.value)}
-          rules={() => (bannedWords !== "" ? "" : "Cannot be empty")}
-        />
-        <div className="mt-9 flex flex-col gap-4">
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-          <button
-            type="button"
-            className="btn-outline btn"
-            onClick={() => onClose()}
-          >
-            Cancel
-          </button>
-        </div>
+        {INPUT_REFRESH_INTERVAL}
+        {/* Banned words */}
+        {INPUT_BANNED_WORDS}
+        {/* Action buttons */}
+        {ACTION_BUTTONS}
       </div>
     </form>
   );

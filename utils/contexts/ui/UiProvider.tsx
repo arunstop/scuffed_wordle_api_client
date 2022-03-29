@@ -4,7 +4,7 @@ import { MainChildren as ContextChildren } from "../../models/GeneralModel";
 import { slugify } from "../../models/GlobalModel";
 import {
   UiAction,
-  UiActionTypes,
+  // UiActionTypes,
   UiCommand,
   UiContextProps,
   UiMenu,
@@ -28,6 +28,8 @@ import {
   ID_DIALOG_OVERLAY,
   ID_MODAL_LOGOUT,
 } from "../../helpers/constants/ConstantIds";
+// import _ from "lodash";
+import { uiReducers } from "./UiReducers";
 // import { ID_MAIN_DRAWER } from "../../helpers/constants/ConstantIds";
 
 const getInitialMenuList = (): UiMenu[] => {
@@ -79,28 +81,8 @@ const INITIAL_STATE: UiState = {
   command: {
     isPaletteOpen: false,
     list: [],
-    recentlyUsed: "",
+    recentlyUsedId: "",
   },
-};
-
-const reducer = (state: UiState, action: UiActionTypes): UiState => {
-  // const { darkTheme } = state;
-  const { type, payload } = action;
-  switch (type) {
-    case "TOGGLE_DARK_THEME":
-      return { ...state, darkTheme: payload.value };
-    case "SELECT_MENU":
-      return { ...state, menu: { ...state.menu, active: payload.menuId } };
-    case "TOGGLE_DRAWER":
-      return { ...state, menu: { ...state.menu, isDrawerOpen: payload.value } };
-    case "TOGGLE_COMMAND_PALETTE":
-      return {
-        ...state,
-        command: { ...state.command, isPaletteOpen: payload.value },
-      };
-    default:
-      return state;
-  }
 };
 
 export const UiProvider = ({ children }: ContextChildren) => {
@@ -133,28 +115,28 @@ export const UiProvider = ({ children }: ContextChildren) => {
         } as UiCommand;
       }),
       {
-        id: `cmd-nav-reload`,
-        title: `Reload app`,
-        desc: ``,
+        id: `cmd-nav-open-game-app`,
+        title: `Go to: Game app`,
+        desc: `Will open the Game app in a new tab -> https://scuffed-wordle.web.app/`,
         lastUsedAt: moment.now().toString(),
         type: "NAVIGATION",
-        icon: <MdRefresh />,
-        action: () => router.reload(),
+        icon: <FiExternalLink />,
+        action: () => window.open("https://scuffed-wordle.web.app/", "_blank"),
       },
     ];
     const alterationCommandList: UiCommand[] = [
       {
-        id: `cmd-alter-open-game-app`,
-        title: `Open game app`,
-        desc: `Will open the Game app in a new tab -> https://scuffed-wordle.web.app/`,
+        id: `cmd-alter-reload`,
+        title: `Execute: Reload app`,
+        desc: ``,
         lastUsedAt: moment.now().toString(),
         type: "ALTERATION",
-        icon: <FiExternalLink />,
-        action: () => window.open("https://scuffed-wordle.web.app/", "_blank"),
+        icon: <MdRefresh />,
+        action: () => router.reload(),
       },
       {
         id: `cmd-alter-light-mode-on`,
-        title: `Turn on the Light Mode`,
+        title: `Execute: Turn on the Light Mode`,
         desc: `Turning on Light Mode meaning, the app appearance will be as bright as daylight. 
         Suited for day-time use. If light mode is already on, this action is futile.`,
         lastUsedAt: moment.now().toString(),
@@ -164,7 +146,7 @@ export const UiProvider = ({ children }: ContextChildren) => {
       },
       {
         id: `cmd-alter-dark-mode-on`,
-        title: `Turn on the Dark Mode`,
+        title: `Execute: Turn on the Dark Mode`,
         desc: `Turning on Dark Mode meaning, the app appearance will be as dim as night. 
         Suited for night-time use. If dark mode is already on, this action is futile.`,
         lastUsedAt: moment.now().toString(),
@@ -176,7 +158,7 @@ export const UiProvider = ({ children }: ContextChildren) => {
     return [...navigationCommandList, ...alterationCommandList];
   }
 
-  const [uiState, dispatch] = useReducer(reducer, {
+  const [uiState, dispatch] = useReducer(uiReducers, {
     ...INITIAL_STATE,
     command: {
       ...INITIAL_STATE.command,
@@ -219,6 +201,12 @@ export const UiProvider = ({ children }: ContextChildren) => {
       dispatch({
         type: "TOGGLE_COMMAND_PALETTE",
         payload: { value: !uiState.command.isPaletteOpen },
+      });
+    },
+    runCommand: (commandId) => {
+      dispatch({
+        type: "RUN_COMMAND",
+        payload: { commandId },
       });
     },
   };

@@ -3,6 +3,7 @@ import _ from "lodash";
 import React, { Fragment, ReactNode, useState } from "react";
 import { FaTerminal } from "react-icons/fa";
 import { HiSelector } from "react-icons/hi";
+import { MdHistory } from "react-icons/md";
 // import { MdCheck } from "react-icons/md";
 import { useUiContext } from "../../utils/contexts/ui/UiHooks";
 import { UiCommand } from "../../utils/models/UiModel";
@@ -14,12 +15,16 @@ export default function CommandPaletteForm({
 }: {
   onClose: (value: boolean) => void;
 }) {
-  const { state: uiState, action: uiAction } = useUiContext();
+  const {
+    state: uiState,
+    action: uiAction,
+    getters: uiGetters,
+  } = useUiContext();
   const [selected, setSelected] = useState<UiCommand | null>();
   const [query, setQuery] = useState("");
   const filteredList = !query
-    ? uiState.command.list
-    : _.filter(uiState.command.list, (command) =>
+    ? uiGetters.sortedCommandList
+    : _.filter(uiGetters.sortedCommandList, (command) =>
         command.title.toLowerCase().trim().includes(query.toLowerCase().trim()),
       );
 
@@ -83,6 +88,7 @@ export default function CommandPaletteForm({
   const COMBOBOX_OPTIONS_ITEM = (
     command: UiCommand,
     isSelected: boolean,
+    recentlyUsed: boolean,
   ): ReactNode => (
     <Combobox.Option
       key={command.title}
@@ -98,36 +104,47 @@ export default function CommandPaletteForm({
             }
             `}
     >
-      <>
-        <span className="grid gap-2">
-          {/* TITLE */}
-          <h1
-            className={`block truncate text-md sm:text-lg ${
-              isSelected ? "font-bold" : "font-medium"
-            }`}
-          >
-            {command.title}
-          </h1>
-          {/* DESCRIPTION */}
-          {command.desc && (
-            <p
-              className={`text-xs sm:text-sm pb-2 ${
-                isSelected ? "" : "text-inherit/30"
-              }`}
+      {({ active }) => {
+        return (
+          <>
+            <span className="grid gap-2">
+              {/* TITLE */}
+              <h1
+                className={`flex flex-row justify-between items-center text-md sm:text-lg ${
+                  isSelected ? "font-bold" : "font-medium"
+                }`}
+              >
+                {command.title}
+                {recentlyUsed && (
+                  <MdHistory
+                    className={`text-xl sm:text-2xl ${
+                      active ? "text-inherit" : "text-info"
+                    }`}
+                  />
+                )}
+              </h1>
+              {/* DESCRIPTION */}
+              {command.desc && (
+                <p
+                  className={`text-xs sm:text-sm pb-2 ${
+                    isSelected ? "" : "text-inherit/30"
+                  }`}
+                >
+                  {command.desc}
+                </p>
+              )}
+            </span>
+            {/* ICON */}
+            <span
+              className={`absolute ${
+                command.desc ? "top-0 mt-2" : "inset-y-0"
+              } left-0 flex items-center pl-3 text-2xl`}
             >
-              {command.desc}
-            </p>
-          )}
-        </span>
-        {/* ICON */}
-        <span
-          className={`absolute ${
-            command.desc ? "top-0 mt-2" : "inset-y-0"
-          } left-0 flex items-center pl-3 text-2xl`}
-        >
-          {command.icon}
-        </span>
-      </>
+              {command.icon}
+            </span>
+          </>
+        );
+      }}
     </Combobox.Option>
   );
 
@@ -147,22 +164,24 @@ export default function CommandPaletteForm({
           ? COMBO_BOX_OPTIONS_NO_DATA
           : filteredList.map((command) => {
               const isSelected: boolean = command.title === selected?.title;
-              return COMBOBOX_OPTIONS_ITEM(command, isSelected);
+              const recentlyUsed: boolean =
+                command.id === uiState.command.recentlyUsedId;
+              return COMBOBOX_OPTIONS_ITEM(command, isSelected, recentlyUsed);
             })}
       </Combobox.Options>
     </Transition>
   );
 
+  function comboboxOnChange(command: UiCommand) {
+    setSelected(command);
+    uiAction.toggleCommandPalette();
+    command?.action();
+    uiAction.runCommand(command.id);
+  }
+
   const CONTENT = (
     <div className="form-control">
-      <Combobox
-        value={selected}
-        onChange={(command) => {
-          setSelected(command);
-          uiAction.toggleCommandPalette();
-          command?.action();
-        }}
-      >
+      <Combobox value={selected} onChange={comboboxOnChange}>
         <div className="relative">
           {COMBOBOX_AUTOCOMPLETE_INPUT}
           {COMBOBOX_OPTIONS}

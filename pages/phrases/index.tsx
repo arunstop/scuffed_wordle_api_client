@@ -2,28 +2,54 @@ import { Transition } from "@headlessui/react";
 import _ from "lodash";
 import { nanoid } from "nanoid";
 import Head from "next/head";
-import React, { Fragment, useState } from "react";
-import { MdAddCircle, MdClose } from "react-icons/md";
+import React, { Fragment, ReactNode, useState } from "react";
+import { MdAddCircle, MdClose, MdDelete, MdEdit } from "react-icons/md";
 import Alert from "../../components/Alert";
 import Drawer from "../../components/Drawer/Drawer";
+import PhraseAddForm from "../../components/Forms/PhraseAddForm";
 import HeadlessModal from "../../components/HeadlessModal";
+import { useApiContext } from "../../utils/contexts/api/ApiHooks";
 import { APP_NAME } from "../../utils/helpers/constants/ConstantText";
+import { Phrase, PhraseType } from "../../utils/models/PhraseModel";
 
 export default function PagePhrases() {
+  const {
+    state: apiState,
+    state: { phrase },
+    action: apiAction,
+  } = useApiContext();
   const [alertInfo, setAlertInfo] = useState(true);
   const [modalAdd, setModalAdd] = useState(false);
   const [modalClear, setModalClear] = useState(false);
-  const [dummyRows, setDummyRows] = useState<string[]>([
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-  ]);
+
+  const PHRASE_TYPE = (type: PhraseType): ReactNode => {
+    switch (type) {
+      case "LOSE":
+        return <span className="font-bold text-error">{type}</span>;
+      case "WIN":
+        return <span className="font-bold text-success">{type}</span>;
+      default:
+        return <span className="font-bold text-info">{type}</span>;
+    }
+  };
+
+  const ACTION_BUTTONS = (phrase: Phrase): ReactNode => {
+    return (
+      <div className="flex flex-wrap gap-2">
+        <button className="btn btn-secondary btn-sm btn-circle bg-opacity-50">
+          <MdEdit />
+        </button>
+        <button
+          className="btn btn-neutral btn-sm btn-circle bg-opacity-50"
+          onClick={() => {
+            apiAction.phrase.delete(phrase.id);
+          }}
+        >
+          <MdDelete />
+        </button>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -57,7 +83,13 @@ export default function PagePhrases() {
             </button>
             <button
               className="btn btn-primary btn-block gap-2 sm:w-auto"
-              onClick={() => setDummyRows([...dummyRows, nanoid()])}
+              onClick={() =>
+                apiAction.phrase.add({
+                  id: nanoid(),
+                  text: nanoid(),
+                  type: PhraseType.WELCOME,
+                })
+              }
             >
               Add a random phrase
               <span className="text-2xl">
@@ -67,7 +99,7 @@ export default function PagePhrases() {
             <button
               className="btn btn-secondary btn-block gap-2 sm:w-auto"
               onClick={() => setModalClear(true)}
-              disabled={dummyRows.length === 0}
+              disabled={phrase.list.length === 0}
             >
               Clear all phrases
               <span className="text-2xl">
@@ -81,25 +113,25 @@ export default function PagePhrases() {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Name</th>
-                  <th>Job</th>
-                  <th>Favorite Color</th>
+                  <th>Text</th>
+                  <th>Type</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {dummyRows.length === 0 ? (
+                {phrase.list.length === 0 ? (
                   <tr>
                     <td className="text-center" colSpan={4}>
                       Nothing found.
                     </td>
                   </tr>
                 ) : (
-                  _.reverse([...dummyRows]).map((e, i) => {
+                  _.reverse([...phrase.list]).map((phraseItem, i) => {
                     return (
                       <Transition
-                        show={dummyRows.includes(e)}
+                        show={phrase.list.includes(phraseItem)}
                         as={Fragment}
-                        key={e}
+                        key={phraseItem.id}
                         appear
                         enter="transform transition duration-200"
                         enterFrom="scale-90 opacity-0"
@@ -110,9 +142,9 @@ export default function PagePhrases() {
                       >
                         <tr className={`${i % 2 !== 0 ? "active" : ""}`}>
                           <th>{i + 1}</th>
-                          <td>Quality Control Specialist</td>
-                          <td>Cy Ganderton</td>
-                          <td>Blue {e}</td>
+                          <td>{phraseItem.text}</td>
+                          <td>{PHRASE_TYPE(phraseItem.type)}</td>
+                          <td>{ACTION_BUTTONS(phraseItem)}</td>
                         </tr>
                       </Transition>
                     );
@@ -126,18 +158,19 @@ export default function PagePhrases() {
       <HeadlessModal
         value={modalAdd}
         title="Add A Phrase"
-        onClose={() => setModalAdd(false)}
+        onClose={(value) => setModalAdd(value)}
         isBig
       >
-        <div>add phrases form</div>
+        {(onClose) => <PhraseAddForm onClose={onClose} />}
       </HeadlessModal>
+
       <HeadlessModal
         value={modalClear}
         title="Clear all phrases"
         desc="All phrases will be wiped out, the player's app is going to be expresionless. Proceed?"
         color="error"
         onClose={() => setModalClear(false)}
-        actionY={() => setDummyRows([])}
+        actionY={() => {}}
       >
         {/* <div>add phrases form</div> */}
       </HeadlessModal>

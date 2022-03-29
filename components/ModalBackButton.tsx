@@ -7,7 +7,9 @@ export default function ModalBackButton({ action }: { action: () => void }) {
     <label
       id={ID_MODAL_BACK_BUTTON}
       // [background-color:hsl(var(--bc)_/_0.3)]
-      className="btn-outline btn btn-secondary btn-circle flex items-center justify-center border-0 bg-primary/30 !text-3xl leading-none ![color:hsl(var(--bc))]"
+      className="btn-outline btn btn-secondary btn-circle flex items-center 
+      justify-center border-0 bg-primary/30 !text-3xl leading-none ![color:hsl(var(--bc))]
+      shadow-lg"
       onClick={() => action()}
     >
       <FaArrowLeft />
