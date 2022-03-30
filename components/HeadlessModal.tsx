@@ -158,7 +158,7 @@ export default function HeadlessModal({
     ${
       isBig
         ? "rounded-none sm:rounded-xl h-full sm:h-auto max-h-full sm:max-h-[calc(100vh_-_5em)]"
-        : `rounded-xl`
+        : `rounded-t-xl`
     }`}
     >
       {/* <div className={` ${
