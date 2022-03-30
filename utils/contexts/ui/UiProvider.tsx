@@ -210,6 +210,7 @@ export const UiProvider = ({ children }: ContextChildren) => {
       });
     },
   };
+
   const value: UiContextProps = {
     state: uiState,
     action: uiAction,
@@ -218,7 +219,10 @@ export const UiProvider = ({ children }: ContextChildren) => {
   // keydown listeners
   useEffect(() => {
     const handleKeydown = (event: KeyboardEvent) => {
-      if (router.pathname === "/") {
+      if (router.pathname === "/" || router.pathname === "/404") {
+        if (uiState.command.isPaletteOpen) {
+          uiAction.toggleCommandPalette();
+        }
         return;
       }
       const key: string = event.key.toLowerCase();

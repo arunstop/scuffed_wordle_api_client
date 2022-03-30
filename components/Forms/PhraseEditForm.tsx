@@ -3,26 +3,29 @@ import TextInput from "../TextInput";
 import { BsChatQuote } from "react-icons/bs";
 import { MdOutlineCategory } from "react-icons/md";
 import { useApiContext } from "../../utils/contexts/api/ApiHooks";
-import { PhraseType } from "../../utils/models/PhraseModel";
+import { Phrase, PhraseType } from "../../utils/models/PhraseModel";
 import _ from "lodash";
-import { nanoid } from "nanoid";
 
-export default function PhraseAddForm({
-  onClose = () => {},
-}: {
+interface PhraseEditFormProps {
   onClose: (value: boolean) => void;
-}) {
+  phraseToEdit: Phrase | null;
+}
+
+export default function PhraseEditForm({
+  onClose = () => {},
+  phraseToEdit,
+}: PhraseEditFormProps) {
   // Mapping an enum
   const phraseTypeList = Object.values(PhraseType).filter(
     (e) => typeof e !== "number",
   );
   const { state: apiState, action: apiAction } = useApiContext();
-  const [text, setText] = useState("");
-  const [type, setType] = useState(phraseTypeList[0]);
+  const [text, setText] = useState(phraseToEdit?.text || "");
+  const [type, setType] = useState(phraseToEdit?.type || "");
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     if (text !== "") {
-      apiAction.phrase.add({
-        id: nanoid(),
+      apiAction.phrase.edit({
+        id: phraseToEdit?.id || "",
         text: text,
         type: PhraseType[type as PhraseType],
       });

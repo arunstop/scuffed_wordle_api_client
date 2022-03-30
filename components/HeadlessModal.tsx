@@ -147,7 +147,7 @@ export default function HeadlessModal({
   const PROCESSED_CHILDREN =
     typeof children === "function" ? children(onClose) : children;
   // Raw content meaning no title, desc and buttons
-  const CONTENT_RAW = children;
+  const CONTENT_RAW = PROCESSED_CHILDREN;
 
   // Not raw children =  including title, desc and buttons
   const CONTENT_NOT_RAW = (
@@ -195,6 +195,7 @@ export default function HeadlessModal({
         initialFocus={completeButtonRef}
         className="modal pointer-events-auto visible transform-none overflow-hidden bg-transparent opacity-100 transition-none"
         onClose={onClose}
+        unmount={true}
       >
         {OVERLAY}
         {INITIAL_FOCUS_TRICK_BUTTON}

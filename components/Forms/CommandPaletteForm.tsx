@@ -10,11 +10,13 @@ import { UiCommand } from "../../utils/models/UiModel";
 import ModalBackButton from "../ModalBackButton";
 // import TextInput from "../TextInput";
 
+interface CommandPaletteFormProps {
+  onClose: (value: boolean) => void;
+}
+
 export default function CommandPaletteForm({
   onClose = () => null,
-}: {
-  onClose: (value: boolean) => void;
-}) {
+}: CommandPaletteFormProps) {
   const {
     state: uiState,
     action: uiAction,

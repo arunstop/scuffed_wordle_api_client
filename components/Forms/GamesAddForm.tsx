@@ -332,6 +332,7 @@ export default function GamesAddForm({
         {INPUT_REFRESH_INTERVAL}
         {/* Banned words */}
         {INPUT_BANNED_WORDS}
+        <div className="w-[10%] mx-auto h-1 rounded-lg bg-primary/30 my-4"></div>
         {/* Action buttons */}
         {ACTION_BUTTONS}
       </div>
