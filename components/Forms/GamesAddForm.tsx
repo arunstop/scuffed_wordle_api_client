@@ -221,7 +221,7 @@ export default function GamesAddForm({
           >
             <Combobox.Options
               className="absolute max-h-60 w-full overflow-auto rounded-md border-4 border-primary
-              bg-base-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm"
+              bg-base-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm z-20"
             >
               {filteredTimeZoneList.length === 0 && query !== "" ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-center">

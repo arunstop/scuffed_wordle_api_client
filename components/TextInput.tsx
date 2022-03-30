@@ -1,6 +1,8 @@
 import { Transition } from "@headlessui/react";
 import React, { InputHTMLAttributes, ReactNode, useState } from "react";
+import { BsCheck } from "react-icons/bs";
 import TextInputMessage from "./TextInputMessage";
+import { MainColorTypes } from "../utils/models/GeneralModel";
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   //   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -14,17 +16,46 @@ export default function TextInput({
   rules = () => "",
   ...props
 }: TextInputProps) {
-  const [focused, setFocused] = useState(false);
-  const isError = rules() !== "" && focused;
-  const color = isError ? "error" : "primary";
+  const [hasBeenFocused, setFocused] = useState(false);
+  const isError = rules() !== "";
+  const isSuccess = !isError;
+  const isErrorAndFocused = isError && hasBeenFocused;
+  let color: MainColorTypes = "primary";
+  if (isErrorAndFocused) {
+    color = "error";
+  }
+  if (isSuccess) {
+    color = "success";
+  }
 
   // set focused state to true after input text has been clicked
   function handleFocus() {
     setFocused(true);
   }
 
+  const VALID_MARK = isError ? null : (
+    <BsCheck
+      className="absolute inset-y-0 right-0 my-auto mx-1 text-success pointer-events-none
+      animated-faster animated animated-heartBeat"
+      size={30}
+    />
+  );
+
   return (
-    <div className={`form-control w-full ${isError ? "text-input-error" : ""}`}>
+    <div
+      className={`form-control w-full ${
+        isErrorAndFocused ? "text-input-error" : ""
+      } z-0`}
+    >
+      {/* {"rules() : " + rules() + "<br>"}
+
+      {"isSuccess : " + isSuccess + "<br>"}
+      {"isError : " + isError + "<br>"}
+      {"isErrorAndFocused : " + isErrorAndFocused + "<br>"} */}
+      <div
+        className="hidden text-error-content text-primary-content text-success 
+      badge-error badge-primary badge-success"
+      ></div>
       {label == "" ? (
         ""
       ) : (
@@ -33,16 +64,30 @@ export default function TextInput({
           {/* <div>{focused && "focused"}</div> */}
         </label>
       )}
-      <label className="input-group">
+      <label className="input-group relative">
         {!icon ? null : (
-          <span className={`bg-${color}/30 font-black sm:text-3xl text-2xl `}>
+          <span
+            className={`
+            ${hasBeenFocused || isSuccess ? "bg-opacity-90" : "bg-opacity-30"}
+            ${
+              isErrorAndFocused
+                ? "badge-error"
+                : isSuccess
+                ? "badge-success"
+                : "bg-primary"
+            } font-medium sm:text-3xl text-2xl transition-colors `}
+          >
             {icon}
           </span>
         )}
+        {/* Put in the middle so input-group css rounded children not distrubted */}
+        {VALID_MARK}
         <input
-          className={`input input-bordered w-full
-          focus:${isError ? `input-error` : "input-primary"}
-          ${isError ? `input-error` : ""}
+          className={`input input-bordered w-full 
+          ${props.type === "number" ? "pr-6" : "pr-9"}
+          focus:${isErrorAndFocused ? `input-error` : "input-success"}
+          ${isErrorAndFocused ? `input-error` : ""}
+          ${isSuccess ? `input-success` : ""}
           `}
           //   set focused state to true after input text has been clicked
           onBlur={handleFocus}
@@ -52,7 +97,7 @@ export default function TextInput({
         />
       </label>
       <Transition
-        show={isError}
+        show={isErrorAndFocused}
         enter="transform transition duration-200"
         enterFrom="scale-y-0"
         enterTo=" scale-y-100"
