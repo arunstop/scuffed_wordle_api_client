@@ -43,6 +43,7 @@ export default function PhraseEditForm({
       placeholder="Say something..."
       icon={<BsChatQuote />}
       rules={() => (text !== "" ? "" : "Cannot be empty")}
+      spellCheck={true}
     />
   );
 

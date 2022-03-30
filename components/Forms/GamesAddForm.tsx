@@ -9,6 +9,7 @@ import { useGameContext } from "../../utils/contexts/game/GameHooks";
 import { generateGameData } from "../../utils/contexts/game/GameProvider";
 import { GameDifficulty } from "../../utils/models/GameModel";
 import { TimeZone } from "../../utils/models/TimeZoneModel";
+import GroupInput from "../GroupInput";
 import TextInput from "../TextInput";
 
 // function timeZoneItem({ value, abbr, isDst, text, offset, utc }: TimeZone) {
@@ -156,19 +157,18 @@ export default function GamesAddForm({
   );
 
   const INPUT_DIFFICULTY = (
-    <div className="form-control w-full">
-      <label className="label input-primary input-error">
-        <span className="label-text">Difficulty: </span>
-        {/* <div>{focused && "focused"}</div> */}
-      </label>
-      <div className="input-group">
-        <span className={`bg-primary/30 font-black sm:text-3xl text-2xl`}>
-          <BiBrain />
-        </span>
+    <GroupInput
+      label="Difficulty :"
+      icon={<BiBrain />}
+      noCheckIcon
+      rules={() => ""}
+    >
+      {({ ...props }) => (
         <select
           value={difficulty}
           onChange={(event) => setDifficulty(event.target.value)}
-          className="select-bordered select grow !font-normal capitalize focus:select-primary"
+          className={`select-bordered select grow !font-normal capitalize 
+          ${props.isSuccess ? "select-success" : "focus:select-primary"}`}
         >
           {/* Map the difficulty list */}
           {gameDifficultyList.map((e) => (
@@ -177,22 +177,21 @@ export default function GamesAddForm({
             </option>
           ))}
         </select>
-      </div>
-    </div>
+      )}
+    </GroupInput>
   );
 
   const INPUT_TIME_ZONE = (
-    <div className="w-full">
-      <label className="label">
-        <span className="label-text">Time Zone :</span>
-      </label>
-      <Combobox value={timeZone} onChange={setTimeZone}>
-        <div className="relative">
-          <div>
-            <label className="input-group">
-              <span className="bg-primary/30">
-                <BiWorld className="text-2xl sm:text-3xl" />
-              </span>
+    <div className="relative">
+      <GroupInput
+        noCheckIcon
+        icon={<BiWorld />}
+        label="Time Zone :"
+        rules={() => ""}
+      >
+        {({ isSuccess, ...props }) => (
+          <Combobox value={timeZone} onChange={setTimeZone}>
+            <div className="relative w-full">
               <Combobox.Input
                 as={Fragment}
                 displayValue={(timeZone: TimeZone) => timeZone.text}
@@ -201,76 +200,85 @@ export default function GamesAddForm({
                 <input
                   type="text"
                   placeholder="Game Name"
-                  className="input-bordered input w-full pr-8 focus:input-primary"
+                  className={`input-bordered input w-full pr-8 
+                  w-full !rounded-l-none !rounded-r-md
+                  ${isSuccess ? "input-success" : "focus:input-primary"}
+                `}
                 />
               </Combobox.Input>
-            </label>
-            <Combobox.Button className="absolute  inset-y-0 right-0 flex items-center pr-2">
-              <HiSelector
-                className="h-5 w-5 text-gray-400"
-                aria-hidden="true"
-              />
-            </Combobox.Button>
-          </div>
-          <Transition
-            as={Fragment}
-            leave="transition ease-in duration-100"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-            afterLeave={() => setQuery("")}
-          >
-            <Combobox.Options
-              className="absolute max-h-60 w-full overflow-auto rounded-md border-4 border-primary
-              bg-base-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm z-20"
-            >
-              {filteredTimeZoneList.length === 0 && query !== "" ? (
-                <div className="relative cursor-default select-none py-2 px-4 text-center">
-                  Nothing found.
-                </div>
-              ) : (
-                filteredTimeZoneList.map((tzItem) => {
-                  const isSelected: boolean = tzItem.text === timeZone.text;
-                  return (
-                    <Combobox.Option
-                      key={tzItem.text}
-                      className={({
-                        active,
-                      }) => `cursor-default select-none relative py-2 pl-10 pr-4 
-                ${active ? "text-white bg-primary/100" : ""}
-                ${
-                  isSelected && !active
-                    ? "bg-primary-content text-primary-focus"
-                    : ""
-                }
-                `}
-                      value={tzItem}
-                    >
-                      <>
-                        {/* time zone text e.g (GMT+07:00) Some Place */}
-                        <span
-                          className={`block truncate ${
-                            isSelected ? "font-medium" : "font-normal"
-                          }`}
-                        >
-                          {tzItem.text}
-                        </span>
-                        {/* Cehck icon */}
-                        {isSelected ? (
-                          <span
-                            className={`absolute inset-y-0 left-0 flex items-center pl-3 `}
+              <Combobox.Button className="absolute  inset-y-0 right-0 flex items-center pr-2">
+                <HiSelector
+                  className="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+              </Combobox.Button>
+              <div>
+                <Transition
+                  as={Fragment}
+                  leave="transition ease-in duration-100"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                  afterLeave={() => setQuery("")}
+                >
+                  <Combobox.Options
+                    className="absolute z-20 max-h-60 w-full overflow-auto rounded-md border-4
+                  border-primary bg-base-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm
+                  "
+                  >
+                    {filteredTimeZoneList.length === 0 && query !== "" ? (
+                      <div className="relative cursor-default select-none py-2 px-4 text-center">
+                        Nothing found.
+                      </div>
+                    ) : (
+                      filteredTimeZoneList.map((tzItem) => {
+                        const isSelected: boolean =
+                          tzItem.text === timeZone.text;
+                        return (
+                          <Combobox.Option
+                            key={tzItem.text}
+                            className={({
+                              active,
+                            }) => `cursor-default select-none relative py-2 pl-10 pr-4 !rounded-none 
+                        ${active ? "text-white bg-primary/100" : ""}
+                        ${
+                          isSelected && !active
+                            ? "bg-primary-content text-primary-focus"
+                            : ""
+                        }`}
+                            value={tzItem}
                           >
-                            <MdCheck className="h-6 w-6" aria-hidden="true" />
-                          </span>
-                        ) : null}
-                      </>
-                    </Combobox.Option>
-                  );
-                })
-              )}
-            </Combobox.Options>
-          </Transition>
-        </div>
-      </Combobox>
+                            <>
+                              {/* time zone text e.g (GMT+07:00) Some Place */}
+                              <p
+                                className={`block truncate ${
+                                  isSelected ? "font-medium" : "font-normal"
+                                }`}
+                              >
+                                {tzItem.text}
+                              </p>
+                              {/* Cehck icon */}
+                              {isSelected ? (
+                                <p
+                                  className={`absolute inset-y-0 left-0 flex items-center pl-3 `}
+                                >
+                                  <MdCheck
+                                    className="h-6 w-6"
+                                    aria-hidden="true"
+                                  />
+                                </p>
+                              ) : null}
+                            </>
+                          </Combobox.Option>
+                        );
+                      })
+                    )}
+                  </Combobox.Options>
+                </Transition>
+              </div>
+            </div>
+          </Combobox>
+        )}
+      </GroupInput>
     </div>
   );
 

@@ -1,21 +1,37 @@
 import { Transition } from "@headlessui/react";
-import React, { InputHTMLAttributes, ReactNode, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { BsCheck } from "react-icons/bs";
 import TextInputMessage from "./TextInputMessage";
 import { MainColorTypes } from "../utils/models/GeneralModel";
-interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
+
+// interface GroupInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface GroupInputProps {
   label?: string;
   //   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   icon?: null | ReactNode;
   rules: () => string;
+  children?: ((props: GroupInputChildrenProps) => ReactNode) | ReactNode;
+  noCheckIcon?: boolean;
 }
-export default function TextInput({
+
+interface GroupInputChildrenProps extends GroupInputProps {
+  isError: boolean;
+  isSuccess: boolean;
+  hasBeenFocused: boolean;
+  isErrorAndFocused: boolean;
+  setFocused: (value: boolean) => void;
+  statusColor: MainColorTypes;
+}
+
+export default function GroupInput({
   label = "",
   icon = null,
   //   onChange = () => {},
   rules = () => "",
-  ...props
-}: TextInputProps) {
+  children,
+  noCheckIcon,
+}: //   ...props
+GroupInputProps) {
   const [hasBeenFocused, setFocused] = useState(false);
   const isError = rules() !== "";
   const isSuccess = !isError;
@@ -81,8 +97,21 @@ export default function TextInput({
           </span>
         )}
         {/* Put in the middle so input-group css rounded children not distrubted */}
-        {VALID_MARK}
-        <input
+        {noCheckIcon || VALID_MARK}
+        {typeof children === "function"
+          ? children({
+              //   ...props,
+              isError,
+              isErrorAndFocused,
+              isSuccess,
+              hasBeenFocused,
+              setFocused: (value) => setFocused(value),
+              rules,
+              statusColor: color,
+              noCheckIcon: false,
+            })
+          : children}
+        {/* <input
           className={`input input-bordered w-full 
           ${props.type === "number" ? "pr-6" : "pr-9"}
           focus:${isErrorAndFocused ? `input-error` : "input-success"}
@@ -94,7 +123,7 @@ export default function TextInput({
           onFocus={handleFocus}
           autoFocus={false || props.autoFocus}
           {...props}
-        />
+        /> */}
       </label>
       <Transition
         show={isErrorAndFocused}
