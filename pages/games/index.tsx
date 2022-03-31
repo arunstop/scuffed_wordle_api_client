@@ -10,6 +10,7 @@ import { MdClose, MdDelete, MdEdit, MdSearch } from "react-icons/md";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Alert from "../../components/Alert";
 import Drawer from "../../components/Drawer/Drawer";
+import GamesEditForm from "../../components/Forms/GameEditForm";
 import GamesAddForm from "../../components/Forms/GamesAddForm";
 import HeadlessModal from "../../components/HeadlessModal";
 import { useGameContext } from "../../utils/contexts/game/GameHooks";
@@ -18,16 +19,25 @@ import { generateGameData } from "../../utils/contexts/game/GameProvider";
 // import { ID_MAIN_DRAWER } from "../utils/constants/ConstantIds";
 import { APP_NAME } from "../../utils/helpers/constants/ConstantText";
 // import { useUiContext } from "../../utils/contexts/ui/UiHooks";
-import { strGameMatrix } from "../../utils/models/GameModel";
+import { Game, strGameMatrix } from "../../utils/models/GameModel";
 // import { Transition } from "@headlessui/react";
 // import { useCountContext } from "../utils/contexts/counter/CounterHooks";
 // import { useUiContext } from "../utils/contexts/ui/UiHooks";
+
+interface ModalEditProps {
+  gameToEdit: Game | null;
+  value: boolean;
+}
 
 export default function Dashboard() {
   const router: NextRouter = useRouter();
   // giving alias with colon (:)
   // const { state: countState, action: countAction } = useCountContext();
   const [modalAdd, setModalAdd] = useState(false);
+  const [modalEdit, setModalEdit] = useState<ModalEditProps>({
+    gameToEdit: null,
+    value: false,
+  });
   const [modalClear, setModalClear] = useState(false);
   const [alertInfo, setAlertInfo] = useState(true);
 
@@ -222,13 +232,19 @@ export default function Dashboard() {
                     <h2 className="card-title bg-primary p-4">{game.name}</h2>
                     <div className="card-body">
                       <p>{strGameMatrix(game.matrix)}</p>
+                      <p>{game.dateEdited}</p>
                       <div className="card-actions justify-end">
                         <button
                           key={"btn-game-item-edit-" + index}
                           className="btn btn-sm btn-circle"
                           // onClick={() => deleteGame(game.id)}
                         >
-                          <MdEdit size={18} />
+                          <MdEdit
+                            size={18}
+                            onClick={() =>
+                              setModalEdit({ gameToEdit: game, value: true })
+                            }
+                          />
                         </button>
                         <button
                           key={"btn-game-item-delete-" + index}
@@ -292,9 +308,7 @@ export default function Dashboard() {
       <HeadlessModal
         value={modalAdd}
         title="Add new Game"
-        desc=""
         color="primary"
-        labelY="Confirm addition"
         // clear searched items if exists
         onClose={(value) => {
           setModalAdd(value);
@@ -302,6 +316,20 @@ export default function Dashboard() {
         isBig
       >
         {(onClose) => <GamesAddForm onClose={onClose} />}
+      </HeadlessModal>
+      <HeadlessModal
+        value={modalEdit.value}
+        title="Edit new Game"
+        color="primary"
+        // clear searched items if exists
+        onClose={(value) => {
+          setModalEdit({ gameToEdit: null, value: false });
+        }}
+        isBig
+      >
+        {(onClose) => (
+          <GamesEditForm gameToEdit={modalEdit.gameToEdit} onClose={onClose} />
+        )}
       </HeadlessModal>
       <HeadlessModal
         value={modalClear}

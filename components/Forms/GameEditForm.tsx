@@ -1,47 +1,48 @@
 import { Combobox, Transition } from "@headlessui/react";
 import _ from "lodash";
+import moment from "moment";
 import React, { Fragment, useState } from "react";
 import { BiBrain, BiWorld } from "react-icons/bi";
 import { HiBan, HiSelector } from "react-icons/hi";
 import { MdCheck, MdRefresh } from "react-icons/md";
 import { TiSortAlphabetically } from "react-icons/ti";
 import { useGameContext } from "../../utils/contexts/game/GameHooks";
-import { generateGameData } from "../../utils/contexts/game/GameProvider";
-import { GameDifficulty } from "../../utils/models/GameModel";
+// import { generateGameData } from "../../utils/contexts/game/GameProvider";
+import { Game, GameDifficulty } from "../../utils/models/GameModel";
 import { TimeZone } from "../../utils/models/TimeZoneModel";
 import GroupInput from "../GroupInput";
 import TextInput from "../TextInput";
 
-// function timeZoneItem({ value, abbr, isDst, text, offset, utc }: TimeZone) {
-//   return (
-//     <div className="bg-primary-focus">
-//       {/* <h2>{name}</h2>
-//       <p>{label}</p> */}
-//     </div>
-//   );
-// }
-
-interface GamesAddFormProps {
+interface GamesEditFormProps {
   actionY?: () => void;
   onClose?: (value: boolean) => void;
+  gameToEdit: Game | null;
 }
-export default function GamesAddForm({
+
+export default function GamesEditForm({
   actionY = () => null,
   onClose = () => null,
-}: GamesAddFormProps) {
+  gameToEdit,
+}: GamesEditFormProps) {
   const {
-    getters: { timeZoneList },
+    getters: { timeZoneList, getTimeZone },
     action: gameAction,
   } = useGameContext();
 
-  const [name, setName] = useState("");
-  const [matrixX, setMatrixX] = useState(4);
-  const [matrixY, setMatrixY] = useState(5);
-  const [matrixZ, setMatrixZ] = useState(1);
+  const [name, setName] = useState(gameToEdit?.name || "");
+  const [matrixX, setMatrixX] = useState(gameToEdit?.matrix.x || 4);
+  const [matrixY, setMatrixY] = useState(gameToEdit?.matrix.y || 5);
+  const [matrixZ, setMatrixZ] = useState(gameToEdit?.matrix.z || 1);
   const [difficulty, setDifficulty] = useState("EASY");
-  const [refreshInterval, setRefreshInterval] = useState("");
-  const [bannedWords, setBannedWords] = useState("");
-  const [timeZone, setTimeZone] = useState(timeZoneList[0]);
+  const [refreshInterval, setRefreshInterval] = useState(
+    gameToEdit?.refreshInterval.join(",") || "",
+  );
+  const [bannedWords, setBannedWords] = useState(
+    gameToEdit?.bannedWordList.join(",") || "",
+  );
+  const [timeZone, setTimeZone] = useState(
+    getTimeZone(gameToEdit?.timeZone) || timeZoneList[0],
+  );
   const [query, setQuery] = useState("");
 
   // Mapping an enum
@@ -67,8 +68,8 @@ export default function GamesAddForm({
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     // alert("submit");
-    gameAction.add({
-      ...generateGameData(),
+    gameAction.edit({
+      ...gameToEdit!,
       name: name,
       matrix: { x: matrixX, y: matrixY, z: matrixZ },
       // EASY || NORMAL || HARD
@@ -88,6 +89,7 @@ export default function GamesAddForm({
         bannedWords.replaceAll(" ", "").split(","),
         (e) => e !== "",
       ),
+      dateEdited: moment.now().toString(),
     });
     // alert(GameDifficulty[difficulty as GameDifficulty]);
     onClose(false);
@@ -236,19 +238,19 @@ export default function GamesAddForm({
                     ) : (
                       filteredTimeZoneList.map((tzItem) => {
                         const isSelected: boolean =
-                          tzItem.text === timeZone.text;
+                          tzItem.value === timeZone.value;
                         return (
                           <Combobox.Option
                             key={tzItem.text}
                             className={({
                               active,
                             }) => `cursor-default select-none relative py-2 pl-10 pr-4 !rounded-none 
-                            ${active ? "text-white bg-primary/100" : ""}
-                            ${
-                              isSelected && !active
-                                ? "bg-primary-content text-primary-focus"
-                                : ""
-                            }`}
+                                  ${active ? "text-white bg-primary/100" : ""}
+                                  ${
+                                    isSelected && !active
+                                      ? "bg-primary-content text-primary-focus"
+                                      : ""
+                                  }`}
                             value={tzItem}
                           >
                             <>
