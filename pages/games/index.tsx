@@ -232,7 +232,6 @@ export default function Dashboard() {
                     <h2 className="card-title bg-primary p-4">{game.name}</h2>
                     <div className="card-body">
                       <p>{strGameMatrix(game.matrix)}</p>
-                      <p>{game.dateEdited}</p>
                       <div className="card-actions justify-end">
                         <button
                           key={"btn-game-item-edit-" + index}

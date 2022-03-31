@@ -33,7 +33,7 @@ export default function GamesEditForm({
   const [matrixX, setMatrixX] = useState(gameToEdit?.matrix.x || 4);
   const [matrixY, setMatrixY] = useState(gameToEdit?.matrix.y || 5);
   const [matrixZ, setMatrixZ] = useState(gameToEdit?.matrix.z || 1);
-  const [difficulty, setDifficulty] = useState("EASY");
+  const [difficulty, setDifficulty] = useState(gameToEdit?.difficulty || "");
   const [refreshInterval, setRefreshInterval] = useState(
     gameToEdit?.refreshInterval.join(",") || "",
   );
@@ -172,7 +172,9 @@ export default function GamesEditForm({
       {({ ...props }) => (
         <select
           value={difficulty}
-          onChange={(event) => setDifficulty(event.target.value)}
+          onChange={(event) =>
+            setDifficulty(GameDifficulty[event.target.value as GameDifficulty])
+          }
           className={`select-bordered select grow !font-normal capitalize 
           ${props.isSuccess ? "select-success" : "focus:select-primary"}`}
         >

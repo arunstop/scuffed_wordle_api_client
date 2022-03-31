@@ -18,7 +18,7 @@ import {
   MdRefresh,
 } from "react-icons/md";
 import { GoBook } from "react-icons/go";
-import { HiOutlineLogout } from "react-icons/hi";
+import { HiOutlineCog, HiOutlineLogout } from "react-icons/hi";
 import { RiApps2Line } from "react-icons/ri";
 import { BsChatQuote } from "react-icons/bs";
 import { NextRouter, useRouter } from "next/router";
@@ -47,6 +47,7 @@ const getInitialMenuList = (): UiMenu[] => {
       icon: <MdOutlineErrorOutline />,
     },
     { title: "Phrases", type: "PAGE", icon: <BsChatQuote /> },
+    { title: "Settings", type: "PAGE", icon: <HiOutlineCog /> },
     {
       title: "Logout",
       type: "MODAL",
