@@ -77,7 +77,11 @@ export default function PhraseAddForm({
 
   const ACTION_BUTTONS = (
     <div className="flex flex-col gap-4">
-      <button type="submit" className="btn btn-primary" disabled={text === ""}>
+      <button
+        type="submit"
+        className="btn btn-primary"
+        disabled={text === "" || text.length < 4}
+      >
         Submit
       </button>
       <button

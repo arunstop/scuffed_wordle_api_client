@@ -80,7 +80,11 @@ export default function PhraseEditForm({
 
   const ACTION_BUTTONS = (
     <div className="flex flex-col gap-4">
-      <button type="submit" disabled={text === ""} className="btn btn-primary">
+      <button
+        type="submit"
+        disabled={text === "" || text.length < 4}
+        className="btn btn-primary"
+      >
         Submit
       </button>
       <button
