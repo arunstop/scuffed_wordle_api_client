@@ -3,7 +3,7 @@ import _ from "lodash";
 import { nanoid } from "nanoid";
 import Head from "next/head";
 import React, { Fragment, ReactNode, useState } from "react";
-import { MdAddCircle, MdClose, MdDelete, MdEdit } from "react-icons/md";
+import { MdAddCircle, MdDelete, MdEdit } from "react-icons/md";
 import Alert from "../../components/Alert";
 import Drawer from "../../components/Drawer/Drawer";
 import PhraseAddForm from "../../components/Forms/PhraseAddForm";
@@ -113,7 +113,7 @@ export default function PagePhrases() {
               apiAction.phrase.add({
                 id: nanoid(),
                 text: nanoid(),
-                type: PhraseType.WELCOME,
+                type: PhraseType.START,
               })
             }
           >
@@ -122,7 +122,7 @@ export default function PagePhrases() {
               <MdAddCircle />
             </span>
           </button>
-          <button
+          {/* <button
             className="btn btn-secondary btn-block gap-2 sm:w-auto"
             onClick={() => setModalClear(true)}
             disabled={phrase.list.length === 0}
@@ -131,7 +131,7 @@ export default function PagePhrases() {
             <span className="text-2xl">
               <MdClose />
             </span>
-          </button>
+          </button> */}
         </div>
         <div className="overflow-x-auto rounded-xl border-2 border-neutral">
           <table className="table w-full">
@@ -210,25 +210,25 @@ export default function PagePhrases() {
     </HeadlessModal>
   );
 
-  const CLEAR_ALL_MODAL = (
-    <HeadlessModal
-      value={modalClear}
-      title="Clear all phrases"
-      desc="All phrases will be wiped out, the player's app is going to be expresionless. Proceed?"
-      color="error"
-      onClose={() => setModalClear(false)}
-      actionY={() => {}}
-    >
-      {/* <div>add phrases form</div> */}
-    </HeadlessModal>
-  );
+  // const CLEAR_ALL_MODAL = (
+  //   <HeadlessModal
+  //     value={modalClear}
+  //     title="Clear all phrases"
+  //     desc="All phrases will be wiped out, the player's app is going to be expresionless. Proceed?"
+  //     color="error"
+  //     onClose={() => setModalClear(false)}
+  //     actionY={() => {}}
+  //   >
+  //     {/* <div>add phrases form</div> */}
+  //   </HeadlessModal>
+  // );
   return (
     <>
       {HEAD}
       {CONTENT}
       {ADD_MODAL}
       {EDIT_MODAL}
-      {CLEAR_ALL_MODAL}
+      {/* {CLEAR_ALL_MODAL} */}
     </>
   );
 }

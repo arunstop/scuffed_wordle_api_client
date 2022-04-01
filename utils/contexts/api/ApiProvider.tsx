@@ -15,7 +15,7 @@ const getPhraseList = (length: number): Phrase[] => {
     if (i % 2 == 0) {
       type = PhraseType.WIN;
     } else if (i % 3 == 0) {
-      type = PhraseType.WELCOME;
+      type = PhraseType.START;
     }
     sampleList.push({
       id: nanoid(),

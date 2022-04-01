@@ -5,6 +5,7 @@ import { MdOutlineCategory } from "react-icons/md";
 import { useApiContext } from "../../utils/contexts/api/ApiHooks";
 import { Phrase, PhraseType } from "../../utils/models/PhraseModel";
 import _ from "lodash";
+import GroupInput from "../GroupInput";
 
 interface PhraseEditFormProps {
   onClose: (value: boolean) => void;
@@ -42,39 +43,44 @@ export default function PhraseEditForm({
       label="Text :"
       placeholder="Say something..."
       icon={<BsChatQuote />}
-      rules={() => (text !== "" ? "" : "Cannot be empty")}
+      rules={() =>
+        (text !== "" ? "" : "Cannot be empty") ||
+        (text.length >= 4 ? "" : "Minimum 4 characters")
+      }
       spellCheck={true}
     />
   );
 
   const INPUT_TYPE = (
-    <div className="form-control w-full">
-      <label className="label">
-        <span className="label-text">Type :</span>
-      </label>
-      <label className="input-group">
-        <span className="bg-primary/30 text-2xl sm:text-3xl">
-          <MdOutlineCategory />
-        </span>
+    <GroupInput
+      // value={type}
+      label="Type :"
+      // onChange={(event) => setType(event.target.value as PhraseType)}
+      icon={<MdOutlineCategory />}
+      rules={() => ""}
+      noCheckIcon
+    >
+      {({ ...props }) => (
         <select
           value={type}
           onChange={(event) => setType(event.target.value as PhraseType)}
-          className="select select-bordered active:select-primary grow font-normal capitalize"
+          className={`select select-bordered active:select-primary grow 
+        font-normal capitalize ${props.isSuccess ? "select-success" : ""}`}
         >
           {/* <option disabled selected>
-            Choose type...
-          </option> */}
+      Choose type...
+    </option> */}
           {_.map(phraseTypeList, (type) => (
             <option value={type}>Phrase on {type.toLowerCase()}</option>
           ))}
         </select>
-      </label>
-    </div>
+      )}
+    </GroupInput>
   );
 
   const ACTION_BUTTONS = (
     <div className="flex flex-col gap-4">
-      <button type="submit" className="btn btn-primary">
+      <button type="submit" disabled={text === ""} className="btn btn-primary">
         Submit
       </button>
       <button

@@ -40,7 +40,10 @@ export default function PhraseAddForm({
       label="Text :"
       placeholder="Say something..."
       icon={<BsChatQuote />}
-      rules={() => (text !== "" ? "" : "Cannot be empty")}
+      rules={() =>
+        (text !== "" ? "" : "Cannot be empty") ||
+        (text.length >= 4 ? "" : "Minimum 4 characters")
+      }
       spellCheck={true}
     />
   );

@@ -1,4 +1,4 @@
-import { Transition } from "@headlessui/react";
+// import { Transition } from "@headlessui/react";
 import React, { InputHTMLAttributes, ReactNode, useState } from "react";
 import { BsCheck } from "react-icons/bs";
 import TextInputMessage from "./TextInputMessage";
@@ -96,7 +96,7 @@ export default function TextInput({
           {...props}
         />
       </label>
-      <Transition
+      {/* <Transition
         show={isErrorAndFocused}
         enter="transform transition duration-200"
         enterFrom="scale-y-0"
@@ -104,9 +104,11 @@ export default function TextInput({
         leave="transform transition duration-200"
         leaveFrom="scale-y-100"
         leaveTo=" scale-y-0"
-      >
-        <TextInputMessage color={color} label={rules()} />
-      </Transition>
+      > */}
+      {isErrorAndFocused && (
+        <TextInputMessage key={rules()} color={color} label={rules()} />
+      )}
+      {/* </Transition> */}
       {/* {isError && <Alert color={color} label="Cannot be empty" />} */}
     </div>
   );

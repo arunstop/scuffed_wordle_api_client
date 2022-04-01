@@ -72,7 +72,7 @@ export default function GamesAddForm({
       name: name,
       matrix: { x: matrixX, y: matrixY, z: matrixZ },
       // EASY || NORMAL || HARD
-      difficulty: GameDifficulty[difficulty as GameDifficulty],
+      difficulty: difficulty as GameDifficulty,
       timeZone: {
         abbr: timeZone.abbr,
         offset: timeZone.offset,

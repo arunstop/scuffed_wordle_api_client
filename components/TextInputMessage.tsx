@@ -11,7 +11,11 @@ export default function TextInputMessage({
   return (
     <label className="label justify-start pb-0">
       {/* <span className="label-text">Alt label</span> */}
-      <span className={`label-text text-${color}`}>{label}</span>
+      <span
+        className={`label-text text-${color} animated animated-headShake animated-faster`}
+      >
+        {label}
+      </span>
     </label>
   );
 }

@@ -10,12 +10,10 @@ export interface Phrase {
 }
 
 export enum PhraseType {
-  WELCOME = "WELCOME",
+  START = "START",
   LOSE = "LOSE",
   WIN = "WIN",
 }
-
-// export type PhraseType = "WELCOME" | "LOSE" | "WIN";
 
 export interface PhraseAction {
   load: () => void;
